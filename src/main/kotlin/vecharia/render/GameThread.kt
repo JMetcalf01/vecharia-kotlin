@@ -3,7 +3,7 @@ package vecharia.render
 import com.badlogic.gdx.Gdx
 import java.lang.Exception
 
-class GameThread(val win: Window) : Thread() {
+class GameThread(private val win: Window) : Thread() {
 
     init {
         this.isDaemon = true
@@ -15,24 +15,28 @@ class GameThread(val win: Window) : Thread() {
 
         //Start the game here
         //todo
+        while (true) {
+
+        }
 
         // Exits game
         Gdx.app.exit()
     }
 
-    fun sleep(milis: Int) {
-        try {
-            this.sleep(milis)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
+    // todo should rename this method to something about waiting for input to finish.
     fun pause() {
         try {
             while (win.entering) {
                 this.sleep(10)
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun sleep(millis: Int) {
+        try {
+            this.sleep(millis)
         } catch (e: Exception) {
             e.printStackTrace()
         }

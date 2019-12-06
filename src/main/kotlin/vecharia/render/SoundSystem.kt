@@ -6,13 +6,15 @@ import com.badlogic.gdx.graphics.Color
 
 object SoundSystem : Thread() {
 
+    private lateinit var canvas: Canvas
     private val playing: SimpleQueue<Music> = SimpleQueue()
     private val tracksNames: SimpleQueue<String> = SimpleQueue()
     private var isOn: Boolean = false
     private var wasOff: Boolean = false
     private var playingName: String = ""
 
-    fun init() {
+    fun init(c: Canvas) {
+        canvas = c
         start()
     }
 
@@ -42,7 +44,7 @@ object SoundSystem : Thread() {
         var tr = SimpleQueue<String>()
         var track = tracksNames.pop()
         while(track != null) {
-            Canvas.println(track, Color.CYAN)
+            canvas.println(track, Color.CYAN)
             tr.push(track)
             track = tracksNames.pop()
         }

@@ -46,7 +46,7 @@ class Window : ApplicationAdapter() {
         canvas = Canvas(this, font)
         println("libGDX things done")
 
-        SoundSystem.init()
+        SoundSystem.init(canvas)
         println("Sound done")
 
         game = GameThread(this)
