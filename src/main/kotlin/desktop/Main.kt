@@ -2,7 +2,7 @@ package desktop
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
-import vecharia.Window
+import vecharia.render.Window
 import java.awt.Toolkit
 
 fun main() {
