@@ -9,9 +9,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 
 import com.badlogic.gdx.Input.Keys.*
+import kotlin.math.roundToInt
 
 class Window : ApplicationAdapter() {
     private lateinit var canvas: Canvas
+    private lateinit var game: GameThread
 
     private lateinit var batch: SpriteBatch
     private lateinit var font: BitmapFont
@@ -47,6 +49,7 @@ class Window : ApplicationAdapter() {
         SoundSystem.init()
         println("Sound done")
 
+        game = GameThread(this)
         println("Main init done")
     }
 
@@ -69,9 +72,11 @@ class Window : ApplicationAdapter() {
             if (Gdx.input.isKeyJustPressed(ENTER))
                 entering = false
 
-            for ((key, action) in inputActions) {
-                if (Gdx.input.isKeyJustPressed(key))
-                    action.action()
+            synchronized(inputActions) {
+                for ((key, action) in inputActions) {
+                    if (Gdx.input.isKeyJustPressed(key))
+                        action.action()
+                }
             }
         }
     }
@@ -79,6 +84,35 @@ class Window : ApplicationAdapter() {
     override fun dispose() {
         batch.dispose()
         font.dispose()
+    }
+
+    fun addKeyAction(key: Int, action: InputAction) {
+        synchronized(inputActions) {
+            inputActions[key] = action
+        }
+    }
+
+    fun removeKeyAction(key: Int) {
+        synchronized(inputActions) {
+            inputActions.remove(key)
+        }
+    }
+
+    fun readLine(): String {
+        entering = true;
+        game.pause()
+        val input = inputBuffer
+//        canvas.println(input, Color.WHITE)
+        inputBuffer = ""
+        return input
+    }
+
+    fun charWidth(): Int {
+        return (width.toDouble() / font.spaceXadvance).roundToInt()
+    }
+
+    fun charHeight(): Int {
+        return (height.toDouble() / font.lineHeight).roundToInt()
     }
 
     private fun addToInputBuffer() {
