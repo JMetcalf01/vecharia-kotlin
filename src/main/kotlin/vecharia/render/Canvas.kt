@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 
 class Canvas(private val win: Window, private val font: BitmapFont) {
 
-    private var charBuffer
-    private var fontColorBuffer
+    private var charBuffer: Array<Array<Char>> = Array(win.charHeight()) { Array(win.charWidth()) { 0.toChar() } }
+    private var fontColorBuffer: Array<Array<Color>> = Array(win.charHeight()) { Array(win.charWidth()) { Color.CLEAR } }
     private var printing: Boolean = true
 
     private var yi: Int = 0
@@ -18,30 +18,30 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         println()
     }
 
-    fun println(string: String) {
+    fun println(string: String = "") {
         println(string, Color.WHITE)
     }
 
-    fun println() {
+    private fun println() {
         if (printing) {
-            if (yi < charBuffer.length - 3) {
+            if (yi < charBuffer.size - 3) {
                 yi++
             } else {
-                for (i in 1 until charBuffer.length) {
-                    for (j in 0..charBuffer[0].length) {
-                        charBuffer[i - 1][j] = 0
-                        fontColorBuffer[i - 1][j] = null
+                for (i in 1 until charBuffer.size) {
+                    for (j in charBuffer[0].indices) {
+                        charBuffer[i - 1][j] = 0.toChar()
+                        fontColorBuffer[i - 1][j] = Color.CLEAR
                     }
 
-                    for (j in 0..charBuffer[0].length) {
+                    for (j in charBuffer[0].indices) {
                         charBuffer[i - 1][j] = charBuffer[i][j]
                         fontColorBuffer[i - 1][j] = fontColorBuffer[i][j]
                     }
                 }
 
-                for (i in 0..charBuffer[0].length) {
-                    charBuffer[charBuffer.length - 1][i] = 0
-                    fontColorBuffer[charBuffer.length - 1][i] = null
+                for (i in charBuffer[0].indices) {
+                    charBuffer[charBuffer.size - 1][i] = 0.toChar()
+                    fontColorBuffer[charBuffer.size - 1][i] = Color.CLEAR
                 }
             }
 
@@ -51,8 +51,8 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
 
     fun print(string: String, color: Color) {
         if (printing) {
-            for (i in 0..string.length) {
-                if (xi + i < charBuffer[0].length) {
+            for (i in string.indices) {
+                if (xi + i < charBuffer[0].size) {
                     charBuffer[yi][xi + i] = string[i]
                     fontColorBuffer[yi][xi + i] = color
                 }
@@ -60,7 +60,6 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
 
             xi = string.length
         }
-
     }
 
     fun print(string: String) {
@@ -69,10 +68,10 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
 
 
     fun clear() {
-        for (i in 0..charBuffer.length) {
-            for (j in 0..charBuffer[0].length) {
-                charBuffer[i][j] = 0
-                fontColorBuffer[i][j] = null
+        for (i in charBuffer.indices) {
+            for (j in charBuffer[0].indices) {
+                charBuffer[i][j] = 0.toChar()
+                fontColorBuffer[i][j] = Color.CLEAR
             }
         }
 
@@ -82,26 +81,27 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
 
 
     fun render(batch: SpriteBatch) {
-        for (i in 0..charBuffer.length) {
-            for (j in charBuffer[0].length) {
-                font.setColor(fontColorBuffer == null ? Color . WHITE : fontColorBuffer [i][j])
-                font.draw(batch)
+        for (i in charBuffer.indices) {
+            for (j in charBuffer[0].indices) {
+                font.color = if (fontColorBuffer[i][j] == Color.CLEAR) Color.WHITE else fontColorBuffer[i][j]
+                font.draw(batch, charBuffer[i][j].toString(),
+                    j * font.spaceXadvance, win.height - font.lineHeight * i - 5)
             }
         }
 
         if (printing) {
             font.color = Color.WHITE
             font.draw(
-                batch, Window.inputBuffer, font.spaceXadvance * xi,
-                Window.WIN_HEIGHT - font.lineHeight * yi - 5
+                batch, win.inputBuffer, font.spaceXadvance * xi,
+                win.height - font.lineHeight * yi - 5
             )
         }
 
-        if (printing && Window.entering) {
-            if (Window.framecount / 20 % 2 == 0) {
+        if (printing && win.entering) {
+            if (win.frameCount / 20 % 2 == 0) {
                 font.draw(
-                    batch, "_", font.spaceXadvance * (Window.inputBuffer.length + xi),
-                    Window.WIN_HEIGHT - font.lineHeight * yi - 5
+                    batch, "_", font.spaceXadvance * (win.inputBuffer.length + xi),
+                    win.height - font.lineHeight * yi - 5
                 )
             }
         }

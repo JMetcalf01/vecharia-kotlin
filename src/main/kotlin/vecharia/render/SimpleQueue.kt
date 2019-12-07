@@ -9,7 +9,7 @@ class SimpleQueue<E> {
 
     fun pop(): E? {
         if (elements.size == 0) return null
-        return elements.removeAt(0);
+        return elements.removeAt(0)
     }
 
     fun clear() {

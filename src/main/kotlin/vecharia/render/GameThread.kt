@@ -23,8 +23,10 @@ class GameThread(private val win: Window) : Thread() {
         Gdx.app.exit()
     }
 
-    // todo should rename this method to something about waiting for input to finish.
-    fun pause() {
+    /**
+     *
+     */
+    fun getInput() {
         try {
             while (win.entering) {
                 this.sleep(10)
@@ -34,6 +36,14 @@ class GameThread(private val win: Window) : Thread() {
         }
     }
 
+    /**
+     *
+     *
+     * @author Jonathan Metcalf
+     * @since Version 1.0
+     *
+     * @param millis the amount of milliseconds to sleep
+     */
     private fun sleep(millis: Int) {
         try {
             this.sleep(millis)

@@ -19,7 +19,7 @@ object SoundSystem : Thread() {
     }
 
     fun add(path: String, looping: Boolean) {
-        var music = Gdx.audio.newMusic(Gdx.files.absolute(path))
+        val music = Gdx.audio.newMusic(Gdx.files.absolute(path))
         music.isLooping = looping
         playing.push(music)
         tracksNames.push(path.substring(path.indexOf('/') + 1))
@@ -41,7 +41,7 @@ object SoundSystem : Thread() {
 
 
     fun listTracks() {
-        var tr = SimpleQueue<String>()
+        val tr = SimpleQueue<String>()
         var track = tracksNames.pop()
         while(track != null) {
             canvas.println(track, Color.CYAN)

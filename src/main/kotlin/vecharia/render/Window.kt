@@ -12,19 +12,19 @@ import com.badlogic.gdx.Input.Keys.*
 import kotlin.math.roundToInt
 
 class Window : ApplicationAdapter() {
-    private lateinit var canvas: Canvas
+    lateinit var canvas: Canvas
     private lateinit var game: GameThread
 
     private lateinit var batch: SpriteBatch
     private lateinit var font: BitmapFont
 
-    private var width: Int = -1
-    private var height: Int = -1
+    var width: Int = -1
+    var height: Int = -1
 
     private val inputActions = mutableMapOf<Int, InputAction>()
     var entering = false
-    private var inputBuffer = ""
-    private var frameCount = 0
+    var inputBuffer = ""
+    var frameCount = 0
 
     override fun create() {
         println("Beginning System Init...")
@@ -100,9 +100,9 @@ class Window : ApplicationAdapter() {
 
     fun readLine(): String {
         entering = true;
-        game.pause()
+        game.getInput()
         val input = inputBuffer
-//        canvas.println(input, Color.WHITE)
+        canvas.println(input, Color.WHITE)
         inputBuffer = ""
         return input
     }
