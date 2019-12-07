@@ -68,6 +68,14 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         }
     }
 
+    /**
+     * This method prints a single character
+     *
+     * @author Jonathan Metcalf
+     * @since 1.0
+     *
+     * @param char the character to be printed
+     */
     fun print(char: Char) = print(char.toString())
 
 

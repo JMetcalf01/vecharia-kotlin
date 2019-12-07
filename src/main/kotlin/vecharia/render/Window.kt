@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 
 import com.badlogic.gdx.Input.Keys.*
+import vecharia.util.InputEvent
 import kotlin.math.roundToInt
 
 /**
