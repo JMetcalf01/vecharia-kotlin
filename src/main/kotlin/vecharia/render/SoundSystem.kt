@@ -5,7 +5,7 @@ import com.badlogic.gdx.audio.Music
 import vecharia.util.SimpleQueue
 
 /**
- * A thread to handle all sounds in the game
+ * A thread to handle all sounds in the game.
  *
  * @author Jonathan Metcalf
  * @since 1.0
@@ -20,7 +20,7 @@ object SoundSystem : Thread() {
     private var playingName: String = ""
 
     /**
-     * Initializes the sound system
+     * Initializes the sound system.
      *
      * @author Matt Worzala
      * @since 1.0
@@ -33,7 +33,7 @@ object SoundSystem : Thread() {
     }
 
     /**
-     * Adds a song to the queue
+     * Adds a song to the queue.
      *
      * @author Jonathan Metcalf
      * @since 1.0
@@ -48,7 +48,7 @@ object SoundSystem : Thread() {
     }
 
     /**
-     * Clears all songs to the queue
+     * Clears all songs to the queue.
      *
      * @author Jonathan Metcalf
      * @since 1.0
@@ -58,7 +58,7 @@ object SoundSystem : Thread() {
     }
 
     /**
-     * Begins playing a song
+     * Begins playing a song.
      *
      * @author Jonathan Metcalf
      * @since 1.0
@@ -68,7 +68,7 @@ object SoundSystem : Thread() {
     }
 
     /**
-     * Stops playing a song
+     * Stops playing a song.
      *
      * @author Jonathan Metcalf
      * @since 1.0
@@ -79,7 +79,7 @@ object SoundSystem : Thread() {
     }
 
     /**
-     * A song that has music and a name
+     * A song that has music and a name.
      *
      * @author Jonathan Metcalf
      * @since 1.0

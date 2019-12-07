@@ -1,7 +1,7 @@
 package vecharia.util
 
 /**
- * An implementation of a queue
+ * An implementation of a queue.
  *
  * @author Jonathan Metcalf
  * @since Version 1.0
@@ -10,7 +10,7 @@ class SimpleQueue<E> {
     private val elements: MutableList<E> = mutableListOf()
 
     /**
-     * Adds an element to the queue
+     * Adds an element to the queue.
      *
      * @author Jonathan Metcalf
      * @since Version 1.0
@@ -22,7 +22,7 @@ class SimpleQueue<E> {
     }
 
     /**
-     * Removes the first element of the queue
+     * Removes the first element of the queue.
      *
      * @author Jonathan Metcalf
      * @since Version 1.0
@@ -35,7 +35,7 @@ class SimpleQueue<E> {
     }
 
     /**
-     * Clears the queue
+     * Clears the queue.
      *
      * @author Jonathan Metcalf
      * @since Version 1.0

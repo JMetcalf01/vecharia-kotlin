@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 
 import com.badlogic.gdx.Input.Keys.*
-import vecharia.util.InputEvent
+import vecharia.Vecharia
 import kotlin.math.roundToInt
 
 /**
@@ -20,8 +20,6 @@ import kotlin.math.roundToInt
  */
 class Window : ApplicationAdapter() {
     lateinit var canvas: Canvas
-    private lateinit var game: GameThread
-
     private lateinit var batch: SpriteBatch
     private lateinit var font: BitmapFont
 
@@ -63,7 +61,7 @@ class Window : ApplicationAdapter() {
         SoundSystem.init(canvas)
         println("Sound done")
 
-        //todo create vecharia object
+        Vecharia(ConsoleLogger(), this)
         println("Main init done")
     }
 

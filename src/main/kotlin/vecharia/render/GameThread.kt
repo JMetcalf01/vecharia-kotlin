@@ -5,7 +5,7 @@ import vecharia.Vecharia
 import java.lang.Exception
 
 /**
- * This class is for the thread that the game runs on
+ * This class is for the thread that the game runs on.
  *
  * @constructor starts the thread
  *
@@ -20,7 +20,7 @@ class GameThread(private val game: Vecharia) : Thread() {
     }
 
     /**
-     * Starts the thread
+     * Starts the thread.
      *
      * @author Jonathan Metcalf
      * @since 1.0
@@ -40,7 +40,7 @@ class GameThread(private val game: Vecharia) : Thread() {
     }
 
     /**
-     * Sleeps the thread while the user is entering
+     * Sleeps the thread while the user is entering.
      *
      * @author Jonathan Metcalf
      * @since 1.0
@@ -56,7 +56,7 @@ class GameThread(private val game: Vecharia) : Thread() {
     }
 
     /**
-     * Sleeps the Game Thread for a set number of milliseconds
+     * Sleeps the Game Thread for a set number of milliseconds.
      *
      * @author Jonathan Metcalf
      * @since 1.0

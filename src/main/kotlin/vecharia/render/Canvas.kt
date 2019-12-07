@@ -21,8 +21,8 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
     private var xi: Int = 0
 
     /**
-     * This method prints a string by adding to the last string
-     * It then adds a new line
+     * This method prints a string by adding to the last string.
+     * It then adds a new line.
      *
      * @author Jonathan Metcalf
      * @since 1.0
@@ -36,7 +36,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
     }
 
     /**
-     * This method just prints a new line
+     * This method just prints a new line.
      *
      * @author Jonathan Metcalf
      * @since 1.0
@@ -69,7 +69,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
     }
 
     /**
-     * This method prints a single character
+     * This method prints a single character.
      *
      * @author Jonathan Metcalf
      * @since 1.0
@@ -80,7 +80,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
 
 
     /**
-     * This method prints a string str by adding to the last string
+     * This method prints a string str by adding to the last string.
      *
      * @author Jonathan Metcalf
      * @since 1.0
@@ -103,7 +103,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
 
 
     /**
-     * Clears the screen, buffers, x and y locations
+     * Clears the screen, buffers, x and y locations.
      *
      * @author Jonathan Metcalf
      * @since 1.0
