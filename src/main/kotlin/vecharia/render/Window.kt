@@ -27,7 +27,7 @@ class Window : ApplicationAdapter() {
     var width: Int = -1
     var height: Int = -1
 
-    private val inputActions = mutableMapOf<Int, InputEvent>()
+    private val inputActions = mutableMapOf<Int, () -> Unit>()
     var entering = false
     var inputBuffer = ""
     var frameCount = 0
@@ -62,7 +62,7 @@ class Window : ApplicationAdapter() {
         SoundSystem.init(canvas)
         println("Sound done")
 
-        game = GameThread(this)
+        //todo create vecharia object
         println("Main init done")
     }
 
@@ -86,7 +86,7 @@ class Window : ApplicationAdapter() {
         if (entering) {
             readInput()
 
-            if (Gdx.input.isKeyJustPressed(BACKSPACE) && inputBuffer.length > 0)
+            if (Gdx.input.isKeyJustPressed(BACKSPACE) && inputBuffer.isNotEmpty())
                 inputBuffer = inputBuffer.substring(0, inputBuffer.length - 1)
 
             if (Gdx.input.isKeyJustPressed(ENTER))
@@ -94,8 +94,7 @@ class Window : ApplicationAdapter() {
 
             synchronized(inputActions) {
                 for ((key, action) in inputActions) {
-                    if (Gdx.input.isKeyJustPressed(key))
-                        action.onInput()
+                    if (Gdx.input.isKeyJustPressed(key)) action()
                 }
             }
         }
@@ -124,7 +123,7 @@ class Window : ApplicationAdapter() {
      * @param key the key to listen for, the int comes from the Keys class
      * @param event an InputAction
      */
-    fun addKeyAction(key: Int, event: InputEvent) {
+    fun addKeyAction(key: Int, event: () -> Unit) {
         synchronized(inputActions) {
             inputActions[key] = event
         }

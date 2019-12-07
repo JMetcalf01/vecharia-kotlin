@@ -1,10 +1,10 @@
 package vecharia
 
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import vecharia.render.GameThread
 import vecharia.render.Window
-import vecharia.util.SimpleQueue
 import java.awt.Toolkit
 import java.lang.Exception
 import java.util.concurrent.atomic.AtomicBoolean
@@ -29,12 +29,16 @@ fun main() {
 
 class Vecharia(val log: Logger, private val window: Window) {
     private val gameThread: GameThread
-    private val printQueue: SimpleQueue<Pair<String, Boolean>> = SimpleQueue()
+//    private val printQueue: SimpleQueue<Pair<String, Boolean>> = SimpleQueue()
 
     private val skipPrint = AtomicBoolean(false)
 
     init {
         gameThread = GameThread(this)
+
+        window.addKeyAction(Input.Keys.SPACE, {
+            println()
+        })
     }
 
     fun getUserInput(): String = window.readLine()
@@ -42,6 +46,7 @@ class Vecharia(val log: Logger, private val window: Window) {
     fun clear() = window.canvas.clear()
 
     fun print(message: String, wait: Boolean = false) {
+        skipPrint.set(false)
         for (char in message) {
             window.canvas.print(char)
             if (!skipPrint.get())
