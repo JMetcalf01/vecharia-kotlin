@@ -43,11 +43,12 @@ class Window : ApplicationAdapter() {
      * @since 1.0
      */
     override fun create() {
-        println("Beginning System Init...")
+        val logger: Logger = ConsoleLogger(Logger.Level.DEBUG)
+        logger.info("Initializing System")
 
         width = Gdx.graphics.width
         height = Gdx.graphics.height
-        println("Constants done")
+        logger.info("Constants done")
 
         val f = FreeTypeFontGenerator(Gdx.files.absolute("assets/font.otf"))
         val fontParams = FreeTypeFontGenerator.FreeTypeFontParameter()
@@ -56,18 +57,18 @@ class Window : ApplicationAdapter() {
         font.setUseIntegerPositions(false)
         f.dispose()
         font.color = Color.WHITE
-        println("Font done.")
+        logger.info("Font done")
 
         batch = SpriteBatch()
         canvas = Canvas(this, font)
-        println("libGDX things done")
+        logger.info("libGDX initialized")
 
         SoundSystem.init(canvas)
-        println("Sound done")
+       logger.info("Sound done")
 
         game = Vecharia(ConsoleLogger(Logger.Level.DEBUG), this)
         game.start()
-        println("Main init done")
+        logger.info("Initialization finished")
     }
 
     /**
