@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
  * @since Version 1.0
  */
 class Canvas(private val win: Window, private val font: BitmapFont) {
-
     private var charBuffer: Array<Array<Char>> = Array(win.charHeight()) { Array(win.charWidth()) { 0.toChar() } }
     private var fontColorBuffer: Array<Array<Color>> =
         Array(win.charHeight()) { Array(win.charWidth()) { Color.CLEAR } }

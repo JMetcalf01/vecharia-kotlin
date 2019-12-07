@@ -64,7 +64,7 @@ class GameThread(private val win: Window) : Thread() {
      */
     private fun sleep(millis: Int) {
         try {
-            this.sleep(millis)
+            sleep(millis.toLong())
         } catch (e: Exception) {
             e.printStackTrace()
         }
