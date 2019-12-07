@@ -1,4 +1,4 @@
-package vecharia.render
+package vecharia.util
 
 /**
  * Represents a key input event.
