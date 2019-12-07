@@ -1,5 +1,3 @@
-package desktop
-
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import vecharia.render.Window
@@ -14,4 +12,8 @@ fun main() {
     config.resizable = false
 
     LwjglApplication(Window(), config)
+}
+
+class Vecharia {
+
 }

@@ -27,7 +27,7 @@ class Window : ApplicationAdapter() {
     var width: Int = -1
     var height: Int = -1
 
-    private val inputActions = mutableMapOf<Int, InputAction>()
+    private val inputActions = mutableMapOf<Int, InputEvent>()
     var entering = false
     var inputBuffer = ""
     var frameCount = 0
@@ -84,7 +84,7 @@ class Window : ApplicationAdapter() {
         batch.end()
 
         if (entering) {
-            addToInputBuffer()
+            readInput()
 
             if (Gdx.input.isKeyJustPressed(BACKSPACE) && inputBuffer.length > 0)
                 inputBuffer = inputBuffer.substring(0, inputBuffer.length - 1)
@@ -95,7 +95,7 @@ class Window : ApplicationAdapter() {
             synchronized(inputActions) {
                 for ((key, action) in inputActions) {
                     if (Gdx.input.isKeyJustPressed(key))
-                        action.action()
+                        action.onInput()
                 }
             }
         }
@@ -120,13 +120,13 @@ class Window : ApplicationAdapter() {
      * @since 1.0
      *
      * @see com.badlogic.gdx.Input.Keys
-     * @see vecharia.render.InputAction
+     * @see vecharia.render.InputEvent
      * @param key the key to listen for, the int comes from the Keys class
-     * @param action an InputAction
+     * @param event an InputAction
      */
-    fun addKeyAction(key: Int, action: InputAction) {
+    fun addKeyAction(key: Int, event: InputEvent) {
         synchronized(inputActions) {
-            inputActions[key] = action
+            inputActions[key] = event
         }
     }
 
@@ -185,77 +185,26 @@ class Window : ApplicationAdapter() {
         return (height.toDouble() / font.lineHeight).roundToInt()
     }
 
-    private fun addToInputBuffer() {
-        if (Gdx.input.isKeyPressed(SHIFT_LEFT) || Gdx.input.isKeyPressed(SHIFT_RIGHT)) {
-            if (Gdx.input.isKeyJustPressed(A)) inputBuffer += 'A';
-            if (Gdx.input.isKeyJustPressed(B)) inputBuffer += 'B';
-            if (Gdx.input.isKeyJustPressed(C)) inputBuffer += 'C';
-            if (Gdx.input.isKeyJustPressed(D)) inputBuffer += 'D';
-            if (Gdx.input.isKeyJustPressed(E)) inputBuffer += 'E';
-            if (Gdx.input.isKeyJustPressed(F)) inputBuffer += 'F';
-            if (Gdx.input.isKeyJustPressed(G)) inputBuffer += 'G';
-            if (Gdx.input.isKeyJustPressed(H)) inputBuffer += 'H';
-            if (Gdx.input.isKeyJustPressed(I)) inputBuffer += 'I';
-            if (Gdx.input.isKeyJustPressed(J)) inputBuffer += 'J';
-            if (Gdx.input.isKeyJustPressed(K)) inputBuffer += 'K';
-            if (Gdx.input.isKeyJustPressed(L)) inputBuffer += 'L';
-            if (Gdx.input.isKeyJustPressed(M)) inputBuffer += 'M';
-            if (Gdx.input.isKeyJustPressed(N)) inputBuffer += 'N';
-            if (Gdx.input.isKeyJustPressed(O)) inputBuffer += 'O';
-            if (Gdx.input.isKeyJustPressed(P)) inputBuffer += 'P';
-            if (Gdx.input.isKeyJustPressed(Q)) inputBuffer += 'Q';
-            if (Gdx.input.isKeyJustPressed(R)) inputBuffer += 'R';
-            if (Gdx.input.isKeyJustPressed(S)) inputBuffer += 'S';
-            if (Gdx.input.isKeyJustPressed(T)) inputBuffer += 'T';
-            if (Gdx.input.isKeyJustPressed(U)) inputBuffer += 'U';
-            if (Gdx.input.isKeyJustPressed(V)) inputBuffer += 'V';
-            if (Gdx.input.isKeyJustPressed(W)) inputBuffer += 'W';
-            if (Gdx.input.isKeyJustPressed(X)) inputBuffer += 'X';
-            if (Gdx.input.isKeyJustPressed(Y)) inputBuffer += 'Y';
-            if (Gdx.input.isKeyJustPressed(Z)) inputBuffer += 'Z';
-        } else {
-            if (Gdx.input.isKeyJustPressed(A)) inputBuffer += 'a';
-            if (Gdx.input.isKeyJustPressed(B)) inputBuffer += 'b';
-            if (Gdx.input.isKeyJustPressed(C)) inputBuffer += 'c';
-            if (Gdx.input.isKeyJustPressed(D)) inputBuffer += 'd';
-            if (Gdx.input.isKeyJustPressed(E)) inputBuffer += 'e';
-            if (Gdx.input.isKeyJustPressed(F)) inputBuffer += 'f';
-            if (Gdx.input.isKeyJustPressed(G)) inputBuffer += 'g';
-            if (Gdx.input.isKeyJustPressed(H)) inputBuffer += 'h';
-            if (Gdx.input.isKeyJustPressed(I)) inputBuffer += 'i';
-            if (Gdx.input.isKeyJustPressed(J)) inputBuffer += 'j';
-            if (Gdx.input.isKeyJustPressed(K)) inputBuffer += 'k';
-            if (Gdx.input.isKeyJustPressed(L)) inputBuffer += 'l';
-            if (Gdx.input.isKeyJustPressed(M)) inputBuffer += 'm';
-            if (Gdx.input.isKeyJustPressed(N)) inputBuffer += 'n';
-            if (Gdx.input.isKeyJustPressed(O)) inputBuffer += 'o';
-            if (Gdx.input.isKeyJustPressed(P)) inputBuffer += 'p';
-            if (Gdx.input.isKeyJustPressed(Q)) inputBuffer += 'q';
-            if (Gdx.input.isKeyJustPressed(R)) inputBuffer += 'r';
-            if (Gdx.input.isKeyJustPressed(S)) inputBuffer += 's';
-            if (Gdx.input.isKeyJustPressed(T)) inputBuffer += 't';
-            if (Gdx.input.isKeyJustPressed(U)) inputBuffer += 'u';
-            if (Gdx.input.isKeyJustPressed(V)) inputBuffer += 'v';
-            if (Gdx.input.isKeyJustPressed(W)) inputBuffer += 'w';
-            if (Gdx.input.isKeyJustPressed(X)) inputBuffer += 'x';
-            if (Gdx.input.isKeyJustPressed(Y)) inputBuffer += 'y';
-            if (Gdx.input.isKeyJustPressed(Z)) inputBuffer += 'z';
+    /**
+     * Reads input for the current frame, and adds it to the buffer.
+     *
+     * @author Matt Worzala
+     * @since 1.0
+     */
+    private fun readInput() {
+        val shift = Gdx.input.isKeyPressed(SHIFT_LEFT) || Gdx.input.isKeyPressed(SHIFT_RIGHT)
+        for (i in A..Z) {
+            if (Gdx.input.isKeyJustPressed(i))
+                inputBuffer += (if (shift) i + 36 else i + 68).toChar()
         }
 
-        if (Gdx.input.isKeyJustPressed(NUM_0)) inputBuffer += '0';
-        if (Gdx.input.isKeyJustPressed(NUM_1)) inputBuffer += '1';
-        if (Gdx.input.isKeyJustPressed(NUM_2)) inputBuffer += '2';
-        if (Gdx.input.isKeyJustPressed(NUM_3)) inputBuffer += '3';
-        if (Gdx.input.isKeyJustPressed(NUM_4)) inputBuffer += '4';
-        if (Gdx.input.isKeyJustPressed(NUM_5)) inputBuffer += '5';
-        if (Gdx.input.isKeyJustPressed(NUM_6)) inputBuffer += '6';
-        if (Gdx.input.isKeyJustPressed(NUM_7)) inputBuffer += '7';
-        if (Gdx.input.isKeyJustPressed(NUM_8)) inputBuffer += '8';
-        if (Gdx.input.isKeyJustPressed(NUM_9)) inputBuffer += '9';
+        for (i in NUM_0..NUM_1) {
+            if (Gdx.input.isKeyJustPressed(i))
+                inputBuffer += (i + 41).toChar()
+        }
+
         if (Gdx.input.isKeyJustPressed(SPACE)) inputBuffer += ' ';
         if (Gdx.input.isKeyJustPressed(MINUS)) inputBuffer += '-';
         if (Gdx.input.isKeyJustPressed(PERIOD)) inputBuffer += '.';
     }
-
-
 }
