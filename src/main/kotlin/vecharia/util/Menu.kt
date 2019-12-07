@@ -33,7 +33,7 @@ class Menu(private val title: String, private val centered: Boolean = false) {
             selection.set(-1)
         }
 
-        render(game, selection.get())
+        render(game, selection.get(), 20)
         while (selection.get() != -1)
             game.sleep(5)
         game.removeInputEvent(Input.Keys.UP)
@@ -41,14 +41,14 @@ class Menu(private val title: String, private val centered: Boolean = false) {
         game.removeInputEvent(Input.Keys.ENTER)
     }
 
-    private fun render(game: Vecharia, selection: Int) {
+    private fun render(game: Vecharia, selection: Int, delay: Long = 0) {
         game.clear()
-        game.print(title)
+        game.print(title, delay = delay)
         for (i in order.indices) {
             val option = order[i]
             if (i == selection)
-                game.print("> $option", Color.GREEN)
-            else game.print("  $option")
+                game.print("> $option", Color.GREEN, delay = delay)
+            else game.print("  $option", delay = delay)
         }
     }
 }
