@@ -2,6 +2,7 @@ package vecharia.render
 
 import com.badlogic.gdx.Gdx
 import vecharia.Vecharia
+import vecharia.util.Menu
 import java.lang.Exception
 
 /**
@@ -29,6 +30,17 @@ class GameThread(private val game: Vecharia) : Thread() {
         println("Starting the game thread...")
 
         //Start the game here (todo)
+
+
+
+        val menu = Menu("Cool menu title")
+
+        menu.selection("Option 1") {
+            println("Option 1 was selected")
+        }
+
+
+
 
         while (true) {
             game.print(game.getTextInput())

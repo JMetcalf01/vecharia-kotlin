@@ -45,6 +45,10 @@ class Vecharia(val log: Logger, private val window: Window) {
 
     fun getTextInput(): String = window.readLine()
 
+    fun addInputEvent(key: Int, onInput: () -> Unit) = window.addKeyAction(key, onInput)
+
+    fun removeInputEvent(key: Int) = window.removeKeyAction(key)
+
     fun clear() = window.canvas.clear()
 
     fun print(message: String, color: Color = Color.WHITE, delay: Long = 20, newLine: Boolean = true, wait: Boolean = false) {
@@ -58,7 +62,7 @@ class Vecharia(val log: Logger, private val window: Window) {
         skipPrint.set(false)
     }
 
-    private fun sleep(length: Long) {
+    fun sleep(length: Long) {
         try {
             Thread.sleep(length)
         } catch (ignore: Exception) { }
