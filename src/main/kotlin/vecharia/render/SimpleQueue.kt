@@ -1,8 +1,17 @@
 package vecharia.render
 
+/**
+ * An implementation of a queue
+ *
+ * @author Jonathan Metcalf
+ * @since Version 1.0
+ */
 class SimpleQueue<E> {
     private val elements: MutableList<E> = mutableListOf()
 
+    /**
+     * Adds an element to the queue
+     */
     fun push(e: E) {
         elements.add(e)
     }

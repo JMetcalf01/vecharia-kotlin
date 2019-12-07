@@ -4,24 +4,41 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 
+/**
+ * This class keeps track of the text on the screen.
+ * It also allows you to print stuff to it.
+ *
+ * @author Jonathan Metcalf
+ * @since Version 1.0
+ */
 class Canvas(private val win: Window, private val font: BitmapFont) {
 
     private var charBuffer: Array<Array<Char>> = Array(win.charHeight()) { Array(win.charWidth()) { 0.toChar() } }
-    private var fontColorBuffer: Array<Array<Color>> = Array(win.charHeight()) { Array(win.charWidth()) { Color.CLEAR } }
+    private var fontColorBuffer: Array<Array<Color>> =
+        Array(win.charHeight()) { Array(win.charWidth()) { Color.CLEAR } }
     private var printing: Boolean = true
 
     private var yi: Int = 0
     private var xi: Int = 0
 
-    fun println(string: String, color: Color) {
+    /**
+     * This method prints a string by adding to the last string
+     * It then adds a new line
+     *
+     * @author Jonathan Metcalf
+     * @since Version 1.0
+     */
+    fun println(string: String = "", color: Color = Color.CLEAR) {
         print(string, color)
         println()
     }
 
-    fun println(string: String = "") {
-        println(string, Color.WHITE)
-    }
-
+    /**
+     * This method just prints a new line
+     *
+     * @author Jonathan Metcalf
+     * @since Version 1.0
+     */
     private fun println() {
         if (printing) {
             if (yi < charBuffer.size - 3) {
@@ -49,7 +66,13 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         }
     }
 
-    fun print(string: String, color: Color) {
+    /**
+     * This method prints a string str by adding to the last string
+     *
+     * @author Jonathan Metcalf
+     * @since Version 1.0
+     */
+    fun print(string: String, color: Color = Color.WHITE) {
         if (printing) {
             for (i in string.indices) {
                 if (xi + i < charBuffer[0].size) {
@@ -62,11 +85,13 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         }
     }
 
-    fun print(string: String) {
-        print(string, Color.WHITE)
-    }
 
-
+    /**
+     * Clears the screen, buffers, x and y locations
+     *
+     * @author Jonathan Metcalf
+     * @since Version 1.0
+     */
     fun clear() {
         for (i in charBuffer.indices) {
             for (j in charBuffer[0].indices) {
@@ -79,16 +104,27 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         xi = 0
     }
 
-
+    /**
+     * Renders the lines, and then user input, if any.
+     *
+     * @author Jonathan Metcalf
+     * @since Version 1.0
+     *
+     * @param batch the batch of sprites
+     */
     fun render(batch: SpriteBatch) {
+        // Render previous lines
         for (i in charBuffer.indices) {
             for (j in charBuffer[0].indices) {
                 font.color = if (fontColorBuffer[i][j] == Color.CLEAR) Color.WHITE else fontColorBuffer[i][j]
-                font.draw(batch, charBuffer[i][j].toString(),
-                    j * font.spaceXadvance, win.height - font.lineHeight * i - 5)
+                font.draw(
+                    batch, charBuffer[i][j].toString(),
+                    j * font.spaceXadvance, win.height - font.lineHeight * i - 5
+                )
             }
         }
 
+        // Render user input
         if (printing) {
             font.color = Color.WHITE
             font.draw(
