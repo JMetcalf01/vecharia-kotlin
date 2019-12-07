@@ -14,7 +14,7 @@ import vecharia.inventory.Inventory
  * @param name the name of the Entity
  * @param maxHealth the max health of the Entity
  */
-abstract class Entity(val name: String, val maxHealth: Int) {
+abstract class Entity(val name: String, open val maxHealth: Int) {
 
     // Health
     var health: Int = maxHealth

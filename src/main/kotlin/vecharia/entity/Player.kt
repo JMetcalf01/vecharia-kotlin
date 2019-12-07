@@ -6,10 +6,13 @@ import kotlin.math.pow
 
 /**
  * The player class, which holds the information about the player.
- * //todo add class and race
+ * // todo add class and race
  *
  * @author Jonathan Metcalf
  * @since 1.0
+ *
+ * @param name the name of the player
+ * @param maxHealth the maxHealth of the player
  */
 class Player(name: String, maxHealth: Int) : Entity(name, maxHealth) {
 
