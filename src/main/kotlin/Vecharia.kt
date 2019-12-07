@@ -3,6 +3,12 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import vecharia.render.Window
 import java.awt.Toolkit
 
+/**
+ * The entry point into the program
+ *
+ * @author Matt Worzala and Jonathan Metcalf
+ * @since 1.0
+ */
 fun main() {
     val config = LwjglApplicationConfiguration()
 
