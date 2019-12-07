@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 
 import com.badlogic.gdx.Input.Keys.*
 import vecharia.Vecharia
+import vecharia.logging.ConsoleLogger
+import vecharia.logging.Logger
 import kotlin.math.roundToInt
 
 /**
@@ -61,7 +63,7 @@ class Window : ApplicationAdapter() {
         SoundSystem.init(canvas)
         println("Sound done")
 
-        Vecharia(ConsoleLogger(), this)
+        Vecharia(ConsoleLogger(Logger.Level.DEBUG), this)
         println("Main init done")
     }
 

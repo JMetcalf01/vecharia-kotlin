@@ -3,12 +3,12 @@ package vecharia
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
+import vecharia.logging.Logger
 import vecharia.render.GameThread
 import vecharia.render.Window
 import java.awt.Toolkit
 import java.lang.Exception
 import java.util.concurrent.atomic.AtomicBoolean
-import java.util.logging.Logger
 
 /**
  * The entry point into the program
