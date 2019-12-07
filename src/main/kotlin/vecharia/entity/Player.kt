@@ -11,7 +11,7 @@ import kotlin.math.pow
  * @author Jonathan Metcalf
  * @since 1.0
  */
-class Player : Entity("player", 10) {
+class Player(name: String, maxHealth: Int) : Entity(name, maxHealth) {
 
     // Constants
     private val totalLevels: Int = 40
