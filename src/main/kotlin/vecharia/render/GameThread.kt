@@ -39,11 +39,20 @@ class GameThread(private val game: Vecharia) : Thread() {
             println("Option 1 was selected")
         }
 
+        menu.selection("Option 2") {
+            println("Option 2 was selected")
+        }
+
+        menu.selection("Option 3") {
+            println("Option 3 was selected")
+        }
+
 
 
 
         while (true) {
-            game.print(game.getTextInput())
+            game.getMenuInput(menu)
+//            game.print(game.getTextInput())
             sleep(10)
         }
 

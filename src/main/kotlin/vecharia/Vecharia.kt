@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color
 import vecharia.logging.Logger
 import vecharia.render.GameThread
 import vecharia.render.Window
+import vecharia.util.Menu
 import java.awt.Toolkit
 import java.lang.Exception
 import java.util.concurrent.atomic.AtomicBoolean
@@ -45,6 +46,8 @@ class Vecharia(val log: Logger, private val window: Window) {
 
     fun getTextInput(): String = window.readLine()
 
+    fun getMenuInput(menu: Menu) = menu.render(this)
+
     fun addInputEvent(key: Int, onInput: () -> Unit) = window.addKeyAction(key, onInput)
 
     fun removeInputEvent(key: Int) = window.removeKeyAction(key)
@@ -54,7 +57,7 @@ class Vecharia(val log: Logger, private val window: Window) {
     fun print(message: String, color: Color = Color.WHITE, delay: Long = 20, newLine: Boolean = true, wait: Boolean = false) {
         skipPrint.set(false)
         for (char in message) {
-            window.canvas.print(char.toString())
+            window.canvas.print(char.toString(), color)
             if (!skipPrint.get())
                 sleep(delay)
         }
