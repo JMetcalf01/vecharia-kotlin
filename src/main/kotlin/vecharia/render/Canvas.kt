@@ -26,6 +26,9 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
      *
      * @author Jonathan Metcalf
      * @since 1.0
+     *
+     * @param string the string to be printed
+     * @param color the color to print in
      */
     fun println(string: String = "", color: Color = Color.CLEAR) {
         print(string, color)
@@ -70,6 +73,9 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
      *
      * @author Jonathan Metcalf
      * @since 1.0
+     *
+     * @param string the string to print
+     * @param color the color to print in
      */
     fun print(string: String, color: Color = Color.WHITE) {
         if (printing) {

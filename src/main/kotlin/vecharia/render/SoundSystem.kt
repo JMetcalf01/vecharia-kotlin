@@ -22,6 +22,8 @@ object SoundSystem : Thread() {
      *
      * @author Matt Worzala
      * @since 1.0
+     *
+     * @param c the Canvas object
      */
     fun init(c: Canvas) {
         canvas = c
@@ -33,6 +35,9 @@ object SoundSystem : Thread() {
      *
      * @author Jonathan Metcalf
      * @since 1.0
+     *
+     * @param path the file path of the music
+     * @param looping whether the music loops or not
      */
     fun add(path: String, looping: Boolean) {
         val music = Gdx.audio.newMusic(Gdx.files.absolute(path))

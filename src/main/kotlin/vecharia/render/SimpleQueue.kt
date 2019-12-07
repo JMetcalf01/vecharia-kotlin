@@ -14,6 +14,8 @@ class SimpleQueue<E> {
      *
      * @author Jonathan Metcalf
      * @since Version 1.0
+     *
+     * @param e the element to add
      */
     fun push(e: E) {
         elements.add(e)
@@ -24,6 +26,8 @@ class SimpleQueue<E> {
      *
      * @author Jonathan Metcalf
      * @since Version 1.0
+     *
+     * @return the first element, or null if the queue is empty
      */
     fun pop(): E? {
         if (elements.size == 0) return null
