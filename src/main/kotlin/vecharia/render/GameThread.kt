@@ -1,6 +1,7 @@
 package vecharia.render
 
 import com.badlogic.gdx.Gdx
+import vecharia.Vecharia
 import java.lang.Exception
 
 /**
@@ -11,7 +12,7 @@ import java.lang.Exception
  * @author Jonathan Metcalf
  * @since 1.0
  */
-class GameThread(private val win: Window) : Thread() {
+class GameThread(private val game: Vecharia) : Thread() {
 
     init {
         this.isDaemon = true

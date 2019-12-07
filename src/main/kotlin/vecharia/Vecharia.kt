@@ -2,8 +2,13 @@ package vecharia
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
+import vecharia.render.GameThread
 import vecharia.render.Window
+import vecharia.util.SimpleQueue
 import java.awt.Toolkit
+import java.lang.Exception
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.logging.Logger
 
 /**
  * The entry point into the program
@@ -22,6 +27,32 @@ fun main() {
     LwjglApplication(Window(), config)
 }
 
-class Vecharia {
+class Vecharia(val log: Logger, private val window: Window) {
+    private val gameThread: GameThread
+    private val printQueue: SimpleQueue<Pair<String, Boolean>> = SimpleQueue()
 
+    private val skipPrint = AtomicBoolean(false)
+
+    init {
+        gameThread = GameThread(this)
+    }
+
+    fun getUserInput(): String = window.readLine()
+
+    fun clear() = window.canvas.clear()
+
+    fun print(message: String, wait: Boolean = false) {
+        for (char in message) {
+            window.canvas.print(char)
+            if (!skipPrint.get())
+                sleep(20)
+        }
+        skipPrint.set(false)
+    }
+
+    private fun sleep(length: Long) {
+        try {
+            Thread.sleep(length)
+        } catch (ignore: Exception) { }
+    }
 }

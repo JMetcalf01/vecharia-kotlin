@@ -2,6 +2,7 @@ package vecharia.render
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.audio.Music
+import vecharia.util.SimpleQueue
 
 /**
  * A thread to handle all sounds in the game
@@ -12,7 +13,8 @@ import com.badlogic.gdx.audio.Music
 object SoundSystem : Thread() {
 
     private lateinit var canvas: Canvas
-    private val playing: SimpleQueue<Song> = SimpleQueue()
+    private val playing: SimpleQueue<Song> =
+        SimpleQueue()
     private var isOn: Boolean = false
     private var wasOff: Boolean = false
     private var playingName: String = ""
