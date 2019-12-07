@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
  * It also allows you to print stuff to it.
  *
  * @author Jonathan Metcalf
- * @since Version 1.0
+ * @since 1.0
  */
 class Canvas(private val win: Window, private val font: BitmapFont) {
     private var charBuffer: Array<Array<Char>> = Array(win.charHeight()) { Array(win.charWidth()) { 0.toChar() } }
@@ -25,7 +25,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
      * It then adds a new line
      *
      * @author Jonathan Metcalf
-     * @since Version 1.0
+     * @since 1.0
      */
     fun println(string: String = "", color: Color = Color.CLEAR) {
         print(string, color)
@@ -36,7 +36,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
      * This method just prints a new line
      *
      * @author Jonathan Metcalf
-     * @since Version 1.0
+     * @since 1.0
      */
     private fun println() {
         if (printing) {
@@ -69,7 +69,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
      * This method prints a string str by adding to the last string
      *
      * @author Jonathan Metcalf
-     * @since Version 1.0
+     * @since 1.0
      */
     fun print(string: String, color: Color = Color.WHITE) {
         if (printing) {
@@ -89,7 +89,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
      * Clears the screen, buffers, x and y locations
      *
      * @author Jonathan Metcalf
-     * @since Version 1.0
+     * @since 1.0
      */
     fun clear() {
         for (i in charBuffer.indices) {
@@ -107,7 +107,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
      * Renders the lines, and then user input, if any.
      *
      * @author Jonathan Metcalf
-     * @since Version 1.0
+     * @since 1.0
      *
      * @param batch the batch of sprites
      */

@@ -9,7 +9,7 @@ import java.lang.Exception
  * @constructor starts the thread
  *
  * @author Jonathan Metcalf
- * @since Version 1.0
+ * @since 1.0
  */
 class GameThread(private val win: Window) : Thread() {
 
@@ -22,7 +22,7 @@ class GameThread(private val win: Window) : Thread() {
      * Starts the thread
      *
      * @author Jonathan Metcalf
-     * @since Version 1.0
+     * @since 1.0
      */
     override fun run() {
         println("Starting the game thread...")
@@ -42,7 +42,7 @@ class GameThread(private val win: Window) : Thread() {
      * Sleeps the thread while the user is entering
      *
      * @author Jonathan Metcalf
-     * @since Version 1.0
+     * @since 1.0
      */
     fun getInput() {
         try {
@@ -58,7 +58,7 @@ class GameThread(private val win: Window) : Thread() {
      * Sleeps the Game Thread for a set number of milliseconds
      *
      * @author Jonathan Metcalf
-     * @since Version 1.0
+     * @since 1.0
      *
      * @param millis the amount of milliseconds to sleep
      */
