@@ -97,7 +97,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
                 }
             }
 
-            xi = string.length
+            xi += string.length
         }
     }
 
