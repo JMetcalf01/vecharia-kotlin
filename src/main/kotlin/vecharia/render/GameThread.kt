@@ -27,7 +27,7 @@ class GameThread(private val game: Vecharia) : Thread() {
      * @since 1.0
      */
     override fun run() {
-        println("Starting the game thread...")
+        game.log.info("Game Thread started")
 
         //Start the game here (todo)
 
@@ -43,7 +43,7 @@ class GameThread(private val game: Vecharia) : Thread() {
 
 
         while (true) {
-            game.print(game.getTextInput())
+            game.print(game.getTextInput(), wait = true)
             sleep(10)
         }
 
