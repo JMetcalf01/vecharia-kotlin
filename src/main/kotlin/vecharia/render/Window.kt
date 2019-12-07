@@ -22,6 +22,8 @@ import kotlin.math.roundToInt
  */
 class Window : ApplicationAdapter() {
     lateinit var canvas: Canvas
+    lateinit var game: Vecharia
+
     private lateinit var batch: SpriteBatch
     private lateinit var font: BitmapFont
 
@@ -63,7 +65,8 @@ class Window : ApplicationAdapter() {
         SoundSystem.init(canvas)
         println("Sound done")
 
-        Vecharia(ConsoleLogger(Logger.Level.DEBUG), this)
+        game = Vecharia(ConsoleLogger(Logger.Level.DEBUG), this)
+        game.start()
         println("Main init done")
     }
 
@@ -120,7 +123,6 @@ class Window : ApplicationAdapter() {
      * @since 1.0
      *
      * @see com.badlogic.gdx.Input.Keys
-     * @see vecharia.render.InputEvent
      * @param key the key to listen for, the int comes from the Keys class
      * @param event an InputAction
      */
@@ -154,7 +156,7 @@ class Window : ApplicationAdapter() {
      */
     fun readLine(): String {
         entering = true;
-        game.getInput()
+        game.gameThread.getInput()
         val input = inputBuffer
         canvas.println(input, Color.WHITE)
         inputBuffer = ""

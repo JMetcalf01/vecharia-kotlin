@@ -31,7 +31,7 @@ class GameThread(private val game: Vecharia) : Thread() {
         //Start the game here (todo)
 
         while (true) {
-            win.canvas.println(win.readLine())
+            game.print(game.getTextInput())
             sleep(10)
         }
 
@@ -47,7 +47,7 @@ class GameThread(private val game: Vecharia) : Thread() {
      */
     fun getInput() {
         try {
-            while (win.entering) {
+            while (game.isTyping()) {
                 this.sleep(10)
             }
         } catch (e: Exception) {

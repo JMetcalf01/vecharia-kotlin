@@ -28,20 +28,20 @@ fun main() {
 }
 
 class Vecharia(val log: Logger, private val window: Window) {
-    private val gameThread: GameThread
-//    private val printQueue: SimpleQueue<Pair<String, Boolean>> = SimpleQueue()
+    lateinit var gameThread: GameThread
 
     private val skipPrint = AtomicBoolean(false)
 
-    init {
+    fun start() {
         gameThread = GameThread(this)
-
-        window.addKeyAction(Input.Keys.SPACE, {
-            println()
-        })
+        window.addKeyAction(Input.Keys.SPACE) {
+            if (!window.entering) skipPrint.set(true)
+        }
     }
 
-    fun getUserInput(): String = window.readLine()
+    fun isTyping(): Boolean = window.entering
+
+    fun getTextInput(): String = window.readLine()
 
     fun clear() = window.canvas.clear()
 
