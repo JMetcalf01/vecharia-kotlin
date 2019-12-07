@@ -9,9 +9,12 @@ import vecharia.menu.MainMenu
 import vecharia.render.GameThread
 import vecharia.render.Window
 import vecharia.menu.Menu
+import vecharia.render.Clock
+import vecharia.util.Tickable
 import java.awt.Toolkit
 import java.lang.Exception
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 
 /**
  * The entry point into the program.
@@ -36,26 +39,47 @@ fun main() {
  * @author Matt Worzala and Jonathan Metcalf
  * @since 1.0
  */
-class Vecharia(val log: Logger, private val window: Window) {
+class Vecharia(val log: Logger, val window: Window) {
     lateinit var gameThread: GameThread
-    val paused: AtomicBoolean = AtomicBoolean(false)
+    private lateinit var clock: Clock
+    private val ticking: MutableMap<Int, Tickable> = HashMap()
 
-    private val skipPrint = AtomicBoolean(false)
+    private var printJob: PrintJob? = null
 
     /**
      * Starts the game thread, and adds a keybind to speed up text
      * if space is hit.
      */
     fun start() {
+        clock = Clock(this)
         gameThread = GameThread(this)
         window.addKeyAction(Input.Keys.SPACE) {
-            if (!window.entering) skipPrint.set(true)
+            if (!window.entering) printJob?.skipped = true
         }
-        window.addKeyAction(Input.Keys.ESCAPE) {
-            println("Hi")
-            if (MainMenu.open.get())
-                MainMenu.close(this)
-            else MainMenu.open(this)
+        MainMenu.register(this)
+    }
+
+    fun prompt(menu: Menu): Int {
+        menu.render(this)
+        val id: Int
+        synchronized(ticking) {
+            id = startTicking(menu)
+        }
+        while (!menu.ready)
+            sleep(5)
+        synchronized(ticking) {
+            stopTicking(id)
+        }
+        return menu.selection
+    }
+
+    fun tick(frame: Int) {
+        if (frame % 4 == 0) {
+            tickPrint()
+        }
+        synchronized(ticking) {
+            for (ticker in ticking.values)
+                ticker.tick(this)
         }
     }
 
@@ -82,6 +106,15 @@ class Vecharia(val log: Logger, private val window: Window) {
 
     fun getMenuInput(menu: Menu) = menu.render(this)
 
+    fun startTicking(tickable: Tickable): Int {
+        ticking[tickable.hashCode()] = tickable
+        return tickable.hashCode()
+    }
+
+    fun stopTicking(id: Int) {
+        ticking.remove(id)
+    }
+
     /**
      * Adds a keybind for a specific action.
      *
@@ -91,7 +124,8 @@ class Vecharia(val log: Logger, private val window: Window) {
      * @param key the key to trigger the action
      * @param onInput the action to be performed
      */
-    fun addInputEvent(key: Int, onInput: () -> Unit) = window.addKeyAction(key, onInput)
+    fun addInputEvent(key: Int, paused: Boolean = false, onInput: () -> Unit) =
+        window.addKeyAction(key, paused, onInput)
 
     /**
      * Removes a specific keybind.
@@ -101,7 +135,7 @@ class Vecharia(val log: Logger, private val window: Window) {
      *
      * @param key the key for the keybind to remove
      */
-    fun removeInputEvent(key: Int) = window.removeKeyAction(key)
+    fun removeInputEvent(key: Int, paused: Boolean = false) = window.removeKeyAction(key, paused)
 
     /**
      * Clears the canvas.
@@ -110,6 +144,23 @@ class Vecharia(val log: Logger, private val window: Window) {
      * @since 1.0
      */
     fun clear() = window.canvas.clear()
+
+    private fun tickPrint() {
+        val job = printJob
+        if (job != null) {
+            if (job.skipped || job.delay == 0L) {
+                window.canvas.print(job.message, job.color)
+                window.canvas.println()
+                printJob = null
+            } else {
+                window.canvas.print(job.message[0].toString(), job.color)
+                if (job.message.length == 1) {
+                    window.canvas.println()
+                    printJob = null
+                } else printJob?.message = job.message.substring(1)
+            }
+        }
+    }
 
     /**
      * Prints a line of text in a specific color, with a possible delay between each letter (so it scrolls),
@@ -131,25 +182,10 @@ class Vecharia(val log: Logger, private val window: Window) {
         newLine: Boolean = true,
         wait: Boolean = false
     ) {
-        skipPrint.set(false)
-        for (char in message) {
-            window.canvas.print(char.toString(), color)
-            if (!skipPrint.get())
-                sleep(delay)
+        printJob = PrintJob(message, color, delay, newLine, wait)
+        while (this.printJob != null) {
+            sleep(5)
         }
-        if (wait) {
-            window.entering = true
-            window.canvas.println()
-            window.canvas.print("Hit enter to continue.")
-            window.canvas.println()
-            window.addKeyAction(Input.Keys.ENTER) {
-                window.entering = false
-                clear()
-            }
-            while (window.entering) sleep(5)
-            window.removeKeyAction(Input.Keys.ENTER)
-        } else if (newLine) window.canvas.println()
-        skipPrint.set(false)
     }
 
     /**
@@ -160,12 +196,21 @@ class Vecharia(val log: Logger, private val window: Window) {
      *
      * @param length the time to sleep the thread
      */
-    fun sleep(length: Long) {
+    private fun sleep(length: Long) {
         try {
-            while (paused.get())
-                Thread.sleep(5)
             Thread.sleep(length)
         } catch (ignore: Exception) {
         }
+    }
+
+    class PrintJob(msg: String, val color: Color = Color.WHITE, val delay: Long = 20, val newLine: Boolean = true, val wait: Boolean = false) {
+        private val safeMessage: AtomicReference<String> = AtomicReference(msg)
+        var message: String
+            get() = safeMessage.get()
+            set(value) = safeMessage.set(value)
+        private val safeSkip: AtomicBoolean = AtomicBoolean(false)
+        var skipped: Boolean
+            get() = safeSkip.get()
+            set(value) = safeSkip.set(value)
     }
 }

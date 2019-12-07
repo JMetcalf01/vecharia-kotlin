@@ -12,6 +12,7 @@ import com.badlogic.gdx.Input.Keys.*
 import vecharia.Vecharia
 import vecharia.logging.ConsoleLogger
 import vecharia.logging.Logger
+import vecharia.util.GameState
 import kotlin.math.roundToInt
 
 /**
@@ -30,7 +31,9 @@ class Window : ApplicationAdapter() {
     var width: Int = -1
     var height: Int = -1
 
-    private val inputActions = mutableMapOf<Int, () -> Unit>()
+    val inputActions = mutableMapOf<Int, () -> Unit>()
+    val pausedInputActions = mutableMapOf<Int, () -> Unit>()
+
     var entering = false
     var inputBuffer = ""
     var frameCount = 0
@@ -68,6 +71,7 @@ class Window : ApplicationAdapter() {
 
         game = Vecharia(ConsoleLogger(Logger.Level.DEBUG), this)
         game.start()
+        Thread.currentThread().name = "Vecharia Render"
         logger.info("Initialization finished")
     }
 
@@ -80,34 +84,31 @@ class Window : ApplicationAdapter() {
      */
     override fun render() {
         frameCount++
-        println("Start")
 
         Gdx.gl.glClearColor(0F, 0F, 0F, 1F)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-
-        println("Cleared")
 
         batch.begin()
         canvas.render(batch)
         batch.end()
 
-        println("Rendered")
-
-        synchronized(inputActions) {
+        if (GameState.paused) synchronized(pausedInputActions) {
+            for ((key, action) in pausedInputActions) {
+                if (Gdx.input.isKeyJustPressed(key)) {
+                    action()
+                }
+            }
+        } else synchronized(inputActions) {
             for ((key, action) in inputActions) {
                 if (Gdx.input.isKeyJustPressed(key)) {
-                    println("Call action")
                     action()
-                    println("Uncall Action")
                 }
             }
         }
 
-        println("dispatched events")
 
         if (entering) {
             readInput()
-            println("Read input")
 
             if (Gdx.input.isKeyJustPressed(BACKSPACE) && inputBuffer.isNotEmpty())
                 inputBuffer = inputBuffer.substring(0, inputBuffer.length - 1)
@@ -115,7 +116,6 @@ class Window : ApplicationAdapter() {
             if (Gdx.input.isKeyJustPressed(ENTER))
                 entering = false
         }
-        println("End")
     }
 
     /**
@@ -140,8 +140,10 @@ class Window : ApplicationAdapter() {
      * @param key the key to listen for, the int comes from the Keys class
      * @param event an InputAction
      */
-    fun addKeyAction(key: Int, event: () -> Unit) {
-        synchronized(inputActions) {
+    fun addKeyAction(key: Int, paused: Boolean = false, event: () -> Unit) {
+        if (paused) synchronized(pausedInputActions) {
+            pausedInputActions[key] = event
+        } else synchronized(inputActions) {
             inputActions[key] = event
         }
     }
@@ -155,8 +157,10 @@ class Window : ApplicationAdapter() {
      * @see com.badlogic.gdx.Input.Keys
      * @param key the key to remove, the int comes from the Keys class
      */
-    fun removeKeyAction(key: Int) {
-        synchronized(inputActions) {
+    fun removeKeyAction(key: Int, paused: Boolean = false) {
+        if (paused) synchronized(pausedInputActions) {
+            pausedInputActions.remove(key)
+        } else synchronized(inputActions) {
             inputActions.remove(key)
         }
     }

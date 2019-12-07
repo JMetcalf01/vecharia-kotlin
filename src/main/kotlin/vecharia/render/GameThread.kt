@@ -1,8 +1,12 @@
 package vecharia.render
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.graphics.Color
 import vecharia.Vecharia
+import vecharia.menu.MainMenu
 import vecharia.menu.Menu
+import vecharia.util.GameState
 import java.lang.Exception
 
 /**
@@ -17,6 +21,7 @@ class GameThread(private val game: Vecharia) : Thread() {
 
     init {
         this.isDaemon = true
+        this.name = "Vecharia Game"
         this.start()
     }
 
@@ -29,32 +34,23 @@ class GameThread(private val game: Vecharia) : Thread() {
     override fun run() {
         game.log.info("Game Thread started")
 
-        //Start the game here (todo)
-
-
-
-        val menu = Menu("Cool menu title")
-
-        menu.selection("Option 1") {
-            println("Option 1 was selected")
+        val menu = Menu("Super Cool Test Menu")
+        menu.selection("Selection 1") {
+            println("Selection 1 was selected.")
         }
-
-        menu.selection("Option 2") {
-            println("Option 2 was selected")
+        menu.selection("Selection 2") {
+            println("Selection 2 was selected.")
         }
-
-        menu.selection("Option 3") {
-            println("Option 3 was selected")
+        menu.selection("Selection 3") {
+            println("Selection 3 was selected.")
         }
-
-
-
+        menu.selection("Selection 4") {
+            println("Selection 4 was selected.")
+        }
 
         while (true) {
-//            game.print(game.getTextInput(), wait = true)
-            game.getMenuInput(menu)
-//            game.print(game.getTextInput())
-            sleep(10)
+
+            println(game.prompt(menu))
         }
 
         // Exits game
