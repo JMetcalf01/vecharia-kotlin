@@ -1,4 +1,4 @@
-package vecharia.render
+package vecharia.util
 
 /**
  * An implementation of a queue
