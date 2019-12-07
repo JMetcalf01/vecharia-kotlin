@@ -1,4 +1,4 @@
-package vecharia.util
+package vecharia.menu
 
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color

@@ -5,9 +5,10 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import com.badlogic.gdx.graphics.Color
 import vecharia.logging.Logger
+import vecharia.menu.MainMenu
 import vecharia.render.GameThread
 import vecharia.render.Window
-import vecharia.util.Menu
+import vecharia.menu.Menu
 import java.awt.Toolkit
 import java.lang.Exception
 import java.util.concurrent.atomic.AtomicBoolean
@@ -37,6 +38,7 @@ fun main() {
  */
 class Vecharia(val log: Logger, private val window: Window) {
     lateinit var gameThread: GameThread
+    val paused: AtomicBoolean = AtomicBoolean(false)
 
     private val skipPrint = AtomicBoolean(false)
 
@@ -47,8 +49,13 @@ class Vecharia(val log: Logger, private val window: Window) {
     fun start() {
         gameThread = GameThread(this)
         window.addKeyAction(Input.Keys.SPACE) {
-            println("Hello ${isTyping()}")
             if (!window.entering) skipPrint.set(true)
+        }
+        window.addKeyAction(Input.Keys.ESCAPE) {
+            println("Hi")
+            if (MainMenu.open.get())
+                MainMenu.close(this)
+            else MainMenu.open(this)
         }
     }
 
@@ -155,6 +162,8 @@ class Vecharia(val log: Logger, private val window: Window) {
      */
     fun sleep(length: Long) {
         try {
+            while (paused.get())
+                Thread.sleep(5)
             Thread.sleep(length)
         } catch (ignore: Exception) {
         }

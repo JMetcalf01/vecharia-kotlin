@@ -2,7 +2,7 @@ package vecharia.render
 
 import com.badlogic.gdx.Gdx
 import vecharia.Vecharia
-import vecharia.util.Menu
+import vecharia.menu.Menu
 import java.lang.Exception
 
 /**
