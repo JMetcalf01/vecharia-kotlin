@@ -87,6 +87,13 @@ class Window : ApplicationAdapter() {
         canvas.render(batch)
         batch.end()
 
+        synchronized(inputActions) {
+            for ((key, action) in inputActions) {
+                if (Gdx.input.isKeyJustPressed(key))
+                    action()
+            }
+        }
+
         if (entering) {
             readInput()
 
@@ -95,12 +102,6 @@ class Window : ApplicationAdapter() {
 
             if (Gdx.input.isKeyJustPressed(ENTER))
                 entering = false
-
-            synchronized(inputActions) {
-                for ((key, action) in inputActions) {
-                    if (Gdx.input.isKeyJustPressed(key)) action()
-                }
-            }
         }
     }
 
@@ -158,7 +159,7 @@ class Window : ApplicationAdapter() {
         entering = true;
         game.gameThread.getInput()
         val input = inputBuffer
-        canvas.println(input, Color.WHITE)
+        game.print(input, delay = 0)
         inputBuffer = ""
         return input
     }

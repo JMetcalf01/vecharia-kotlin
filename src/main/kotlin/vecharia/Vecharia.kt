@@ -3,6 +3,7 @@ package vecharia
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
+import com.badlogic.gdx.graphics.Color
 import vecharia.logging.Logger
 import vecharia.render.GameThread
 import vecharia.render.Window
@@ -35,6 +36,7 @@ class Vecharia(val log: Logger, private val window: Window) {
     fun start() {
         gameThread = GameThread(this)
         window.addKeyAction(Input.Keys.SPACE) {
+            println("Hello ${isTyping()}")
             if (!window.entering) skipPrint.set(true)
         }
     }
@@ -45,13 +47,14 @@ class Vecharia(val log: Logger, private val window: Window) {
 
     fun clear() = window.canvas.clear()
 
-    fun print(message: String, wait: Boolean = false) {
+    fun print(message: String, color: Color = Color.WHITE, delay: Long = 20, newLine: Boolean = true, wait: Boolean = false) {
         skipPrint.set(false)
         for (char in message) {
-            window.canvas.print(char)
+            window.canvas.print(char.toString())
             if (!skipPrint.get())
-                sleep(20)
+                sleep(delay)
         }
+        if (newLine) window.canvas.println()
         skipPrint.set(false)
     }
 

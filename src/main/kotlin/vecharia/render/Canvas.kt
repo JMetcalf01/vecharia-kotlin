@@ -21,18 +21,25 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
     private var xi: Int = 0
 
     /**
-     * This method prints a string by adding to the last string.
-     * It then adds a new line.
+     * This method prints a string str by adding to the last string.
      *
      * @author Jonathan Metcalf
      * @since 1.0
      *
-     * @param string the string to be printed
+     * @param string the string to print
      * @param color the color to print in
      */
-    fun println(string: String = "", color: Color = Color.CLEAR) {
-        print(string, color)
-        println()
+    fun print(string: String, color: Color = Color.WHITE) {
+        if (printing) {
+            for (i in string.indices) {
+                if (xi + i < charBuffer[0].size) {
+                    charBuffer[yi][xi + i] = string[i]
+                    fontColorBuffer[yi][xi + i] = color
+                }
+            }
+
+            xi += string.length
+        }
     }
 
     /**
@@ -41,7 +48,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
      * @author Jonathan Metcalf
      * @since 1.0
      */
-    private fun println() {
+    fun println() {
         if (printing) {
             if (yi < charBuffer.size - 3) {
                 yi++
@@ -65,39 +72,6 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
             }
 
             xi = 0
-        }
-    }
-
-    /**
-     * This method prints a single character.
-     *
-     * @author Jonathan Metcalf
-     * @since 1.0
-     *
-     * @param char the character to be printed
-     */
-    fun print(char: Char) = print(char.toString())
-
-
-    /**
-     * This method prints a string str by adding to the last string.
-     *
-     * @author Jonathan Metcalf
-     * @since 1.0
-     *
-     * @param string the string to print
-     * @param color the color to print in
-     */
-    fun print(string: String, color: Color = Color.WHITE) {
-        if (printing) {
-            for (i in string.indices) {
-                if (xi + i < charBuffer[0].size) {
-                    charBuffer[yi][xi + i] = string[i]
-                    fontColorBuffer[yi][xi + i] = color
-                }
-            }
-
-            xi += string.length
         }
     }
 
