@@ -68,6 +68,9 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         }
     }
 
+    fun print(char: Char) = print(char.toString())
+
+
     /**
      * This method prints a string str by adding to the last string
      *
