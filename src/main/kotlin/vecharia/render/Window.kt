@@ -80,34 +80,24 @@ class Window : ApplicationAdapter() {
      */
     override fun render() {
         frameCount++
-        println("Start")
 
         Gdx.gl.glClearColor(0F, 0F, 0F, 1F)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-
-        println("Cleared")
 
         batch.begin()
         canvas.render(batch)
         batch.end()
 
-        println("Rendered")
-
         synchronized(inputActions) {
             for ((key, action) in inputActions) {
                 if (Gdx.input.isKeyJustPressed(key)) {
-                    println("Call action")
                     action()
-                    println("Uncall Action")
                 }
             }
         }
 
-        println("dispatched events")
-
         if (entering) {
             readInput()
-            println("Read input")
 
             if (Gdx.input.isKeyJustPressed(BACKSPACE) && inputBuffer.isNotEmpty())
                 inputBuffer = inputBuffer.substring(0, inputBuffer.length - 1)
@@ -115,7 +105,6 @@ class Window : ApplicationAdapter() {
             if (Gdx.input.isKeyJustPressed(ENTER))
                 entering = false
         }
-        println("End")
     }
 
     /**
