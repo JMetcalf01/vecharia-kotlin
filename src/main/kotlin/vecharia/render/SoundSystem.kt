@@ -107,7 +107,7 @@ object SoundSystem : Thread() {
             return
         }
 
-        music.volume =0.5f
+        music.volume = 0.5f
         music.play()
 
         while (music.isPlaying) {
@@ -134,7 +134,8 @@ object SoundSystem : Thread() {
     private fun sleep() {
         try {
             sleep(10)
-        } catch (ignored: Exception) {}
+        } catch (ignored: Exception) {
+        }
     }
 
     /**

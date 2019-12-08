@@ -14,7 +14,13 @@ import java.lang.IllegalStateException
  * @param maxStack the maximum stack size of the item
  * @param visible whether the item is visible in the inventory
  */
-abstract class Item(val name: String, amount: Int = 1, val cost: Int = -1, val maxStack: Int = 99, val visible: Boolean = true) {
+abstract class Item(
+    val name: String,
+    amount: Int = 1,
+    val cost: Int = -1,
+    val maxStack: Int = 99,
+    val visible: Boolean = true
+) {
     var count: Int = amount
         set(value) {
             if (value < maxStack) field = value

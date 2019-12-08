@@ -82,6 +82,14 @@ class Vecharia(val log: Logger, private val window: Window) {
      */
     fun getTextInput(): String = window.readLine()
 
+    /**
+     * Gets menu input from a specific menu
+     *
+     * @author Matt Worzala
+     * @since 1.0
+     *
+     * @param menu the menu to get input from
+     */
     fun getMenuInput(menu: Menu) = menu.render(this)
 
     /**

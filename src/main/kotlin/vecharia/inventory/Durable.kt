@@ -4,6 +4,7 @@ package vecharia.inventory
  * Represents an item which has durability and can be broken or repaired
  */
 interface Durable {
+
     /**
      * Gets the current durability of the item
      *
