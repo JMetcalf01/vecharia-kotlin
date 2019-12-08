@@ -28,19 +28,30 @@ class GameThread(private val game: Vecharia) : Thread() {
      */
     override fun run() {
 
-        game.log.info("Game thread started...")
+//        game.log.info("Game thread started...")
 
 //        SoundSystem.add("assets/introscreen.mp3", looping = true)
 //        SoundSystem.playM()
 //        game.log.info("Sound system playing")
 
-        val menu = startMenu()
-        game.log.info("Menu created")
-
-        while (true) {
-            game.getMenuInput(menu)
-            sleep(10)
-        }
+        game.print("giggity")
+        game.sleep(1000)
+        game.print("balshdpoai")
+        game.sleep(1000)
+        game.window.canvas.buffer()
+        game.sleep(1000)
+        game.print("after buffer")
+        game.sleep(1000)
+        game.window.canvas.unbuffer()
+        game.sleep(1000)
+        game.print("after unbuffer")
+//        val menu = startMenu()
+//        game.log.info("Menu created")
+//
+//        while (true) {
+//            game.getMenuInput(menu)
+//            sleep(10)
+//        }
     }
 
     /**

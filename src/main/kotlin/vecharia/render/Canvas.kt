@@ -3,6 +3,7 @@ package vecharia.render
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import java.lang.IllegalStateException
 
 /**
  * This class keeps track of the text on the screen.
@@ -12,13 +13,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
  * @since 1.0
  */
 class Canvas(private val win: Window, private val font: BitmapFont) {
-    private var charBuffer: Array<Array<Char>> = Array(win.charHeight()) { Array(win.charWidth()) { 0.toChar() } }
-    private var fontColorBuffer: Array<Array<Color>> =
-        Array(win.charHeight()) { Array(win.charWidth()) { Color.CLEAR } }
+    var charBuffer: Array<Array<Character>> = Array(win.charHeight()) { Array(win.charWidth()) { Character(0.toChar(), Color.CLEAR) } }
+
     private var printing: Boolean = true
 
+    // Position of the next character
     private var yi: Int = 0
     private var xi: Int = 0
+
+    // Temporary variables when buffer and unbuffer is called
+    var charBufferTemp: Array<Array<Character>> = Array(win.charHeight()) { Array(win.charWidth()) { Character(0.toChar(), Color.CLEAR) } }
+    var yiTemp: Int = 0
+    var xiTemp: Int = 0
 
     /**
      * This method prints a string str by adding to the last string.
@@ -33,8 +39,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         if (printing) {
             for (i in string.indices) {
                 if (xi + i < charBuffer[0].size) {
-                    charBuffer[yi][xi + i] = string[i]
-                    fontColorBuffer[yi][xi + i] = color
+                    charBuffer[yi][xi] = Character(string[i], color)
                 }
             }
 
@@ -55,19 +60,16 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
             } else {
                 for (i in 1 until charBuffer.size) {
                     for (j in charBuffer[0].indices) {
-                        charBuffer[i - 1][j] = 0.toChar()
-                        fontColorBuffer[i - 1][j] = Color.CLEAR
+                        charBuffer[i - 1][j] = Character(0.toChar(), Color.CLEAR)
                     }
 
                     for (j in charBuffer[0].indices) {
                         charBuffer[i - 1][j] = charBuffer[i][j]
-                        fontColorBuffer[i - 1][j] = fontColorBuffer[i][j]
                     }
                 }
 
                 for (i in charBuffer[0].indices) {
-                    charBuffer[charBuffer.size - 1][i] = 0.toChar()
-                    fontColorBuffer[charBuffer.size - 1][i] = Color.CLEAR
+                    charBuffer[charBuffer.size - 1][i] = Character(0.toChar(), Color.CLEAR)
                 }
             }
 
@@ -85,8 +87,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
     fun clear() {
         for (i in charBuffer.indices) {
             for (j in charBuffer[0].indices) {
-                charBuffer[i][j] = 0.toChar()
-                fontColorBuffer[i][j] = Color.CLEAR
+                charBuffer[i][j] = Character(0.toChar(), Color.CLEAR)
             }
         }
 
@@ -106,9 +107,9 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         // Render previous lines
         for (i in charBuffer.indices) {
             for (j in charBuffer[0].indices) {
-                font.color = if (fontColorBuffer[i][j] == Color.CLEAR) Color.WHITE else fontColorBuffer[i][j]
+                font.color = if (charBuffer[i][j].color == Color.CLEAR) Color.WHITE else charBuffer[i][j].color
                 font.draw(
-                    batch, charBuffer[i][j].toString(),
+                    batch, charBuffer[i][j].char.toString(),
                     j * font.spaceXadvance, win.height - font.lineHeight * i - 5
                 )
             }
@@ -123,6 +124,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
             )
         }
 
+        // Renders blinking cursor
         if (printing && win.entering) {
             if (win.frameCount / 20 % 2 == 0) {
                 font.draw(
@@ -130,6 +132,60 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
                     win.height - font.lineHeight * yi - 5
                 )
             }
+        }
+    }
+
+    /**
+     * Buffers the character array in a temporary
+     * character array for use with the pause menu.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.0
+     */
+    fun buffer() {
+        charBufferTemp = charBuffer.copy()
+        xiTemp = xi
+        yiTemp = yi
+        clear()
+    }
+
+    /**
+     * Unbuffers the character array by copying
+     * over the contents of the temporary character array.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.0
+     */
+    fun unbuffer() {
+        if (charBufferTemp.isEmpty())
+            throw IllegalStateException()
+
+        xi = xiTemp
+        yi = yiTemp
+        charBuffer = charBufferTemp.copy()
+        charBufferTemp = emptyArray()
+    }
+
+    /**
+     * Deep copies a 2D character array.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.0
+     */
+    private fun Array<Array<Character>>.copy() = Array(size) { get(it).clone() }
+
+    /**
+     * A character that has a char and a color.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.0
+     *
+     * @param char the character
+     * @param color the color
+     */
+    class Character(val char: Char, val color: Color) {
+        override fun toString(): String {
+            return "[$char]"
         }
     }
 }
