@@ -35,7 +35,7 @@ class GameThread(private val game: Vecharia) : Thread() {
         game.log.info("Sound system playing")
 
 
-        val menu = Menu("Cool menu title", centered = true)
+        val menu = Menu("Welcome to Vecharia!", centered = true)
 
         menu.selection("New Game") {
             game.log.info("Starting New Game...")
@@ -53,8 +53,6 @@ class GameThread(private val game: Vecharia) : Thread() {
             game.log.info("Exiting...")
             Gdx.app.exit()
         }
-
-
 
 
         while (true) {

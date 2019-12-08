@@ -30,8 +30,9 @@ class Menu(private val title: String, private val centered: Boolean = false) {
      * @param onSelect the function to be called upon selection
      */
     fun selection(title: String, onSelect: () -> Unit) {
-        order.add(title)
-        selections[title] = onSelect
+        val titleFixed: String = title.padEnd(fixLengths(order))
+        order.add(titleFixed)
+        selections[titleFixed] = onSelect
     }
 
     /**
@@ -59,7 +60,7 @@ class Menu(private val title: String, private val centered: Boolean = false) {
             selection.set(-1)
         }
 
-        render(game, selection.get(), 20)
+        render(game, selection.get())
         while (selection.get() != -1)
             game.sleep(5)
         game.removeInputEvent(Input.Keys.UP)
@@ -70,21 +71,80 @@ class Menu(private val title: String, private val centered: Boolean = false) {
     /**
      * Render the text forming the menu.
      *
-     * @author Matt Worzala
+     * @author Matt Worzala and Jonathan Metcalf
      * @since 1.0
      *
      * @param game the Vecharia game instance
      * @param selection the currently selected item, where 0 is the top item
-     * @param delay the delay between printing each item.
      */
-    private fun render(game: Vecharia, selection: Int, delay: Long = 0) {
+    private fun render(game: Vecharia, selection: Int) {
         game.clear()
-        game.print(title, delay = delay)
+
+        // Centers vertically
+        if (centered) {
+            for (i in 0 until (game.window.charHeight() / 2) - (selections.size + 1)) {
+                game.print("", newLine = true)
+            }
+        }
+
+        // Centers title horizontally
+        if (centered) {
+            for (j in 0..centerString(game, title)) {
+                game.print(" ", newLine = false, delay = 0)
+            }
+        }
+        game.print(title, delay = 0)
+
         for (i in order.indices) {
             val option = order[i]
-            if (i == selection)
-                game.print("> $option", Color.GREEN, delay = delay)
-            else game.print("  $option", delay = delay)
+
+            // Centers options horizontally
+            for (j in 0..centerString(game, "  $option")) {
+                game.print(" ", newLine = false, delay = 0)
+            }
+
+            if (i == selection) game.print("> $option", Color.GREEN, delay = 0)
+            else game.print("  $option", delay = 0)
         }
+    }
+
+    /**
+     * Returns the number of spaces to center a certain string.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.0
+     *
+     * @param game the Vecharia game instance
+     * @param string the string to be centered
+     * @return the number of spaces to center the string
+     */
+    private fun centerString(game: Vecharia, string: String): Int {
+        return game.window.charWidth() / 2 - string.length / 2
+    }
+
+    /**
+     * This method standardizes the length of all the options
+     * It determines the length of the longest String in the array
+     * passed in, then adds spaces to every line that has a length
+     * less than that.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.0
+     *
+     * @param list the options to be standardized in length
+     * @return the length of the longest string
+     */
+    private fun fixLengths(list: MutableList<String>): Int {
+        var maxLength = 0
+        for (i in list.indices) {
+            if (maxLength < list[i].length)
+                maxLength = list[i].length
+        }
+
+        for (i in list.indices)
+            while (list[i].length < maxLength)
+                list[i] += " "
+
+        return maxLength
     }
 }
