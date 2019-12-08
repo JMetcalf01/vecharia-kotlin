@@ -3,7 +3,7 @@ package vecharia.menu
 import vecharia.Vecharia
 import java.util.concurrent.atomic.AtomicBoolean
 
-object MainMenu {
+object PauseMenu {
     private val menu: Menu = Menu("Vecharia", centered = true)
     val open: AtomicBoolean = AtomicBoolean(false)
 

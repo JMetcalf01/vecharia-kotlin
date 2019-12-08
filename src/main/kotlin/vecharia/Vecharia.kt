@@ -5,7 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import com.badlogic.gdx.graphics.Color
 import vecharia.logging.Logger
-import vecharia.menu.MainMenu
+import vecharia.menu.PauseMenu
 import vecharia.render.GameThread
 import vecharia.render.Window
 import vecharia.menu.Menu
@@ -54,9 +54,9 @@ class Vecharia(val log: Logger, val window: Window) {
         }
         window.addKeyAction(Input.Keys.ESCAPE) {
             println("Hi")
-            if (MainMenu.open.get())
-                MainMenu.close(this)
-            else MainMenu.open(this)
+            if (PauseMenu.open.get())
+                PauseMenu.close(this)
+            else PauseMenu.open(this)
         }
     }
 
