@@ -9,6 +9,7 @@ import vecharia.menu.MainMenu
 import vecharia.render.GameThread
 import vecharia.render.Window
 import vecharia.menu.Menu
+import vecharia.render.SoundSystem
 import java.awt.Toolkit
 import java.lang.Exception
 import java.util.concurrent.atomic.AtomicBoolean
@@ -38,6 +39,7 @@ fun main() {
  */
 class Vecharia(val log: Logger, private val window: Window) {
     lateinit var gameThread: GameThread
+
     val paused: AtomicBoolean = AtomicBoolean(false)
 
     private val skipPrint = AtomicBoolean(false)

@@ -73,7 +73,7 @@ class Menu(private val title: String, private val centered: Boolean = false) {
      * @author Matt Worzala
      * @since 1.0
      *
-     * @param game the vecharia game instance
+     * @param game the Vecharia game instance
      * @param selection the currently selected item, where 0 is the top item
      * @param delay the delay between printing each item.
      */

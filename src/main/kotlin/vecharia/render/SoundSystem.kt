@@ -78,11 +78,70 @@ object SoundSystem : Thread() {
         wasOff = true
     }
 
+    override fun run() {
+        while (true) {
+            if (isOn) {
+                wasOff = false
+                playNext()
+            } else {
+                sleep()
+            }
+        }
+    }
+
+    /**
+     * Plays the next song in the queue.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.0
+     *
+     * @see com.badlogic.gdx.audio.Music
+     */
+    private fun playNext() {
+        val song: Song? = playing.pop()
+        val music: Music? = song?.music
+        playingName = song?.name.toString()
+
+        if (music == null) {
+            isOn = false
+            return
+        }
+
+        music.volume =0.5f
+        music.play()
+
+        while (music.isPlaying) {
+            if (wasOff) {
+                break
+            }
+
+            sleep()
+        }
+
+        playingName = ""
+
+        if (wasOff) {
+            music.stop()
+        }
+    }
+
+    /**
+     * Sleeps the music thread
+     *
+     * @author Jonathan Metcalf
+     * @since 1.0
+     */
+    private fun sleep() {
+        try {
+            sleep(10)
+        } catch (ignored: Exception) {}
+    }
+
     /**
      * A song that has music and a name.
      *
      * @author Jonathan Metcalf
      * @since 1.0
      */
-    private class Song(val music: Music, val name: String) {}
+    private class Song(val music: Music, val name: String)
 }

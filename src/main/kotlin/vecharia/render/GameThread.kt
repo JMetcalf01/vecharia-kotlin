@@ -21,30 +21,37 @@ class GameThread(private val game: Vecharia) : Thread() {
     }
 
     /**
-     * Starts the thread.
+     * Starts the thread, begins the main menu.
      *
      * @author Jonathan Metcalf
      * @since 1.0
      */
     override fun run() {
-        game.log.info("Game Thread started")
 
-        //Start the game here (todo)
+        game.log.info("Game thread started...")
+
+        SoundSystem.add("assets/introscreen.mp3", looping = true)
+        SoundSystem.playM()
+        game.log.info("Sound system playing")
 
 
+        val menu = Menu("Cool menu title", centered = true)
 
-        val menu = Menu("Cool menu title")
-
-        menu.selection("Option 1") {
-            println("Option 1 was selected")
+        menu.selection("New Game") {
+            game.log.info("Starting New Game...")
         }
 
-        menu.selection("Option 2") {
-            println("Option 2 was selected")
+        menu.selection("Load Game") {
+            game.log.warn("Load Game In Progress!")
         }
 
-        menu.selection("Option 3") {
-            println("Option 3 was selected")
+        menu.selection("Settings") {
+            game.log.info("Settings...")
+        }
+
+        menu.selection("Exit") {
+            game.log.info("Exiting...")
+            Gdx.app.exit()
         }
 
 
@@ -56,9 +63,6 @@ class GameThread(private val game: Vecharia) : Thread() {
 //            game.print(game.getTextInput())
             sleep(10)
         }
-
-        // Exits game
-        Gdx.app.exit()
     }
 
     /**
