@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 
 import com.badlogic.gdx.Input.Keys.*
 import vecharia.Vecharia
+import vecharia.event.event
+import vecharia.event.namedEvent
 import vecharia.logging.ConsoleLogger
 import vecharia.logging.Logger
 import kotlin.math.roundToInt
@@ -94,6 +96,16 @@ class Window : ApplicationAdapter() {
                     action()
                 }
             }
+        }
+
+        data class Test(val id: Int)
+
+        val event = namedEvent<Test>()
+        event["Test"] = { (id) ->
+
+        }
+        event += { (id) ->
+
         }
 
         if (entering) {
