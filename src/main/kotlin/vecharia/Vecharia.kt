@@ -5,10 +5,10 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import com.badlogic.gdx.graphics.Color
 import vecharia.logging.Logger
-import vecharia.menu.PauseMenu
 import vecharia.render.GameThread
 import vecharia.render.Window
 import vecharia.menu.Menu
+import vecharia.util.Tickable
 import java.awt.Toolkit
 import java.lang.Exception
 import java.util.concurrent.atomic.AtomicBoolean
@@ -36,7 +36,7 @@ fun main() {
  * @author Matt Worzala and Jonathan Metcalf
  * @since 1.0
  */
-class Vecharia(val log: Logger, val window: Window) {
+class Vecharia(val log: Logger, val window: Window) : Tickable {
     lateinit var gameThread: GameThread
 
     val paused: AtomicBoolean = AtomicBoolean(false)
@@ -52,12 +52,12 @@ class Vecharia(val log: Logger, val window: Window) {
         window.addKeyAction(Input.Keys.SPACE) {
             if (!window.entering) skipPrint.set(true)
         }
-        window.addKeyAction(Input.Keys.ESCAPE) {
-            println("Hi")
-            if (PauseMenu.open.get())
-                PauseMenu.close(this)
-            else PauseMenu.open(this)
-        }
+//        window.addKeyAction(Input.Keys.ESCAPE) {
+//            println("Hi")
+//            if (PauseMenu.open.get())
+//                PauseMenu.close(this)
+//            else PauseMenu.open(this)
+//        }
     }
 
     /**
@@ -176,5 +176,9 @@ class Vecharia(val log: Logger, val window: Window) {
             Thread.sleep(length)
         } catch (ignore: Exception) {
         }
+    }
+
+    override fun tick(game: Vecharia, frame: Int) {
+
     }
 }
