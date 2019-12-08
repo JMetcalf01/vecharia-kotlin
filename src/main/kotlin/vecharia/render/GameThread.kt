@@ -34,26 +34,8 @@ class GameThread(private val game: Vecharia) : Thread() {
         SoundSystem.playM()
         game.log.info("Sound system playing")
 
-
-        val menu = Menu("Welcome to Vecharia!", centered = true)
-
-        menu.selection("New Game") {
-            game.log.info("Starting New Game...")
-        }
-
-        menu.selection("Load Game") {
-            game.log.warn("Load Game In Progress!")
-        }
-
-        menu.selection("Settings") {
-            game.log.info("Settings...")
-        }
-
-        menu.selection("Exit") {
-            game.log.info("Exiting...")
-            Gdx.app.exit()
-        }
-
+        val menu = startMenu()
+        game.log.info("Menu created")
 
         while (true) {
             game.getMenuInput(menu)
@@ -88,9 +70,48 @@ class GameThread(private val game: Vecharia) : Thread() {
     private fun sleep(millis: Int) {
         try {
             sleep(millis.toLong())
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (ignored: Exception) {
         }
+    }
+
+    /**
+     * Creates the start menu with selections:
+     *     New Game (creates new game)
+     *     Load Game (loads game from save file)
+     *     Settings (opens settings menu)
+     *     Credits (runs the credits)
+     *     Exit (exits the game)
+     *
+     * @author Jonathan Metcalf
+     * @since 1.0
+     *
+     * @return the start menu
+     */
+    private fun startMenu(): Menu {
+        val menu = Menu("Welcome to Vecharia!", centered = true)
+
+        menu.selection("New Game") {
+            game.log.info("New game started")
+        }
+
+        menu.selection("Load Game") {
+            game.log.warn("Load game in progress!")
+        }
+
+        menu.selection("Settings") {
+            game.log.info("Settings opened")
+        }
+
+        menu.selection("Credits") {
+            game.log.info("Running credits")
+        }
+
+        menu.selection("Exit") {
+            game.log.info("Exiting")
+            Gdx.app.exit()
+        }
+
+        return menu
     }
 
 }
