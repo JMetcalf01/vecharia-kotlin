@@ -30,9 +30,9 @@ class GameThread(private val game: Vecharia) : Thread() {
 
         game.log.info("Game thread started...")
 
-        SoundSystem.add("assets/introscreen.mp3", looping = true)
-        SoundSystem.playM()
-        game.log.info("Sound system playing")
+//        SoundSystem.add("assets/introscreen.mp3", looping = true)
+//        SoundSystem.playM()
+//        game.log.info("Sound system playing")
 
         val menu = startMenu()
         game.log.info("Menu created")
