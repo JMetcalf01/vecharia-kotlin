@@ -5,6 +5,7 @@ import vecharia.Vecharia
 import vecharia.menu.Menu
 import vecharia.util.GameState
 import java.lang.Exception
+import kotlin.system.exitProcess
 
 /**
  * This class is for the thread that the game runs on.
@@ -95,7 +96,8 @@ class GameThread(private val game: Vecharia) : Thread() {
         val menu = Menu("Welcome to Vecharia!", centered = true)
 
         menu.selection("New Game") {
-            game.log.info("New game started")
+            GameState.state = GameState.ACTIVE
+            game.log.info("New game started and GameState is now Active")
         }
 
         menu.selection("Load Game") {
@@ -113,6 +115,8 @@ class GameThread(private val game: Vecharia) : Thread() {
         menu.selection("Exit") {
             game.log.info("Exiting")
             Gdx.app.exit()
+            SoundSystem.end()
+            exitProcess(0)
         }
 
         return menu

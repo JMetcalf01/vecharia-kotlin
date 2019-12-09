@@ -6,6 +6,7 @@ import vecharia.logging.Logger
 import vecharia.render.GameThread
 import vecharia.render.Window
 import vecharia.menu.Menu
+import vecharia.menu.PauseMenu
 import vecharia.render.Printer
 import vecharia.util.Tickable
 import java.awt.Toolkit
@@ -42,6 +43,7 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
     lateinit var printer: Printer
 
     private val tickables: MutableSet<Tickable> = HashSet()
+    val pauseMenu: PauseMenu = PauseMenu("Pause Menu")
 
     /**
      * Starts the game thread, and adds a keybind to speed up text

@@ -2,6 +2,7 @@ package vecharia.render
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.audio.Music
+import org.lwjgl.openal.AL
 import vecharia.util.SimpleQueue
 
 /**
@@ -136,6 +137,16 @@ object SoundSystem : Thread() {
             sleep(10)
         } catch (ignored: Exception) {
         }
+    }
+
+    /**
+     * Shuts down the audio library before the game is closed.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.1
+     */
+    fun end() {
+        AL.destroy()
     }
 
     /**

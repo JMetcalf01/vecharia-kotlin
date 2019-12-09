@@ -3,6 +3,7 @@
 package vecharia.render
 
 import vecharia.Vecharia
+import vecharia.menu.PauseMenu
 import vecharia.util.GameState
 import vecharia.util.Tickable
 import kotlin.collections.HashMap
@@ -44,8 +45,10 @@ class Clock(private val game: Vecharia, private val speed: Long = 5) : Thread() 
         while (true) {
             if (frame > 2_000_000_000) throw StackOverflowError("You probably left your game open...")
 
-            if (GameState.state == GameState.ACTIVE || GameState.state == GameState.UNLOADED) game.printer.tick(game, frame)
-            // else todo implement paused printer
+            if (GameState.state == GameState.ACTIVE || GameState.state == GameState.UNLOADED)
+                game.printer.tick(game, frame)
+            else if (GameState.state == GameState.PAUSED)
+                game.pauseMenu.tick(game, frame)
 
             for ((state, tickable) in tickables) {
                 if (state == GameState.state)
