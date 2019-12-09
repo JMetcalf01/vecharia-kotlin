@@ -1,7 +1,5 @@
 package vecharia.entity
 
-import vecharia.inventory.Inventory
-
 /**
  * The enemy class, which holds information about a specific enemy.
  * // todo add class and race

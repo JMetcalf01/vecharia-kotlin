@@ -2,15 +2,13 @@ package vecharia.render
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input.Keys.*
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
-
-import com.badlogic.gdx.Input.Keys.*
 import vecharia.Vecharia
-import vecharia.event.event
 import vecharia.event.namedEvent
 import vecharia.logging.ConsoleLogger
 import vecharia.logging.Logger
@@ -26,12 +24,12 @@ import kotlin.math.roundToInt
 class Window : ApplicationAdapter() {
     lateinit var canvas: Canvas
     lateinit var game: Vecharia
-    lateinit var clock: Clock
+    private lateinit var clock: Clock
 
     private lateinit var batch: SpriteBatch
     private lateinit var font: BitmapFont
 
-    var width: Int = -1
+    private var width: Int = -1
     var height: Int = -1
 
     private val inputActions = mutableMapOf<Int, () -> Unit>()
@@ -128,7 +126,7 @@ class Window : ApplicationAdapter() {
 
     /**
      * Dispose of all assets loaded by the window.
-     * Called by libGDX
+     * Called by libGDX.
      *
      * @author Matt Worzala
      * @since 1.0
@@ -177,7 +175,7 @@ class Window : ApplicationAdapter() {
      * @since 1.0
      */
     fun readLine(): String {
-        entering = true;
+        entering = true
         game.gameThread.getInput()
         val input = inputBuffer
         game.window.canvas.print(input)
@@ -227,8 +225,8 @@ class Window : ApplicationAdapter() {
                 inputBuffer += (i + 41).toChar()
         }
 
-        if (Gdx.input.isKeyJustPressed(SPACE)) inputBuffer += ' ';
-        if (Gdx.input.isKeyJustPressed(MINUS)) inputBuffer += '-';
-        if (Gdx.input.isKeyJustPressed(PERIOD)) inputBuffer += '.';
+        if (Gdx.input.isKeyJustPressed(SPACE)) inputBuffer += ' '
+        if (Gdx.input.isKeyJustPressed(MINUS)) inputBuffer += '-'
+        if (Gdx.input.isKeyJustPressed(PERIOD)) inputBuffer += '.'
     }
 }

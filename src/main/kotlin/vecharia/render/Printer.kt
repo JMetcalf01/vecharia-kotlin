@@ -115,6 +115,7 @@ class Printer(game: Vecharia, private val canvas: Canvas) : Tickable {
      * @since 1.1
      *
      * @see Text
+     * @see SimpleQueue
      * @param text the text to be printed
      */
     fun print(text: Text) {
@@ -127,6 +128,8 @@ class Printer(game: Vecharia, private val canvas: Canvas) : Tickable {
      *
      * @author Jonathan Metcalf
      * @since 1.1
+     *
+     * @see SimpleQueue
      */
     fun clear() {
         queue.push(Text("", instant = true))
@@ -139,6 +142,7 @@ class Printer(game: Vecharia, private val canvas: Canvas) : Tickable {
      * @author Jonathan Metcalf
      * @since 1.1
      *
+     * @see SimpleQueue
      * @param text the text to be added
      */
     operator fun plusAssign(text: Text) {
@@ -152,7 +156,8 @@ class Printer(game: Vecharia, private val canvas: Canvas) : Tickable {
      * @author Jonathan Metcalf
      * @since 1.1
      *
-     * @param text the text to be added
+     * @see SimpleQueue
+     * @param string the text to be added
      */
     operator fun plusAssign(string: String) {
         queue.push(Text(string))
@@ -161,6 +166,16 @@ class Printer(game: Vecharia, private val canvas: Canvas) : Tickable {
 
 /**
  * A string of text to be printed.
+ *
+ * @author Jonathan Metcalf
+ * @since 1.1
+ *
+ * @param message the string of text
+ * @param color the color of the text
+ * @param newLine whether to print a new line after
+ * @param wait whether to wait for user input after printing
+ * @param instant whether to print the line instantly
+ * @param callback the event to be done after printing is finished
  */
 data class Text(var message: String, val color: Color = Color.WHITE, val newLine: Boolean = true, val wait: Boolean = false, var instant: Boolean = false, val callback: () -> Unit = {}) {
     override fun toString(): String {

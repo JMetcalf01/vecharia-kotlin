@@ -15,11 +15,11 @@ import java.lang.IllegalStateException
  * @param visible whether the item is visible in the inventory
  */
 abstract class Item(
-    val name: String,
+    private val name: String,
     amount: Int = 1,
-    val cost: Int = -1,
-    val maxStack: Int = 99,
-    val visible: Boolean = true
+    private val cost: Int = -1,
+    private val maxStack: Int = 99,
+    private val visible: Boolean = true
 ) {
     var count: Int = amount
         set(value) {

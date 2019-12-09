@@ -5,6 +5,8 @@ package vecharia.logging
  *
  * @author Jonathan Metcalf
  * @since 1.0
+ *
+ * @param level the level for output
  */
 class ConsoleLogger(private val level: Logger.Level) : Logger {
     /**

@@ -11,9 +11,13 @@ import java.lang.IllegalStateException
  *
  * @author Jonathan Metcalf
  * @since 1.0
+ *
+ * @param win the window instance
+ * @param font the font instance
  */
 class Canvas(private val win: Window, private val font: BitmapFont) {
-    var charBuffer: Array<Array<Character>> = Array(win.charHeight()) { Array(win.charWidth()) { Character(0.toChar(), Color.CLEAR) } }
+    private var charBuffer: Array<Array<Character>> =
+        Array(win.charHeight()) { Array(win.charWidth()) { Character(0.toChar(), Color.CLEAR) } }
 
     private var printing: Boolean = true
 
@@ -22,9 +26,10 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
     private var xi: Int = 0
 
     // Temporary variables when buffer and unbuffer is called
-    var charBufferTemp: Array<Array<Character>> = Array(win.charHeight()) { Array(win.charWidth()) { Character(0.toChar(), Color.CLEAR) } }
-    var yiTemp: Int = 0
-    var xiTemp: Int = 0
+    private var charBufferTemp: Array<Array<Character>> =
+        Array(win.charHeight()) { Array(win.charWidth()) { Character(0.toChar(), Color.CLEAR) } }
+    private var yiTemp: Int = 0
+    private var xiTemp: Int = 0
 
     /**
      * This method prints a string str by adding to the last string.

@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package vecharia.render
 
 import vecharia.Vecharia
@@ -9,14 +11,17 @@ import kotlin.collections.HashMap
  * The main clock in Vecharia. This allows for main menu
  * and pause menu access.
  *
- * @constructor starts the clock thread
- *
  * @author Matt Worzala
  * @since 1.1
+ *
+ * @constructor starts the clock thread
+ *
+ * @param game the Vecharia game instance
+ * @param speed the amount of milliseconds before the next frame
  */
 class Clock(private val game: Vecharia, private val speed: Long = 5) : Thread() {
 
-    val tickables: MutableMap<vecharia.util.State, Tickable> = HashMap()
+    private val tickables: MutableMap<vecharia.util.State, Tickable> = HashMap()
 
     init {
         this.isDaemon = true
@@ -30,12 +35,14 @@ class Clock(private val game: Vecharia, private val speed: Long = 5) : Thread() 
      *
      * @author Jonathan Metcalf
      * @since 1.1
+     *
+     * @see GameState
+     * @throws StackOverflowError if you leave your game open for too long
      */
     override fun run() {
         var frame = 0
         while (true) {
-            if (frame > 2_000_000_000) throw StackOverflowError("Close your fucking game you reject")
-
+            if (frame > 2_000_000_000) throw StackOverflowError("You probably left your game open...")
 
             if (GameState.state == GameState.ACTIVE || GameState.state == GameState.UNLOADED) game.printer.tick(game, frame)
             // else todo implement paused printer

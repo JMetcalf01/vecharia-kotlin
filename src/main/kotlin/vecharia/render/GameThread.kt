@@ -9,10 +9,13 @@ import java.lang.Exception
 /**
  * This class is for the thread that the game runs on.
  *
- * @constructor starts the thread
  *
  * @author Jonathan Metcalf
  * @since 1.0
+ *
+ * @constructor starts the thread
+ *
+ * @param game the Vecharia game instance
  */
 class GameThread(private val game: Vecharia) : Thread() {
 
@@ -28,7 +31,6 @@ class GameThread(private val game: Vecharia) : Thread() {
      * @since 1.0
      */
     override fun run() {
-
         game.log.info("Game thread started...")
         GameState.state = GameState.ACTIVE
 
@@ -54,7 +56,7 @@ class GameThread(private val game: Vecharia) : Thread() {
     fun getInput() {
         try {
             while (game.isTyping()) {
-                this.sleep(10)
+                sleep(10)
             }
         } catch (e: Exception) {
             e.printStackTrace()

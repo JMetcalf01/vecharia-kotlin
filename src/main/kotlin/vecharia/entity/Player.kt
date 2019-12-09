@@ -24,7 +24,7 @@ class Player(name: String, maxHealth: Int) : Entity(name, maxHealth) {
     private val a: Double = 1.0 * firstXPLevel / (kotlin.math.exp(b) - 1.0)
 
     // Instance Variables
-    var xp: Int = 0
+    private var xp: Int = 0
     var quest: Quest? = null
     var possibleQuests: MutableList<Quest> = mutableListOf()
     var mana: Int = 0

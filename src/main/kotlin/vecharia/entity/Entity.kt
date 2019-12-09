@@ -14,14 +14,8 @@ import vecharia.inventory.Inventory
  * @param name the name of the Entity
  * @param maxHealth the max health of the Entity
  */
-abstract class Entity(val name: String, open val maxHealth: Int) {
-
-    // Health
-    var health: Int = maxHealth
-
-    // Inventory
+abstract class Entity(private val name: String, open val maxHealth: Int) {
+    var health: Int = this.maxHealth
     val inventory: Inventory = Inventory()
-
-    // Effects
     var effects: MutableList<Effect> = mutableListOf()
 }
