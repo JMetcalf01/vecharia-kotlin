@@ -46,8 +46,7 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
     val pauseMenu: PauseMenu = PauseMenu("Pause Menu")
 
     /**
-     * Starts the game thread, and adds a keybind to speed up text
-     * if space is hit.
+     * Starts the game thread.
      *
      * @author Jonathan Metcalf
      * @since 1.1
