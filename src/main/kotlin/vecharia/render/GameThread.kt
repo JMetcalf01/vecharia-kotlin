@@ -39,8 +39,8 @@ class GameThread(private val game: Vecharia) : Thread() {
         val menu = startMenu()
         game.log.info("Menu created")
 
+        game.render(menu)
         while (true) {
-            game.getMenuInput(menu)
             sleep(10)
         }
     }

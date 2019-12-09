@@ -14,6 +14,7 @@ import vecharia.event.event
 import vecharia.event.namedEvent
 import vecharia.logging.ConsoleLogger
 import vecharia.logging.Logger
+import vecharia.util.GameState
 import kotlin.math.roundToInt
 
 /**
@@ -70,6 +71,7 @@ class Window : ApplicationAdapter() {
         game.start()
 
         clock = Clock(game)
+        clock[GameState.ACTIVE] = game
         logger.info("Clock thread done")
 
         SoundSystem.init(canvas)
@@ -178,7 +180,7 @@ class Window : ApplicationAdapter() {
         entering = true;
         game.gameThread.getInput()
         val input = inputBuffer
-        game.print(input, delay = 0)
+        game.window.canvas.print(input)
         inputBuffer = ""
         return input
     }

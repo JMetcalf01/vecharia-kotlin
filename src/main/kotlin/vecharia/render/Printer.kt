@@ -59,6 +59,7 @@ class Printer(game: Vecharia, private val canvas: Canvas) : Tickable {
             // If you pass in an empty string, it clears
             if (text.message.isEmpty()) {
                 canvas.clear()
+                queue.pop()
                 return
             }
 
@@ -84,6 +85,7 @@ class Printer(game: Vecharia, private val canvas: Canvas) : Tickable {
                 } else {
                     queue.pop()
                     text.callback()
+                    tick(game, frame)
                 }
             }
         }
@@ -93,12 +95,14 @@ class Printer(game: Vecharia, private val canvas: Canvas) : Tickable {
      * Adds text to the end of the queue.
      *
      * @author Jonathan Metcalf
-     * @since 1.0
+     * @since 1.1
      *
      * @param message the message to be printed
      * @param color the color of the message
      * @param newLine whether to print a new line
      * @param wait whether to wait or not at the end of the line
+     * @param instant whether the line prints instantly
+     * @param callback the event to call after printing
      */
     fun print(message: String, color: Color = Color.WHITE, newLine: Boolean = true, wait: Boolean = false, instant: Boolean = false, callback: () -> Unit = {}) {
         queue.push(Text(message, color, newLine, wait, instant, callback))
@@ -111,7 +115,6 @@ class Printer(game: Vecharia, private val canvas: Canvas) : Tickable {
      * @since 1.1
      *
      * @see Text
-     *
      * @param text the text to be printed
      */
     fun print(text: Text) {
@@ -126,7 +129,7 @@ class Printer(game: Vecharia, private val canvas: Canvas) : Tickable {
      * @since 1.1
      */
     fun clear() {
-        queue.push(Text(""))
+        queue.push(Text("", instant = true))
     }
 
     /**
@@ -140,6 +143,19 @@ class Printer(game: Vecharia, private val canvas: Canvas) : Tickable {
      */
     operator fun plusAssign(text: Text) {
         queue.push(text)
+    }
+
+    /**
+     * Alternate way of adding text to the queue like so:
+     * printer += (text)
+     *
+     * @author Jonathan Metcalf
+     * @since 1.1
+     *
+     * @param text the text to be added
+     */
+    operator fun plusAssign(string: String) {
+        queue.push(Text(string))
     }
 }
 

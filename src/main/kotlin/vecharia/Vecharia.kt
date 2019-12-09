@@ -1,9 +1,7 @@
 package vecharia
 
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
-import com.badlogic.gdx.graphics.Color
 import vecharia.logging.Logger
 import vecharia.render.GameThread
 import vecharia.render.Window
@@ -11,8 +9,6 @@ import vecharia.menu.Menu
 import vecharia.render.Printer
 import vecharia.util.Tickable
 import java.awt.Toolkit
-import java.lang.Exception
-import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * The entry point into the program.
@@ -22,6 +18,10 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 fun main() {
     val config = LwjglApplicationConfiguration()
+
+    config.vSyncEnabled = true
+//    config.foregroundFPS = 200
+//    config.backgroundFPS = 200
 
     config.height = Toolkit.getDefaultToolkit().screenSize.height
     config.width = Toolkit.getDefaultToolkit().screenSize.width
@@ -41,13 +41,14 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
     lateinit var gameThread: GameThread
     lateinit var printer: Printer
 
-    val paused: AtomicBoolean = AtomicBoolean(false)
-
-    private val skipPrint = AtomicBoolean(false)
+    private val tickables: MutableSet<Tickable> = HashSet()
 
     /**
      * Starts the game thread, and adds a keybind to speed up text
      * if space is hit.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.1
      */
     fun start() {
         printer = Printer(this, window.canvas)
@@ -63,27 +64,6 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
      * @return whether the user is typing
      */
     fun isTyping(): Boolean = window.entering
-
-    /**
-     * Read a single line of input from the user.
-     * This is a thread blocking action, it will wait until the line has been submitted.
-     *
-     * @author Matt Worzala
-     * @since 1.0
-     *
-     * @return the string the user typed
-     */
-    fun getTextInput(): String = window.readLine()
-
-    /**
-     * Gets menu input from a specific menu
-     *
-     * @author Matt Worzala
-     * @since 1.0
-     *
-     * @param menu the menu to get input from
-     */
-    fun getMenuInput(menu: Menu) = menu.render(this)
 
     /**
      * Adds a keybind for a specific action.
@@ -107,78 +87,40 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
     fun removeInputEvent(key: Int) = window.removeKeyAction(key)
 
     /**
-     * Clears the canvas.
+     * Given a menu to render, adds it to tickables, renders it,
+     * and when the user leaves the menu, removes it from tickables.
      *
-     * @author Matt Worzala
-     * @since 1.0
+     * @author Jonathan Metcalf
+     * @since 1.1
+     *
+     * @param menu the menu to render
      */
-    fun clear() = window.canvas.clear()
-
-    /**
-     * Prints a line of text in a specific color, with a possible delay between each letter (so it scrolls),
-     * as well as ending it with a new line or waiting at the end until the user hits ENTER.
-     *
-     * @author Matt Worzala and Jonathan Metcalf
-     * @since 1.0
-     *
-     * @param message the message to be printed
-     * @param color the color of the printed text (defaults to white)
-     * @param delay the delay between each printed letter (defaults to 20)
-     * @param newLine whether to print a new line after (defaults to true)
-     * @param wait whether to wait after it finishes printing (defaults to false)
-     */
-    fun print(
-        message: String,
-        color: Color = Color.WHITE,
-        delay: Long = 20,
-        newLine: Boolean = true,
-        wait: Boolean = false
-    ) {
-        skipPrint.set(false)
-        for (char in message) {
-            window.canvas.print(char.toString(), color)
-            if (!skipPrint.get())
-                sleep(delay)
+    fun render(menu: Menu) {
+        synchronized(tickables) {
+            tickables.add(menu)
         }
-        if (wait) {
-            window.entering = true
-            window.canvas.println()
-            window.canvas.print("Hit enter to continue.")
-            window.canvas.println()
-            window.addKeyAction(Input.Keys.ENTER) {
-                window.entering = false
-                clear()
+        menu.render(this) {
+            synchronized(tickables) {
+                tickables.remove(menu)
             }
-            while (window.entering) sleep(5)
-            window.removeKeyAction(Input.Keys.ENTER)
-        } else if (newLine) window.canvas.println()
-        skipPrint.set(false)
+        }
     }
+
 
     /**
-     * Sleeps all threads for the inputted amount of time.
+     * Ticks every single tickable.
      *
-     * @author Matt Worzala
-     * @since 1.0
+     * @author Jonathan Metcalf
+     * @since 1.1
      *
-     * @param length the time to sleep the thread
+     * @param game the Vecharia game instance
+     * @param frame the current frame count
      */
-    fun sleep(length: Long) {
-        try {
-            while (paused.get())
-                Thread.sleep(5)
-            Thread.sleep(length)
-        } catch (ignore: Exception) {
-        }
-    }
-
     override fun tick(game: Vecharia, frame: Int) {
-        if (frame % 4 == 0) {
-            tickPrint()
+        synchronized(tickables) {
+            for (tickable in tickables) {
+                tickable.tick(game, frame)
+            }
         }
-    }
-
-    private fun tickPrint() {
-
     }
 }

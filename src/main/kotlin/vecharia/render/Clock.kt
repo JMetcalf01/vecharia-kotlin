@@ -34,6 +34,8 @@ class Clock(private val game: Vecharia, private val speed: Long = 5) : Thread() 
     override fun run() {
         var frame = 0
         while (true) {
+            if (frame > 2_000_000_000) throw StackOverflowError("Close your fucking game you reject")
+
 
             if (GameState.state == GameState.ACTIVE || GameState.state == GameState.UNLOADED) game.printer.tick(game, frame)
             // else todo implement paused printer
