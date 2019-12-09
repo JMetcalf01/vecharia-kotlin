@@ -8,6 +8,7 @@ import vecharia.logging.Logger
 import vecharia.render.GameThread
 import vecharia.render.Window
 import vecharia.menu.Menu
+import vecharia.render.Printer
 import vecharia.util.Tickable
 import java.awt.Toolkit
 import java.lang.Exception
@@ -38,6 +39,7 @@ fun main() {
  */
 class Vecharia(val log: Logger, val window: Window) : Tickable {
     lateinit var gameThread: GameThread
+    lateinit var printer: Printer
 
     val paused: AtomicBoolean = AtomicBoolean(false)
 
@@ -48,16 +50,8 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
      * if space is hit.
      */
     fun start() {
+        printer = Printer(this, window.canvas)
         gameThread = GameThread(this)
-        window.addKeyAction(Input.Keys.SPACE) {
-            if (!window.entering) skipPrint.set(true)
-        }
-//        window.addKeyAction(Input.Keys.ESCAPE) {
-//            println("Hi")
-//            if (PauseMenu.open.get())
-//                PauseMenu.close(this)
-//            else PauseMenu.open(this)
-//        }
     }
 
     /**
@@ -179,6 +173,12 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
     }
 
     override fun tick(game: Vecharia, frame: Int) {
+        if (frame % 4 == 0) {
+            tickPrint()
+        }
+    }
+
+    private fun tickPrint() {
 
     }
 }

@@ -25,6 +25,7 @@ import kotlin.math.roundToInt
 class Window : ApplicationAdapter() {
     lateinit var canvas: Canvas
     lateinit var game: Vecharia
+    lateinit var clock: Clock
 
     private lateinit var batch: SpriteBatch
     private lateinit var font: BitmapFont
@@ -65,11 +66,15 @@ class Window : ApplicationAdapter() {
         canvas = Canvas(this, font)
         logger.info("libGDX initialized")
 
+        game = Vecharia(ConsoleLogger(Logger.Level.DEBUG), this)
+        game.start()
+
+        clock = Clock(game)
+        logger.info("Clock thread done")
+
         SoundSystem.init(canvas)
         logger.info("Sound done")
 
-        game = Vecharia(ConsoleLogger(Logger.Level.DEBUG), this)
-        game.start()
         logger.info("Initialization finished")
     }
 

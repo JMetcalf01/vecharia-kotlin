@@ -34,6 +34,10 @@ class Clock(private val game: Vecharia, private val speed: Long = 5) : Thread() 
     override fun run() {
         var frame = 0
         while (true) {
+
+            if (GameState.state == GameState.ACTIVE || GameState.state == GameState.UNLOADED) game.printer.tick(game, frame)
+            // else todo implement paused printer
+
             for ((state, tickable) in tickables) {
                 if (state == GameState.state)
                     tickable.tick(game, frame)

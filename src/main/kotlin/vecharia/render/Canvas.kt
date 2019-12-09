@@ -39,7 +39,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         if (printing) {
             for (i in string.indices) {
                 if (xi + i < charBuffer[0].size) {
-                    charBuffer[yi][xi] = Character(string[i], color)
+                    charBuffer[yi][xi + i] = Character(string[i], color)
                 }
             }
 

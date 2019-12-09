@@ -22,7 +22,7 @@ class SimpleQueue<E> {
     }
 
     /**
-     * Removes the first element of the queue.
+     * Removes and returns the first element of the queue.
      *
      * @author Jonathan Metcalf
      * @since Version 1.0
@@ -32,6 +32,19 @@ class SimpleQueue<E> {
     fun pop(): E? {
         if (elements.size == 0) return null
         return elements.removeAt(0)
+    }
+
+    /**
+     * Returns the first element of the queue.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.1
+     *
+     * @return the first element, or null if the queue is empty
+     */
+    fun peek(): E? {
+        if (elements.size == 0) return null
+        return elements[0]
     }
 
     /**
