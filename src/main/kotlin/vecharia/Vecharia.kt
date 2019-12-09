@@ -20,7 +20,7 @@ import java.awt.Toolkit
 fun main() {
     val config = LwjglApplicationConfiguration()
 
-    config.vSyncEnabled = true
+//    config.vSyncEnabled = true
 //    config.foregroundFPS = 200
 //    config.backgroundFPS = 200
 
