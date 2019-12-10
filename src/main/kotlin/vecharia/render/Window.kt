@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import vecharia.Vecharia
-import vecharia.event.namedEvent
 import vecharia.logging.ConsoleLogger
 import vecharia.logging.Logger
 import vecharia.util.GameState
@@ -101,16 +100,6 @@ class Window : ApplicationAdapter() {
                     action()
                 }
             }
-        }
-
-        data class Test(val id: Int)
-
-        val event = namedEvent<Test>()
-        event["Test"] = { (id) ->
-
-        }
-        event += { (id) ->
-
         }
 
         if (entering) {

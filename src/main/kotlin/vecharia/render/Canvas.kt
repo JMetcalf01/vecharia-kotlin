@@ -3,7 +3,6 @@ package vecharia.render
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import java.lang.IllegalStateException
 
 /**
  * This class keeps track of the text on the screen.
@@ -16,7 +15,8 @@ import java.lang.IllegalStateException
  * @param font the font instance
  */
 class Canvas(private val win: Window, private val font: BitmapFont) {
-    private var charBuffer: Array<Array<Character>> =
+
+    private var currentBuffer: Array<Array<Character>> =
         Array(win.charHeight()) { Array(win.charWidth()) { Character(0.toChar(), Color.CLEAR) } }
 
     private var printing: Boolean = true
@@ -25,11 +25,11 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
     private var yi: Int = 0
     private var xi: Int = 0
 
-    // Temporary variables when buffer and unbuffer is called
-    private var charBufferTemp: Array<Array<Character>> =
-        Array(win.charHeight()) { Array(win.charWidth()) { Character(0.toChar(), Color.CLEAR) } }
-    private var yiTemp: Int = 0
-    private var xiTemp: Int = 0
+//    // Temporary variables when buffer and unbuffer is called
+//    private var charBufferTemp: Array<Array<Character>> =
+//        Array(win.charHeight()) { Array(win.charWidth()) { Character(0.toChar(), Color.CLEAR) } }
+//    private var yiTemp: Int = 0
+//    private var xiTemp: Int = 0
 
     /**
      * This method prints a string str by adding to the last string.
@@ -43,8 +43,8 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
     fun print(string: String, color: Color = Color.WHITE) {
         if (printing) {
             for (i in string.indices) {
-                if (xi + i < charBuffer[0].size) {
-                    charBuffer[yi][xi + i] = Character(string[i], color)
+                if (xi + i < currentBuffer[0].size) {
+                    currentBuffer[yi][xi + i] = Character(string[i], color)
                 }
             }
 
@@ -60,21 +60,21 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
      */
     fun println() {
         if (printing) {
-            if (yi < charBuffer.size - 3) {
+            if (yi < currentBuffer.size - 3) {
                 yi++
             } else {
-                for (i in 1 until charBuffer.size) {
-                    for (j in charBuffer[0].indices) {
-                        charBuffer[i - 1][j] = Character(0.toChar(), Color.CLEAR)
+                for (i in 1 until currentBuffer.size) {
+                    for (j in currentBuffer[0].indices) {
+                        currentBuffer[i - 1][j] = Character(0.toChar(), Color.CLEAR)
                     }
 
-                    for (j in charBuffer[0].indices) {
-                        charBuffer[i - 1][j] = charBuffer[i][j]
+                    for (j in currentBuffer[0].indices) {
+                        currentBuffer[i - 1][j] = currentBuffer[i][j]
                     }
                 }
 
-                for (i in charBuffer[0].indices) {
-                    charBuffer[charBuffer.size - 1][i] = Character(0.toChar(), Color.CLEAR)
+                for (i in currentBuffer[0].indices) {
+                    currentBuffer[currentBuffer.size - 1][i] = Character(0.toChar(), Color.CLEAR)
                 }
             }
 
@@ -90,9 +90,9 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
      * @since 1.0
      */
     fun clear() {
-        for (i in charBuffer.indices) {
-            for (j in charBuffer[0].indices) {
-                charBuffer[i][j] = Character(0.toChar(), Color.CLEAR)
+        for (i in currentBuffer.indices) {
+            for (j in currentBuffer[0].indices) {
+                currentBuffer[i][j] = Character(0.toChar(), Color.CLEAR)
             }
         }
 
@@ -110,11 +110,11 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
      */
     fun render(batch: SpriteBatch) {
         // Render previous lines
-        for (i in charBuffer.indices) {
-            for (j in charBuffer[0].indices) {
-                font.color = if (charBuffer[i][j].color == Color.CLEAR) Color.WHITE else charBuffer[i][j].color
+        for (i in currentBuffer.indices) {
+            for (j in currentBuffer[0].indices) {
+                font.color = if (currentBuffer[i][j].color == Color.CLEAR) Color.WHITE else currentBuffer[i][j].color
                 font.draw(
-                    batch, charBuffer[i][j].char.toString(),
+                    batch, currentBuffer[i][j].char.toString(),
                     j * font.spaceXadvance, win.height - font.lineHeight * i - 5
                 )
             }
@@ -140,44 +140,44 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         }
     }
 
-    /**
-     * Buffers the character array in a temporary
-     * character array for use with the pause menu.
-     *
-     * @author Jonathan Metcalf
-     * @since 1.0
-     */
-    fun buffer() {
-        charBufferTemp = charBuffer.copy()
-        xiTemp = xi
-        yiTemp = yi
-        clear()
-    }
-
-    /**
-     * Unbuffers the character array by copying
-     * over the contents of the temporary character array.
-     *
-     * @author Jonathan Metcalf
-     * @since 1.0
-     */
-    fun unbuffer() {
-        if (charBufferTemp.isEmpty())
-            throw IllegalStateException()
-
-        xi = xiTemp
-        yi = yiTemp
-        charBuffer = charBufferTemp.copy()
-        charBufferTemp = emptyArray()
-    }
-
-    /**
-     * Deep copies a 2D character array.
-     *
-     * @author Jonathan Metcalf
-     * @since 1.0
-     */
-    private fun Array<Array<Character>>.copy() = Array(size) { get(it).clone() }
+//    /**
+//     * Buffers the character array in a temporary
+//     * character array for use with the pause menu.
+//     *
+//     * @author Jonathan Metcalf
+//     * @since 1.0
+//     */
+//    fun buffer() {
+//        charBufferTemp = charBuffer.copy()
+//        xiTemp = xi
+//        yiTemp = yi
+//        clear()
+//    }
+//
+//    /**
+//     * Unbuffers the character array by copying
+//     * over the contents of the temporary character array.
+//     *
+//     * @author Jonathan Metcalf
+//     * @since 1.0
+//     */
+//    fun unbuffer() {
+//        if (charBufferTemp.isEmpty())
+//            throw IllegalStateException()
+//
+//        xi = xiTemp
+//        yi = yiTemp
+//        charBuffer = charBufferTemp.copy()
+//        charBufferTemp = emptyArray()
+//    }
+//
+//    /**
+//     * Deep copies a 2D character array.
+//     *
+//     * @author Jonathan Metcalf
+//     * @since 1.0
+//     */
+//    private fun Array<Array<Character>>.copy() = Array(size) { get(it).clone() }
 
     /**
      * A character that has a char and a color.

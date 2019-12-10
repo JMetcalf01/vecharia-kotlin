@@ -114,6 +114,7 @@ class GameThread(private val game: Vecharia) : Thread() {
 
         menu.selection("Exit") {
             game.log.info("Exiting")
+            game.window.dispose()
             Gdx.app.exit()
             SoundSystem.end()
             exitProcess(0)
