@@ -16,7 +16,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
  */
 class Canvas(private val win: Window, private val font: BitmapFont) {
 
-    private var currentBuffer: Array<Array<Character>> =
+    private var charBuffer: Array<Array<Character>> =
         Array(win.charHeight()) { Array(win.charWidth()) { Character(0.toChar(), Color.CLEAR) } }
 
     private var printing: Boolean = true
@@ -43,8 +43,8 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
     fun print(string: String, color: Color = Color.WHITE) {
         if (printing) {
             for (i in string.indices) {
-                if (xi + i < currentBuffer[0].size) {
-                    currentBuffer[yi][xi + i] = Character(string[i], color)
+                if (xi + i < charBuffer[0].size) {
+                    charBuffer[yi][xi + i] = Character(string[i], color)
                 }
             }
 
@@ -60,21 +60,21 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
      */
     fun println() {
         if (printing) {
-            if (yi < currentBuffer.size - 3) {
+            if (yi < charBuffer.size - 3) {
                 yi++
             } else {
-                for (i in 1 until currentBuffer.size) {
-                    for (j in currentBuffer[0].indices) {
-                        currentBuffer[i - 1][j] = Character(0.toChar(), Color.CLEAR)
+                for (i in 1 until charBuffer.size) {
+                    for (j in charBuffer[0].indices) {
+                        charBuffer[i - 1][j] = Character(0.toChar(), Color.CLEAR)
                     }
 
-                    for (j in currentBuffer[0].indices) {
-                        currentBuffer[i - 1][j] = currentBuffer[i][j]
+                    for (j in charBuffer[0].indices) {
+                        charBuffer[i - 1][j] = charBuffer[i][j]
                     }
                 }
 
-                for (i in currentBuffer[0].indices) {
-                    currentBuffer[currentBuffer.size - 1][i] = Character(0.toChar(), Color.CLEAR)
+                for (i in charBuffer[0].indices) {
+                    charBuffer[charBuffer.size - 1][i] = Character(0.toChar(), Color.CLEAR)
                 }
             }
 
@@ -90,9 +90,9 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
      * @since 1.0
      */
     fun clear() {
-        for (i in currentBuffer.indices) {
-            for (j in currentBuffer[0].indices) {
-                currentBuffer[i][j] = Character(0.toChar(), Color.CLEAR)
+        for (i in charBuffer.indices) {
+            for (j in charBuffer[0].indices) {
+                charBuffer[i][j] = Character(0.toChar(), Color.CLEAR)
             }
         }
 
@@ -110,11 +110,11 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
      */
     fun render(batch: SpriteBatch) {
         // Render previous lines
-        for (i in currentBuffer.indices) {
-            for (j in currentBuffer[0].indices) {
-                font.color = if (currentBuffer[i][j].color == Color.CLEAR) Color.WHITE else currentBuffer[i][j].color
+        for (i in charBuffer.indices) {
+            for (j in charBuffer[0].indices) {
+                font.color = if (charBuffer[i][j].color == Color.CLEAR) Color.WHITE else charBuffer[i][j].color
                 font.draw(
-                    batch, currentBuffer[i][j].char.toString(),
+                    batch, charBuffer[i][j].char.toString(),
                     j * font.spaceXadvance, win.height - font.lineHeight * i - 5
                 )
             }

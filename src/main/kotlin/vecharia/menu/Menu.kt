@@ -103,8 +103,10 @@ class Menu(private val title: String, private val centered: Boolean = false) : T
             if (centered)
                 game.printer += Text("".padEnd(centerString(game, "  $option")), newLine = false, instant = true)
 
-            if (i == selection.get()) game.printer += Text("> $option", Color.GREEN, instant = true)
-            else game.printer += Text("  $option", instant = true)
+            if (i == selection.get())
+                game.printer += Text("> $option", Color.FOREST, instant = true)
+            else
+                game.printer += Text("  $option", instant = true)
         }
 
         lastSelection.set(selection.get())

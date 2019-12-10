@@ -20,9 +20,9 @@ import java.awt.Toolkit
 fun main() {
     val config = LwjglApplicationConfiguration()
 
-    config.vSyncEnabled = true
-//    config.foregroundFPS = 60
-//    config.backgroundFPS = 60
+//    config.vSyncEnabled = true
+//    config.foregroundFPS = 200
+//    config.backgroundFPS = 200
 
 
     config.height = Toolkit.getDefaultToolkit().screenSize.height
