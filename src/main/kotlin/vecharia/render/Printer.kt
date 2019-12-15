@@ -54,6 +54,11 @@ class Printer(game: Vecharia, private val canvas: Canvas) : Tickable {
             return
 
         val text: Text? = queue.peek()
+
+        // Slows down text to every 20 ms if it's not instant text
+        if (text != null && frame % 4 != 0L && !text.instant)
+            return
+
         if (text != null) {
 
             // If you pass in an empty string, it clears
