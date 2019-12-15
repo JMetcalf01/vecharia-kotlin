@@ -19,12 +19,6 @@ import java.awt.Toolkit
  */
 fun main() {
     val config = LwjglApplicationConfiguration()
-
-//    config.vSyncEnabled = true
-//    config.foregroundFPS = 200
-//    config.backgroundFPS = 200
-
-
     config.height = Toolkit.getDefaultToolkit().screenSize.height
     config.width = Toolkit.getDefaultToolkit().screenSize.width
     config.fullscreen = true
@@ -118,7 +112,7 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
      * @param game the Vecharia game instance
      * @param frame the current frame count
      */
-    override fun tick(game: Vecharia, frame: Int) {
+    override fun tick(game: Vecharia, frame: Long) {
         synchronized(tickables) {
             for (tickable in tickables) {
                 tickable.tick(game, frame)

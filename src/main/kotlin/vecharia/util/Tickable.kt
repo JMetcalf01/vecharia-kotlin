@@ -10,5 +10,5 @@ import vecharia.Vecharia
  */
 @FunctionalInterface
 interface Tickable {
-    fun tick(game: Vecharia, frame: Int)
+    fun tick(game: Vecharia, frame: Long)
 }

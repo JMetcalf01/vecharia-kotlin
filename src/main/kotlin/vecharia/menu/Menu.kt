@@ -75,7 +75,7 @@ class Menu(private val title: String, private val centered: Boolean = false) : T
      * @param game the Vecharia game instance
      * @param frame the current frame
      */
-    override fun tick(game: Vecharia, frame: Int) {
+    override fun tick(game: Vecharia, frame: Long) {
         if (lastSelection.get() == selection.get())
             return
 

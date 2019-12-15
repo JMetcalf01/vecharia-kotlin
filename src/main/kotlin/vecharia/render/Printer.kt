@@ -48,9 +48,9 @@ class Printer(game: Vecharia, private val canvas: Canvas) : Tickable {
      * @param game the Vecharia game instance
      * @param frame the current frame count of the game
      */
-    override fun tick(game: Vecharia, frame: Int) {
-        // Only runs every 4 frames
-        if (frame % 4 != 0 || waiting.get())
+    override fun tick(game: Vecharia, frame: Long) {
+        // If waiting for user input, don't keep printing
+        if (waiting.get())
             return
 
         val text: Text? = queue.peek()
