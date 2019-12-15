@@ -25,11 +25,11 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
     private var yi: Int = 0
     private var xi: Int = 0
 
-//    // Temporary variables when buffer and unbuffer is called
-//    private var charBufferTemp: Array<Array<Character>> =
-//        Array(win.charHeight()) { Array(win.charWidth()) { Character(0.toChar(), Color.CLEAR) } }
-//    private var yiTemp: Int = 0
-//    private var xiTemp: Int = 0
+    // Temporary variables when buffer and unbuffer is called
+    private var charBufferTemp: Array<Array<Character>> =
+        Array(win.charHeight()) { Array(win.charWidth()) { Character(0.toChar(), Color.CLEAR) } }
+    private var yiTemp: Int = 0
+    private var xiTemp: Int = 0
 
     /**
      * This method prints a string str by adding to the last string.
@@ -140,44 +140,44 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         }
     }
 
-//    /**
-//     * Buffers the character array in a temporary
-//     * character array for use with the pause menu.
-//     *
-//     * @author Jonathan Metcalf
-//     * @since 1.0
-//     */
-//    fun buffer() {
-//        charBufferTemp = charBuffer.copy()
-//        xiTemp = xi
-//        yiTemp = yi
-//        clear()
-//    }
-//
-//    /**
-//     * Unbuffers the character array by copying
-//     * over the contents of the temporary character array.
-//     *
-//     * @author Jonathan Metcalf
-//     * @since 1.0
-//     */
-//    fun unbuffer() {
-//        if (charBufferTemp.isEmpty())
-//            throw IllegalStateException()
-//
-//        xi = xiTemp
-//        yi = yiTemp
-//        charBuffer = charBufferTemp.copy()
-//        charBufferTemp = emptyArray()
-//    }
-//
-//    /**
-//     * Deep copies a 2D character array.
-//     *
-//     * @author Jonathan Metcalf
-//     * @since 1.0
-//     */
-//    private fun Array<Array<Character>>.copy() = Array(size) { get(it).clone() }
+    /**
+     * Buffers the character array in a temporary
+     * character array for use with the pause menu.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.0
+     */
+    fun buffer() {
+        charBufferTemp = charBuffer.copy()
+        xiTemp = xi
+        yiTemp = yi
+        clear()
+    }
+
+    /**
+     * Unbuffers the character array by copying
+     * over the contents of the temporary character array.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.0
+     */
+    fun unbuffer() {
+        if (charBufferTemp.isEmpty())
+            throw IllegalStateException()
+
+        xi = xiTemp
+        yi = yiTemp
+        charBuffer = charBufferTemp.copy()
+        charBufferTemp = emptyArray()
+    }
+
+    /**
+     * Deep copies a 2D character array.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.0
+     */
+    private fun Array<Array<Character>>.copy() = Array(size) { get(it).clone() }
 
     /**
      * A character that has a char and a color.
