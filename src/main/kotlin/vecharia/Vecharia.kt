@@ -11,6 +11,8 @@ import vecharia.render.Printer
 import vecharia.util.Tickable
 import java.awt.Toolkit
 
+private const val FULLSCREEN: Boolean = true
+
 /**
  * The entry point into the program.
  *
@@ -21,11 +23,12 @@ fun main() {
     val config = LwjglApplicationConfiguration()
     config.height = Toolkit.getDefaultToolkit().screenSize.height
     config.width = Toolkit.getDefaultToolkit().screenSize.width
-    config.fullscreen = true
+    config.fullscreen = FULLSCREEN
     config.resizable = false
 
     LwjglApplication(Window(), config)
 }
+
 
 /**
  * The main game class.
@@ -38,7 +41,7 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
     lateinit var printer: Printer
 
     private val tickables: MutableSet<Tickable> = HashSet()
-    val pauseMenu: PauseMenu = PauseMenu("Pause Menu")
+    val pauseMenu: PauseMenu = PauseMenu(this)
 
     /**
      * Starts the game thread.

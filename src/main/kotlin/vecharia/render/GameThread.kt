@@ -1,11 +1,9 @@
 package vecharia.render
 
-import com.badlogic.gdx.Gdx
 import vecharia.Vecharia
-import vecharia.menu.Menu
+import vecharia.menu.StartMenu
 import vecharia.util.GameState
 import java.lang.Exception
-import kotlin.system.exitProcess
 
 /**
  * This class is for the thread that the game runs on.
@@ -35,14 +33,13 @@ class GameThread(private val game: Vecharia) : Thread() {
         game.log.info("Game thread started...")
         GameState.state = GameState.ACTIVE
 
-//        SoundSystem.add("assets/introscreen.mp3", looping = true)
+//        SoundSystem.add("assets/introscreen.mp3", looping = true, volume = 0f)
 //        SoundSystem.playM()
 //        game.log.info("Sound system playing")
 
-        val menu = startMenu()
-        game.log.info("Menu created")
-
-        game.render(menu)
+        val startMenu = StartMenu(game)
+        game.log.info("Entering Start Menu")
+        game.render(startMenu)
         while (true) {
             sleep(10)
         }
@@ -78,49 +75,4 @@ class GameThread(private val game: Vecharia) : Thread() {
         } catch (ignored: Exception) {
         }
     }
-
-    /**
-     * Creates the start menu with selections:
-     *     New Game (creates new game)
-     *     Load Game (loads game from save file)
-     *     Settings (opens settings menu)
-     *     Credits (runs the credits)
-     *     Exit (exits the game)
-     *
-     * @author Jonathan Metcalf
-     * @since 1.0
-     *
-     * @return the start menu
-     */
-    private fun startMenu(): Menu {
-        val menu = Menu("Welcome to Vecharia!", centered = true)
-
-        menu.selection("New Game") {
-            GameState.state = GameState.ACTIVE
-            game.log.info("New game started and GameState is now Active")
-        }
-
-        menu.selection("Load Game") {
-            game.log.warn("Load game in progress!")
-        }
-
-        menu.selection("Settings") {
-            game.log.info("Settings opened")
-        }
-
-        menu.selection("Credits") {
-            game.log.info("Running credits")
-        }
-
-        menu.selection("Exit") {
-            game.log.info("Exiting")
-            game.window.dispose()
-            Gdx.app.exit()
-            SoundSystem.end()
-            exitProcess(0)
-        }
-
-        return menu
-    }
-
 }

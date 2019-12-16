@@ -20,6 +20,8 @@ object SoundSystem : Thread() {
     private var wasOff: Boolean = false
     private var playingName: String = ""
 
+    var musicEnabled: Boolean = true
+
     /**
      * Initializes the sound system.
      *
@@ -42,8 +44,9 @@ object SoundSystem : Thread() {
      * @param path the file path of the music
      * @param looping whether the music loops or not
      */
-    fun add(path: String, looping: Boolean) {
+    fun add(path: String, looping: Boolean, volume: Float = 1f) {
         val music = Gdx.audio.newMusic(Gdx.files.absolute(path))
+        music.volume = volume
         music.isLooping = looping
         playing.push(Song(music, path.substring(path.indexOf('/') + 1)))
     }
@@ -79,6 +82,33 @@ object SoundSystem : Thread() {
         wasOff = true
     }
 
+    /**
+     * Toggles the sound. Currently, if turned on, it plays
+     * the main menu sound looping.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.1
+     */
+    fun toggleVolume() {
+        musicEnabled = !musicEnabled
+        if (musicEnabled) {
+            add("assets/introscreen.mp3", true)
+            playM()
+        } else {
+            stopM()
+        }
+    }
+
+
+
+    /**
+     * Starts the Sound thread.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.1
+     *
+     * @see Thread
+     */
     override fun run() {
         while (true) {
             if (isOn) {

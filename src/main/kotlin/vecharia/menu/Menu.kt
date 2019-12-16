@@ -18,7 +18,7 @@ import kotlin.collections.LinkedHashMap
  * @param title the title of the menu
  * @param centered whether the menu is centered on the screen
  */
-class Menu(private val title: String, private val centered: Boolean = false) : Tickable {
+open class Menu(val game: Vecharia, private val title: String, private val centered: Boolean = false) : Tickable {
     private val order: LinkedList<String> = LinkedList()
     private val selections: LinkedHashMap<String, () -> Unit> = LinkedHashMap()
     private val selection: AtomicInteger = AtomicInteger(0)
@@ -40,7 +40,7 @@ class Menu(private val title: String, private val centered: Boolean = false) : T
     }
 
     /**
-     * Render the menu, this method should not be called manually.
+     * Renders the menu --   this method should not be called manually.
      *
      * @author Matt Worzala
      * @since 1.1

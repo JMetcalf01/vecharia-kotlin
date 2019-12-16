@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 /**
  * A singleton that is the state of the game:
- *     Unloaded if the game is still in the main menu,
+ *     Unloaded if the game is still in the start menu,
  *     Active is the game is currently being played
  *     Paused if the game has been paused
  *

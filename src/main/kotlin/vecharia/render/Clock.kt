@@ -3,7 +3,6 @@
 package vecharia.render
 
 import vecharia.Vecharia
-import vecharia.menu.PauseMenu
 import vecharia.util.GameState
 import vecharia.util.Tickable
 import kotlin.collections.HashMap
