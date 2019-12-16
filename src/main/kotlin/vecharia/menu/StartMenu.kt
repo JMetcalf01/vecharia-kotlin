@@ -26,6 +26,7 @@ class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", centered = t
 
         selection("Load Game") {
             game.log.warn("Load game in progress!")
+            // todo implement loading game
         }
 
         selection("Settings") {
@@ -35,6 +36,7 @@ class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", centered = t
 
         selection("Credits") {
             game.log.info("Running credits")
+            // todo implement credits
         }
 
         selection("Exit") {

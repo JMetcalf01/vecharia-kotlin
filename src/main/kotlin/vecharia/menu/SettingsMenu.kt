@@ -23,7 +23,7 @@ class SettingsMenu(game: Vecharia) : Menu(game, "Settings Menu", centered = true
 
         selection("Toggle Fullscreen") {
             game.log.error("Fullscreen not implemented!")
-            // Todo Implement fullscreen
+            // Todo implement fullscreen
         }
 
         selection("Exit Settings") {

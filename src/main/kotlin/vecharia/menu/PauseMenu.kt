@@ -24,6 +24,7 @@ class PauseMenu(game: Vecharia) : Menu(game, "Pause Menu", centered = true) {
 
         selection("Save") {
             game.log.error("Saving not implemented!")
+            // todo implement saving
             game.render(this)
         }
 
