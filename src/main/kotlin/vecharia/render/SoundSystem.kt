@@ -20,7 +20,7 @@ object SoundSystem : Thread() {
     private var wasOff: Boolean = false
     private var playingName: String = ""
 
-    var musicEnabled: Boolean = true
+    var musicEnabled: Boolean = false
 
     /**
      * Initializes the sound system.
@@ -69,6 +69,7 @@ object SoundSystem : Thread() {
      */
     fun playM() {
         isOn = true
+        musicEnabled = true
     }
 
     /**
@@ -80,6 +81,7 @@ object SoundSystem : Thread() {
     fun stopM() {
         isOn = false
         wasOff = true
+        musicEnabled = false
     }
 
     /**

@@ -6,6 +6,7 @@ import vecharia.logging.Logger
 import vecharia.menu.Menu
 import vecharia.menu.StartMenu
 import vecharia.render.Printer
+import vecharia.render.SoundSystem
 import vecharia.render.Window
 import vecharia.util.GameState
 import vecharia.util.Tickable
@@ -47,11 +48,9 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
      * @since 1.1
      */
     fun start() {
-        log.info("Game thread started...")
-
-//        SoundSystem.add("assets/introscreen.mp3", looping = true, volume = 0f)
+//        SoundSystem.add("assets/introscreen.mp3", looping = true, volume = 1f)
 //        SoundSystem.playM()
-//        game.log.info("Sound system playing")
+//        log.info("Sound system playing")
 
         val startMenu = StartMenu(this)
         log.info("Entering Start Menu")

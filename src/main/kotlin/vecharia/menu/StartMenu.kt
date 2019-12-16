@@ -13,16 +13,20 @@ import vecharia.util.GameState
  *
  * @author Jonathan Metcalf
  * @since 1.1
+ *
+ * @param game the Vecharia game instance
  */
 class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", centered = true) {
     init {
         selection("New Game") {
             GameState.state = GameState.ACTIVE
-            game.log.info("New game started and GameState is now Active")
+            game.log.info("new game -- state = ${GameState.state}")
+            game.printer.clear()
         }
 
         selection("Load Game") {
             game.log.warn("Load game in progress!")
+            game.render(StartMenu(game))
             // todo implement loading game
         }
 
@@ -33,6 +37,7 @@ class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", centered = t
 
         selection("Credits") {
             game.log.info("Running credits")
+            game.render(StartMenu(game))
             // todo implement credits
         }
 
