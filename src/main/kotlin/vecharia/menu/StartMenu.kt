@@ -28,7 +28,7 @@ class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", centered = t
 
         selection("Settings") {
             game.log.info("Settings opened")
-            game.render(SettingsMenu(game))
+            game.render(SettingsMenu(game, this))
         }
 
         selection("Credits") {

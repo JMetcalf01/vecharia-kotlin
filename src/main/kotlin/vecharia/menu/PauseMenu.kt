@@ -29,7 +29,7 @@ class PauseMenu(game: Vecharia) : Menu(game, "Pause Menu", centered = true) {
         }
 
         selection("Settings") {
-            game.render(SettingsMenu(game))
+            game.render(SettingsMenu(game, this))
         }
 
         selection("Save and Exit Game") {

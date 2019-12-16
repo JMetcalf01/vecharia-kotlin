@@ -14,7 +14,7 @@ import vecharia.render.SoundSystem
  * @author Jonathan Metcalf
  * @since 1.1
  */
-class SettingsMenu(game: Vecharia) : Menu(game, "Settings Menu", centered = true) {
+class SettingsMenu(game: Vecharia, pastMenu: Menu) : Menu(game, "Settings Menu", centered = true) {
     init {
         selection("Toggle Sound (Currently ${if (SoundSystem.musicEnabled) "Enabled" else "Disabled"})") {
             game.log.info("Music set to ${if (SoundSystem.musicEnabled) "on" else "off"}")
@@ -28,7 +28,7 @@ class SettingsMenu(game: Vecharia) : Menu(game, "Settings Menu", centered = true
 
         selection("Exit Settings") {
             game.log.info("Exiting settings")
-            game.render(PauseMenu(game))
+            game.render(if (pastMenu is StartMenu) StartMenu(game) else PauseMenu(game))
         }
     }
 }
