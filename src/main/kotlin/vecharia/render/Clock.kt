@@ -45,10 +45,7 @@ class Clock(private val game: Vecharia, private val speed: Long = 5) : Thread() 
             if (frame > Long.MAX_VALUE - 1_000_000) throw StackOverflowError("You probably left your game open...")
 
             sleep(speed)
-
             updateGame(frame)
-            renderGame(frame)
-
             frame++
         }
     }
@@ -68,22 +65,6 @@ class Clock(private val game: Vecharia, private val speed: Long = 5) : Thread() 
             if (state == GameState.state)
                 tickable.tick(game, frame)
         }
-    }
-
-    /**
-     * Does all the printing and rendering of the game.
-     *
-     * @author Jonathan Metcalf
-     * @since 1.1
-     *
-     * @param frame the current frame of the game
-     */
-    private fun renderGame(frame: Long) {
-        if (GameState.state == GameState.ACTIVE || GameState.state == GameState.UNLOADED)
-            game.printer.tick(game, frame)
-        else if (GameState.state == GameState.PAUSED)
-            game.pauseMenu.tick(game, frame)
-
     }
 
     /**

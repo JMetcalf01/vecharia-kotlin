@@ -41,7 +41,6 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
     lateinit var printer: Printer
 
     private val tickables: MutableSet<Tickable> = HashSet()
-    val pauseMenu: PauseMenu = PauseMenu(this)
 
     /**
      * Starts the game thread.
@@ -50,8 +49,9 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
      * @since 1.1
      */
     fun start() {
-        printer = Printer(this, window.canvas)
         gameThread = GameThread(this)
+        printer = Printer(this, window.canvas)
+        tickables.add(printer)
     }
 
     /**

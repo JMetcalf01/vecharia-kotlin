@@ -2,7 +2,6 @@ package vecharia.render
 
 import vecharia.Vecharia
 import vecharia.menu.StartMenu
-import vecharia.util.GameState
 import java.lang.Exception
 
 /**
@@ -31,7 +30,6 @@ class GameThread(private val game: Vecharia) : Thread() {
      */
     override fun run() {
         game.log.info("Game thread started...")
-        GameState.state = GameState.ACTIVE
 
 //        SoundSystem.add("assets/introscreen.mp3", looping = true, volume = 0f)
 //        SoundSystem.playM()

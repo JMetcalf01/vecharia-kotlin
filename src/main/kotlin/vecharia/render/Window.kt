@@ -69,6 +69,7 @@ class Window : ApplicationAdapter() {
 
         clock = Clock(game)
         clock[GameState.ACTIVE] = game
+        clock[GameState.UNLOADED] = game
         logger.info("Clock thread done")
 
         SoundSystem.init(canvas)
