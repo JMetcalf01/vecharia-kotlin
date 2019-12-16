@@ -1,9 +1,11 @@
 package vecharia.menu
 
-import com.badlogic.gdx.Input
+import com.badlogic.gdx.Input.Keys.*
 import com.badlogic.gdx.graphics.Color
+import vecharia.Input
 import vecharia.Vecharia
 import vecharia.render.Text
+import vecharia.util.GameState
 import vecharia.util.Tickable
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
@@ -48,20 +50,19 @@ open class Menu(val game: Vecharia, private val title: String, private val cente
      * @param game the vecharia game instance
      */
     fun render(game: Vecharia, callback: () -> Unit = {}) {
-        game.addInputEvent(Input.Keys.UP) {
+        val up = Input.registerListener(UP, GameState.state) {
             if (selection.get() > 0)
                 selection.decrementAndGet()
         }
-        game.addInputEvent(Input.Keys.DOWN) {
+        val down = Input.registerListener(DOWN, GameState.state) {
             if (selection.get() < order.size - 1)
                 selection.incrementAndGet()
         }
-        game.addInputEvent(Input.Keys.ENTER) {
+        Input.registerListener(ENTER, GameState.state, once = true) {
             selections[order[selection.get()]]?.invoke()
             selection.set(0)
-            game.removeInputEvent(Input.Keys.UP)
-            game.removeInputEvent(Input.Keys.DOWN)
-            game.removeInputEvent(Input.Keys.ENTER)
+            Input -= up
+            Input -= down
             callback()
         }
     }

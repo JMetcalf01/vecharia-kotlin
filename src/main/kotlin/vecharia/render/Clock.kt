@@ -2,6 +2,7 @@
 
 package vecharia.render
 
+import vecharia.Input
 import vecharia.Vecharia
 import vecharia.util.GameState
 import vecharia.util.Tickable
@@ -20,8 +21,10 @@ import kotlin.collections.HashMap
  * @param speed the amount of milliseconds before the next frame
  */
 class Clock(private val game: Vecharia, private val speed: Long = 5) : Thread() {
-
     private val tickables: MutableMap<vecharia.util.State, Tickable> = HashMap()
+
+    var frame: Long = 0
+        private set
 
     init {
         this.isDaemon = true
@@ -40,7 +43,6 @@ class Clock(private val game: Vecharia, private val speed: Long = 5) : Thread() 
      * @throws StackOverflowError if you leave your game open for too long
      */
     override fun run() {
-        var frame = 0L
         while (true) {
             if (frame > Long.MAX_VALUE - 1_000_000) throw StackOverflowError("You probably left your game open...")
 
@@ -61,6 +63,7 @@ class Clock(private val game: Vecharia, private val speed: Long = 5) : Thread() 
      * @param frame the current frame of the game
      */
     private fun updateGame(frame: Long) {
+        Input.tick(game, frame)
         for ((state, tickable) in tickables) {
             if (state == GameState.state)
                 tickable.tick(game, frame)

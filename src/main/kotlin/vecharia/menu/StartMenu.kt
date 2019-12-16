@@ -1,10 +1,7 @@
 package vecharia.menu
 
-import com.badlogic.gdx.Gdx
 import vecharia.Vecharia
-import vecharia.render.SoundSystem
 import vecharia.util.GameState
-import kotlin.system.exitProcess
 
 /**
  * Creates the start menu with selections:
@@ -40,11 +37,7 @@ class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", centered = t
         }
 
         selection("Exit") {
-            game.log.info("Exiting")
-            game.window.dispose()
-            Gdx.app.exit()
-            SoundSystem.end()
-            exitProcess(0)
+            game.exit()
         }
     }
 }

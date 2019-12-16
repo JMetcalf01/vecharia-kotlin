@@ -3,11 +3,11 @@ package vecharia
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import vecharia.logging.Logger
-import vecharia.render.GameThread
-import vecharia.render.Window
 import vecharia.menu.Menu
-import vecharia.menu.PauseMenu
+import vecharia.menu.StartMenu
 import vecharia.render.Printer
+import vecharia.render.Window
+import vecharia.util.GameState
 import vecharia.util.Tickable
 import java.awt.Toolkit
 
@@ -37,10 +37,8 @@ fun main() {
  * @since 1.0
  */
 class Vecharia(val log: Logger, val window: Window) : Tickable {
-    lateinit var gameThread: GameThread
-    lateinit var printer: Printer
-
-    private val tickables: MutableSet<Tickable> = HashSet()
+    val printer: Printer = Printer(window.canvas, GameState.ACTIVE)
+    private val tickables: MutableSet<Tickable> = mutableSetOf(printer)
 
     /**
      * Starts the game thread.
@@ -49,41 +47,16 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
      * @since 1.1
      */
     fun start() {
-        gameThread = GameThread(this)
-        printer = Printer(this, window.canvas)
-        tickables.add(printer)
+        log.info("Game thread started...")
+
+//        SoundSystem.add("assets/introscreen.mp3", looping = true, volume = 0f)
+//        SoundSystem.playM()
+//        game.log.info("Sound system playing")
+
+        val startMenu = StartMenu(this)
+        log.info("Entering Start Menu")
+        render(startMenu)
     }
-
-    /**
-     * Returns whether the user is currently typing.
-     *
-     * @author Matt Worzala
-     * @since 1.0
-     *
-     * @return whether the user is typing
-     */
-    fun isTyping(): Boolean = window.entering
-
-    /**
-     * Adds a keybind for a specific action.
-     *
-     * @author Matt Worzala
-     * @since 1.0
-     *
-     * @param key the key to trigger the action
-     * @param onInput the action to be performed
-     */
-    fun addInputEvent(key: Int, onInput: () -> Unit) = window.addKeyAction(key, onInput)
-
-    /**
-     * Removes a specific keybind.
-     *
-     * @author Matt Worzala
-     * @since 1.0
-     *
-     * @param key the key for the keybind to remove
-     */
-    fun removeInputEvent(key: Int) = window.removeKeyAction(key)
 
     /**
      * Given a menu to render, adds it to tickables, renders it,
@@ -105,7 +78,6 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
         }
     }
 
-
     /**
      * Ticks every single tickable.
      *
@@ -122,4 +94,13 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
             }
         }
     }
+
+    /**
+     * Exits the game safely
+     *
+     * @author Matt Worzala
+     * @since 1.2
+     */
+    fun exit() { window.exit = true }
+
 }

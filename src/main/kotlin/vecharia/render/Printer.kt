@@ -1,10 +1,12 @@
 package vecharia.render
 
-import com.badlogic.gdx.Input
+import com.badlogic.gdx.Input.Keys.*
 import com.badlogic.gdx.graphics.Color
+import vecharia.Input
 import vecharia.Vecharia
 import vecharia.util.GameState
 import vecharia.util.SimpleQueue
+import vecharia.util.State
 import vecharia.util.Tickable
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -19,21 +21,20 @@ import java.util.concurrent.atomic.AtomicBoolean
  * @param game the Vecharia game instance
  * @param canvas the canvas instance
  */
-class Printer(game: Vecharia, private val canvas: Canvas) : Tickable {
+class Printer(private val canvas: Canvas, state: State) : Tickable {
 
     private val queue: SimpleQueue<Text> = SimpleQueue()
     private var waiting: AtomicBoolean = AtomicBoolean(false)
 
     init {
-        game.addInputEvent(Input.Keys.ENTER) {
+        Input.registerListener(ENTER, state) {
             waiting.set(false)
             queue.pop()?.callback?.invoke()
             canvas.clear()
         }
-        game.addInputEvent(Input.Keys.SPACE) {
-            if (GameState.state == GameState.ACTIVE) {
+        Input.registerListener(SPACE, state) {
+            if (GameState.state == GameState.ACTIVE)
                 queue.peek()?.instant = true
-            }
         }
     }
 

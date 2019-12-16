@@ -3,6 +3,8 @@ package vecharia.render
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import vecharia.Input
+import java.lang.IllegalStateException
 
 /**
  * This class keeps track of the text on the screen.
@@ -104,7 +106,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
      * Renders the lines, and then user input, if any.
      *
      * @author Jonathan Metcalf
-     * @since 1.0
+     * @since 1.2
      *
      * @param batch the batch of sprites
      */
@@ -124,16 +126,16 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         if (printing) {
             font.color = Color.WHITE
             font.draw(
-                batch, win.inputBuffer, font.spaceXadvance * xi,
+                batch, Input.current, font.spaceXadvance * xi,
                 win.height - font.lineHeight * yi - 5
             )
         }
 
         // Renders blinking cursor
-        if (printing && win.entering) {
-            if (win.frameCount / 20 % 2 == 0) {
+        if (printing && Input.typing) {
+            if (win.clock.frame / 20L % 2 == 0L) {
                 font.draw(
-                    batch, "_", font.spaceXadvance * (win.inputBuffer.length + xi),
+                    batch, "_", font.spaceXadvance * (Input.length + xi),
                     win.height - font.lineHeight * yi - 5
                 )
             }
