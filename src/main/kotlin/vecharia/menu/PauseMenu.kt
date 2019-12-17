@@ -15,16 +15,21 @@ import vecharia.util.GameState
  *
  * @param game the Vecharia game instance
  */
-class PauseMenu(game: Vecharia) : Menu(game, "Pause Menu", centered = true) {
+class PauseMenu(game: Vecharia) : Menu(game, "Pause Menu", closeOnSelect = false, centered = true) {
     init {
         selection("Resume") {
             GameState.state = GameState.ACTIVE
+            it.menu.closeOnSelect = true
         }
 
         selection("Save") {
             game.log.error("Saving not implemented!")
             // todo implement saving
-            game.render(PauseMenu(game))
+        }
+
+        selection("Inventory") {
+            game.log.error("Inventory not implemented!")
+            // todo implement inventory
         }
 
         selection("Settings") {

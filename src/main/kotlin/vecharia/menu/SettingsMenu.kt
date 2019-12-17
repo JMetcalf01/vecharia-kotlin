@@ -15,27 +15,31 @@ import vecharia.render.SoundSystem
  * @param game the Vecharia game instance
  * @param pastMenu the menu the settings menu came from (either start or pause)
  */
-class SettingsMenu(game: Vecharia, pastMenu: Menu) : Menu(game, "Settings", centered = true) {
+class SettingsMenu(game: Vecharia, pastMenu: Menu) : Menu(game, "Settings", closeOnSelect = false, caret = false, centered = true) {
     init {
-        selection("[${if (SoundSystem.musicEnabled) "*" else " "}] Toggle Sound (Currently ${if (SoundSystem.musicEnabled) "Enabled" else "Disabled"})") {
+        selection("${getToggle(SoundSystem.musicEnabled)}Sounds") {
             SoundSystem.toggleVolume()
             game.log.info("Music set to ${if (SoundSystem.musicEnabled) "on" else "off"}")
-            game.render(SettingsMenu(game, pastMenu))
+            it.title = "${getToggle(SoundSystem.musicEnabled)}Sounds"
         }
 
-        selection("Toggle Fullscreen") {
+        selection("${getToggle(true)}Fullscreen") {
             game.log.error("Fullscreen not implemented!")
             // Todo implement fullscreen
         }
 
         // this is temporary until we set up pause menu
-        selection("temp pause menu access") {
+        selection("    temp pause menu access") {
+            it.menu.closeOnSelect = true
             game.render(PauseMenu(game))
         }
 
-        selection("Exit Settings") {
+        selection("    Exit Settings") {
             game.log.info("Exiting settings")
+            it.menu.closeOnSelect = true
             game.render(if (pastMenu is StartMenu) StartMenu(game) else PauseMenu(game))
         }
     }
+
+    private fun getToggle(enabled: Boolean): String = "[${if (enabled) "*" else " "}] "
 }

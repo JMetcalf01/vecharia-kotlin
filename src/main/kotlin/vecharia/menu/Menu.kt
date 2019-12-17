@@ -8,23 +8,20 @@ import vecharia.render.Text
 import vecharia.util.GameState
 import vecharia.util.Tickable
 import java.util.*
-import java.util.concurrent.atomic.AtomicInteger
-import kotlin.collections.LinkedHashMap
 
 /**
  * A menu to be displayed in the game.
  *
  * @author Matt Worzala
- * @since 1.0
+ * @since 1.3
  *
  * @param title the title of the menu
  * @param centered whether the menu is centered on the screen
  */
-open class Menu(val game: Vecharia, private val title: String, private val centered: Boolean = false) : Tickable {
-    private val order: LinkedList<String> = LinkedList()
-    private val selections: LinkedHashMap<String, () -> Unit> = LinkedHashMap()
-    private val selection: AtomicInteger = AtomicInteger(0)
-    private val lastSelection: AtomicInteger = AtomicInteger(-1)
+open class Menu(val game: Vecharia, private val title: String, var closeOnSelect: Boolean = true, private val caret: Boolean = true, private val centered: Boolean = false) : Tickable {
+    private val selections: MutableList<Selection> = LinkedList()
+    private var current: Int = 0
+    private var refresh: Boolean = true
 
     /**
      * Add a new selection option to the menu
@@ -35,35 +32,38 @@ open class Menu(val game: Vecharia, private val title: String, private val cente
      * @param title the title of the option
      * @param onSelect the function to be called upon selection
      */
-    fun selection(title: String, onSelect: () -> Unit) {
-        val titleFixed: String = title.padEnd(fixLengths(order))
-        order.add(titleFixed)
-        selections[titleFixed] = onSelect
+    fun selection(title: String, onSelect: (Selection) -> Unit) {
+        selections.add(Selection(this, title, onSelect))
     }
 
     /**
      * Renders the menu --   this method should not be called manually.
      *
      * @author Matt Worzala
-     * @since 1.1
+     * @since 1.3
      *
-     * @param game the vecharia game instance
+     * @param callback a callback for when the menu has been closed by a a selction
      */
-    fun render(game: Vecharia, callback: () -> Unit = {}) {
+    fun render(callback: () -> Unit = {}) {
         val up = Input.registerListener(UP, GameState.state) {
-            if (selection.get() > 0)
-                selection.decrementAndGet()
+            if (current > 0) current--
+            refresh = true
         }
         val down = Input.registerListener(DOWN, GameState.state) {
-            if (selection.get() < order.size - 1)
-                selection.incrementAndGet()
+            if (current < selections.size - 1) current++
+            refresh = true
         }
-        Input.registerListener(ENTER, GameState.state, once = true) {
-            selections[order[selection.get()]]?.invoke()
-            selection.set(0)
-            Input -= up
-            Input -= down
-            callback()
+        var enter: Int = -1
+        enter = Input.registerListener(ENTER, GameState.state) {
+            val selection = selections[current]
+            selection.callback(selection)
+            current = 0
+            if (closeOnSelect) {
+                Input -= up
+                Input -= down
+                Input -= enter
+                callback()
+            } else refresh = true
         }
     }
 
@@ -71,19 +71,19 @@ open class Menu(val game: Vecharia, private val title: String, private val cente
      * Ticks the menu.
      * 
      * @author Jonathan Metcalf
-     * @since 1.1
+     * @since 1.3
      * 
      * @param game the Vecharia game instance
      * @param frame the current frame
      */
     override fun tick(game: Vecharia, frame: Long) {
-        if (lastSelection.get() == selection.get())
-            return
+        if (!refresh) return
+        refresh = false
 
         game.printer.clear()
 
         // Centers vertically
-        if (centered) {
+        if (centered) { //todo fix the length of the titles here (pad them so that they all match the length of the longest one val titleFixed: String = title.padEnd(fixLengths(order))
             for (i in 0 until (game.window.charHeight() / 2) - (selections.size + 1)) {
                 game.printer += Text(" ", newLine = true, instant = true)
             }
@@ -97,20 +97,19 @@ open class Menu(val game: Vecharia, private val title: String, private val cente
         }
         game.printer += Text(title, instant = true)
 
-        for (i in order.indices) {
-            val option = order[i]
-
-            // Centers options horizontally
+        val titles = selections.map { it.title }
+        val longest = titles.map { it.length }.sortedDescending()[0]
+        var i = 0
+        titles.map { it.padEnd(longest, ' ') }.forEach {
             if (centered)
-                game.printer += Text("".padEnd(centerString(game, "  $option")), newLine = false, instant = true)
+                game.printer += Text("".padEnd(centerString(game, "  $it")), newLine = false, instant = true)
 
-            if (i == selection.get())
-                game.printer += Text("> $option", Color.FOREST, instant = true)
-            else
-                game.printer += Text("  $option", instant = true)
+            if (i == current)
+                game.printer += Text("${if (caret) "> " else ""}$it", Color.FOREST, instant = true)
+            else game.printer += Text("${if (caret) "  " else ""}$it", instant = true)
+
+            i++
         }
-
-        lastSelection.set(selection.get())
     }
 
     /**
@@ -153,3 +152,15 @@ open class Menu(val game: Vecharia, private val title: String, private val cente
         return maxLength
     }
 }
+
+/**
+ * Represents a selection option in a menu and enables changing the title of a selection to reflect a change.
+ *
+ * @author Matt Worzala
+ * @since 1.3
+ *
+ * @param menu the menu instance that the selection belongs to
+ * @param title the title of the selection
+ * @param callback the function to be called when the selection is chosen
+ */
+data class Selection(val menu: Menu, var title: String, val callback: (Selection) -> Unit)

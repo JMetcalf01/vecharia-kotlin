@@ -74,7 +74,7 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
         synchronized(tickables) {
             tickables.add(menu)
         }
-        menu.render(this) {
+        menu.render {
             synchronized(tickables) {
                 tickables.remove(menu)
             }

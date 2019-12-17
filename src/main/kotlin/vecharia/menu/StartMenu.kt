@@ -16,33 +16,51 @@ import vecharia.util.GameState
  *
  * @param game the Vecharia game instance
  */
-class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", centered = true) {
+class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", closeOnSelect = false, centered = true) {
     init {
         selection("New Game") {
-            GameState.state = GameState.ACTIVE
-            game.log.info("new game -- state = ${GameState.state}")
-            game.printer.clear()
+            game.log.info("Prompting for selection")
+            it.menu.closeOnSelect = true
+            game.render(SaveSelectionMenu(game))
         }
 
         selection("Load Game") {
             game.log.warn("Load game in progress!")
-            game.render(StartMenu(game))
+
             // todo implement loading game
         }
 
         selection("Settings") {
             game.log.info("Settings opened")
+            it.menu.closeOnSelect = true
             game.render(SettingsMenu(game, this))
         }
 
         selection("Credits") {
             game.log.info("Running credits")
-            game.render(StartMenu(game))
             // todo implement credits
         }
 
         selection("Exit") {
             game.exit()
         }
+    }
+}
+
+class SaveSelectionMenu(game: Vecharia) : Menu(game, "Select a save:", centered = true) {
+    init {
+        selection("Slot 0: Empty") {
+            it.menu.closeOnSelect = false
+            it.title = "Slot 0: NEW_CHARACTER"
+        }
+        selection("Slot 1: Empty", this::newGame)
+        selection("Slot 2: Empty", this::newGame)
+        selection("Back") { game.render(StartMenu(game)) }
+    }
+
+    private fun newGame(selection: Selection) {
+        GameState.state = GameState.ACTIVE
+        game.log.info("new game -- state = ${GameState.state}")
+        game.printer.clear()
     }
 }
