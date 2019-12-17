@@ -20,10 +20,9 @@ import vecharia.util.GameState
 class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", closeOnSelect = false, centered = true) {
     init {
         selection("New Game") {
-//            game.log.info("Prompting for selection")
+            game.log.info("Prompting for selection")
             it.menu.closeOnSelect = true
-//            game.render(SaveSelectionMenu(game))
-            Introduction(game).introduction()
+            game.render(SaveSelectionMenu(game))
         }
 
         selection("Load Game") {
@@ -52,8 +51,9 @@ class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", closeOnSelec
 class SaveSelectionMenu(game: Vecharia) : Menu(game, "Select a save:", centered = true) {
     init {
         selection("Slot 0: Empty") {
-            it.menu.closeOnSelect = false
+            it.menu.closeOnSelect = true
             it.title = "Slot 0: NEW_CHARACTER"
+            Introduction(game).introduction()
         }
         selection("Slot 1: Empty", this::newGame)
         selection("Slot 2: Empty", this::newGame)

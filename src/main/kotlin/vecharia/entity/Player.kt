@@ -84,13 +84,21 @@ class Player private constructor(private val name: String?, maxHealth: Int?, pri
     class Builder {
         var name: String? = null
         var maxHealth: Int? = null
+        var race: Race? = null
+        var pclass: Class? = null
         var quest: Quest? = null
         var possibleQuests: MutableList<Quest>? = null
 
         fun name(name: String) = apply { this.name = name }
         fun maxHealth(maxHealth: Int) = apply { this.maxHealth = maxHealth }
+        fun race(race: Race) = apply { this.race = race }
+        fun pclass(pclass: Class) =  apply { this.pclass = pclass }
         fun quest(quest: Quest) = apply { this.quest = quest }
         fun possibleQuests(possibleQuests: MutableList<Quest>) = apply { this.possibleQuests = possibleQuests }
         fun build() = Player(name, maxHealth, quest, possibleQuests)
+    }
+
+    enum class Class {
+        KNIGHT, ARCHER, MAGE
     }
 }

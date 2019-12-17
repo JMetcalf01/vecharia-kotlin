@@ -18,4 +18,9 @@ abstract class Entity(private val name: String?, open val maxHealth: Int?) {
     var health: Int? = this.maxHealth
     val inventory: Inventory = Inventory()
     var effects: MutableList<Effect> = mutableListOf()
+
+    enum class Race {
+        HUMAN, ELF, DWARF
+    }
 }
+
