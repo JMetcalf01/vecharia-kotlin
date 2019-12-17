@@ -1,5 +1,6 @@
 package vecharia.menu
 
+import vecharia.Input
 import vecharia.Vecharia
 import vecharia.util.GameState
 
@@ -43,6 +44,18 @@ class PauseMenu(game: Vecharia) : Menu(game, "Pause Menu", closeOnSelect = false
 
             // Exit
             game.exit()
+        }
+
+        Input.registerListener(com.badlogic.gdx.Input.Keys.ESCAPE, GameState.ACTIVE) {
+            game.printer.buffer()
+            game.log.debug("here")
+            GameState.state = GameState.PAUSED
+            game.render(PauseMenu(game))
+        }
+
+        Input.registerListener(com.badlogic.gdx.Input.Keys.ESCAPE, GameState.PAUSED) {
+            GameState.state = GameState.ACTIVE
+            game.printer.unbuffer()
         }
     }
 }
