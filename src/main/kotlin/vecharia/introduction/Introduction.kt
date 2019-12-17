@@ -19,9 +19,9 @@ class Introduction(val game: Vecharia) {
             game.printer.clear()
             game.printer += "You wake from a deep sleep. Rubbing your eyes blearily, you roll over and sit up."
             game.printer += "What's your name again?"
+            game.printer += Text(">", newLine = false, instant = true)
             Input.readInput().then { str ->
-                print("here")
-                game.printer += Text(">", newLine = false, instant = true)
+                print("here: $str")
                 builder.name = str
                 resolve(builder)
             }
