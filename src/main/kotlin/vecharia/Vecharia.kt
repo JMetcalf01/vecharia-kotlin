@@ -11,7 +11,7 @@ import vecharia.util.GameState
 import vecharia.util.Tickable
 import java.awt.Toolkit
 
-private const val FULLSCREEN: Boolean = true
+private const val FULLSCREEN: Boolean = false
 
 /**
  * The entry point into the program.

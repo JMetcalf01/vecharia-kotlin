@@ -20,13 +20,10 @@ import vecharia.util.GameState
 class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", closeOnSelect = false, centered = true) {
     init {
         selection("New Game") {
-            it.menu.closeOnSelect = true
-
-            Introduction(game).introduction()
 //            game.log.info("Prompting for selection")
-//            it.menu.closeOnSelect = true
+            it.menu.closeOnSelect = true
 //            game.render(SaveSelectionMenu(game))
-
+            Introduction(game).introduction()
         }
 
         selection("Load Game") {

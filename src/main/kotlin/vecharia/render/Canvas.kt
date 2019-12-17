@@ -126,7 +126,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         if (printing) {
             font.color = Color.WHITE
             font.draw(
-                batch, Input.current, font.spaceXadvance * xi,
+                batch, if (Input.length > 0) "> ${Input.current}" else Input.current, font.spaceXadvance * xi,
                 win.height - font.lineHeight * yi - 5
             )
         }
@@ -135,7 +135,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         if (printing && Input.typing) {
             if (win.clock.frame / 20L % 2 == 0L) {
                 font.draw(
-                    batch, "_", font.spaceXadvance * (Input.length + xi),
+                    batch, "_", font.spaceXadvance * (Input.length + xi + 2),
                     win.height - font.lineHeight * yi - 5
                 )
             }
