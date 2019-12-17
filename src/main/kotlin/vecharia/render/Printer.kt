@@ -127,6 +127,16 @@ class Printer(private val canvas: Canvas, state: State) : Tickable {
         queue.push(text)
     }
 
+
+    // just added these methods to test
+    fun buffer() {
+        canvas.buffer()
+    }
+
+    fun unbuffer() {
+        canvas.unbuffer()
+    }
+
     /**
      * Adds an empty line to the end of the queue,
      * which the printer reads as clearing the canvas.
