@@ -31,7 +31,8 @@ class Promise<T>(run: Boolean = true, private val func: ((T) -> Unit) -> Unit) {
      * @return the new promise
      */
     fun <T2> then(func: ((T2) -> Unit, T) -> Unit): Promise<T2> {
-        val temp = Promise<T2> {
+        val temp = Promise<T2>(false) {
+            println("MEEEE")
             val tempValue = value
             if (tempValue != null)
                 func(it, tempValue)

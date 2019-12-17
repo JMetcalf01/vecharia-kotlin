@@ -12,6 +12,7 @@ class Introduction(val game: Vecharia) {
         val player: Promise<Player.Builder> = Promise { builder ->
             builder(Player.Builder())
         }
+        println("HEREEEE")
 
         // Name
         player.then { resolve: (Player.Builder) -> Unit, builder ->
