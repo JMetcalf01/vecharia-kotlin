@@ -99,7 +99,7 @@ class Window : ApplicationAdapter() {
         canvas.render(batch)
         batch.end()
 
-        Input.readInput()
+        Input.readGdxInput()
     }
 
     /**

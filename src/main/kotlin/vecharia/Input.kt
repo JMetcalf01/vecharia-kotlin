@@ -4,10 +4,9 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys.*
 import vecharia.render.Text
 import vecharia.util.GameState
+import vecharia.util.Promise
 import vecharia.util.State
 import vecharia.util.Tickable
-import java.lang.IllegalStateException
-import java.lang.StringBuilder
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -85,14 +84,14 @@ object Input : Tickable {
      * Prompt the user for input and make use of the response.
      *
      * @author Matt Worzala
-     * @since 1.2
+     * @since 1.3
      *
-     * @param callback a function with a single parameter of the string typed by the user.
+     * @return a promise of the text entered by the user
      */
-    fun readInput(callback: (String) -> Unit) {
+    fun readInput(): Promise<String> {
         if (typing) throw IllegalStateException("Already reading input!")
         typing = true
-        cb = callback
+        return Promise { cb = it }
     }
 
     /**
@@ -141,7 +140,7 @@ object Input : Tickable {
      * @author Matt Worzala
      * @since 1.2
      */
-    internal fun readInput() {
+    internal fun readGdxInput() {
         val shift = Gdx.input.isKeyPressed(SHIFT_LEFT) || Gdx.input.isKeyPressed(SHIFT_RIGHT)
         (NUM_0..NUMPAD_9).filter { Gdx.input.isKeyJustPressed(it) }.forEach { queue.offer(if (shift) it + 1000 else it) }
     }

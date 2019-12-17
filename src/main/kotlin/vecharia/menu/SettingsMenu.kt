@@ -17,7 +17,7 @@ import vecharia.render.SoundSystem
  */
 class SettingsMenu(game: Vecharia, pastMenu: Menu) : Menu(game, "Settings", centered = true) {
     init {
-        selection("Toggle Sound (Currently ${if (SoundSystem.musicEnabled) "Enabled" else "Disabled"})") {
+        selection("[${if (SoundSystem.musicEnabled) "*" else " "}] Toggle Sound (Currently ${if (SoundSystem.musicEnabled) "Enabled" else "Disabled"})") {
             SoundSystem.toggleVolume()
             game.log.info("Music set to ${if (SoundSystem.musicEnabled) "on" else "off"}")
             game.render(SettingsMenu(game, pastMenu))

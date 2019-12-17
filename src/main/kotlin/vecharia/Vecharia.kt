@@ -6,7 +6,6 @@ import vecharia.logging.Logger
 import vecharia.menu.Menu
 import vecharia.menu.StartMenu
 import vecharia.render.Printer
-import vecharia.render.SoundSystem
 import vecharia.render.Window
 import vecharia.util.GameState
 import vecharia.util.Tickable
@@ -55,6 +54,11 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
         val startMenu = StartMenu(this)
         log.info("Entering Start Menu")
         render(startMenu)
+
+//        Input.readInput().then {
+//            println(it)
+//
+//        }
     }
 
     /**
@@ -100,6 +104,8 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
      * @author Matt Worzala
      * @since 1.2
      */
-    fun exit() { window.exit = true }
+    fun exit() {
+        window.exit = true
+    }
 
 }
