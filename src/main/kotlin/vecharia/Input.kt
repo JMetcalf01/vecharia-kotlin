@@ -44,6 +44,7 @@ object Input : Tickable {
      * @param frame the current frame
      */
     override fun tick(game: Vecharia, frame: Long) {
+
         while (queue.size > 0) {
             val raw = queue.poll()
             val shift = raw - 1000 > 0
@@ -73,10 +74,12 @@ object Input : Tickable {
             }
 
             // Call key events
-            events[GameState.state]?.get(key)?.forEach {
-                it.third()
-                if (it.second) this -= it.first
+            val events: List<Triple<Int, Boolean, () -> Unit>> = events[GameState.state]?.get(key) ?: mutableListOf()
+            for (event in events) {
+                event.third()
+                if (event.second) this -= event.first
             }
+
         }
     }
 

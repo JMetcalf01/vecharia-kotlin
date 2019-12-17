@@ -56,6 +56,7 @@ open class Menu(val game: Vecharia, private val title: String, var closeOnSelect
         var enter: Int = -1
         enter = Input.registerListener(ENTER, GameState.state) {
             val selection = selections[current]
+            println(selection)
             selection.callback(selection)
             current = 0
             if (closeOnSelect) {
