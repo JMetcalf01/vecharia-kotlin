@@ -13,8 +13,10 @@ import kotlin.math.pow
  *
  * @param name the name of the player
  * @param maxHealth the maxHealth of the player
+ * @param quest the quest of the player
+ * @param possibleQuests list of possible quests for the player
  */
-class Player(name: String, maxHealth: Int) : Entity(name, maxHealth) {
+class Player private constructor(private val name: String?, maxHealth: Int?, private val quest: Quest?, private val possibleQuests: MutableList<Quest>?) : Entity(name, maxHealth) {
 
     // Constants
     private val totalLevels: Int = 40
@@ -23,11 +25,9 @@ class Player(name: String, maxHealth: Int) : Entity(name, maxHealth) {
     private val b: Double = ln(1.0 * lastXPLevel / firstXPLevel) / (totalLevels - 1)
     private val a: Double = 1.0 * firstXPLevel / (kotlin.math.exp(b) - 1.0)
 
-    // Instance Variables
-    private var xp: Int = 0
-    var quest: Quest? = null
-    var possibleQuests: MutableList<Quest> = mutableListOf()
+    // figure this out later
     var mana: Int = 0
+    private var xp: Int = 0
 
     /**
      * Adds a certain amount of xp to the player.
@@ -73,5 +73,24 @@ class Player(name: String, maxHealth: Int) : Entity(name, maxHealth) {
             println("Level: ${tempLevel - 1}, XP: ${getLevelHelper(tempLevel - 1)}")
         }
         return tempLevel - 2
+    }
+
+    /**
+     * Builder class for the Player.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.3
+     */
+    class Builder {
+        var name: String? = null
+        var maxHealth: Int? = null
+        var quest: Quest? = null
+        var possibleQuests: MutableList<Quest>? = null
+
+        fun name(name: String) = apply { this.name = name }
+        fun maxHealth(maxHealth: Int) = apply { this.maxHealth = maxHealth }
+        fun quest(quest: Quest) = apply { this.quest = quest }
+        fun possibleQuests(possibleQuests: MutableList<Quest>) = apply { this.possibleQuests = possibleQuests }
+        fun build() = Player(name, maxHealth, quest, possibleQuests)
     }
 }

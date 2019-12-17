@@ -89,6 +89,7 @@ object Input : Tickable {
      * @return a promise of the text entered by the user
      */
     fun readInput(): Promise<String> {
+        println("hereeee")
         if (typing) throw IllegalStateException("Already reading input!")
         typing = true
         return Promise { cb = it }

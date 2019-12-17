@@ -17,7 +17,9 @@ class Promise<T>(run: Boolean = true, private val func: ((T) -> Unit) -> Unit) {
     private var next: Promise<*>? = null
     private var end: ((T) -> Unit)? = null
 
-    init { if (run) invoke() }
+    init {
+        if (run) invoke()
+    }
 
     /**
      * Add a transformation function to another promise, possibly of a different type.

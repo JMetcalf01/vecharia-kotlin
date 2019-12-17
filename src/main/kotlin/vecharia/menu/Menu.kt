@@ -42,7 +42,7 @@ open class Menu(val game: Vecharia, private val title: String, var closeOnSelect
      * @author Matt Worzala
      * @since 1.3
      *
-     * @param callback a callback for when the menu has been closed by a a selction
+     * @param callback a callback for when the menu has been closed by a selection
      */
     fun render(callback: () -> Unit = {}) {
         val up = Input.registerListener(UP, GameState.state) {
