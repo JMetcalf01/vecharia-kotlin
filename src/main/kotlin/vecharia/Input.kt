@@ -66,7 +66,7 @@ object Input : Tickable {
 
                 if (key == ENTER) {
                     typing = false
-                    game.printer += Text("> " + current, instant = true)
+                    game.printer += Text("> $current", instant = true)
                     cb?.invoke(current)
                     buffer.clear()
                 }

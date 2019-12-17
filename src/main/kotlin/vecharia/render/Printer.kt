@@ -1,6 +1,7 @@
 package vecharia.render
 
-import com.badlogic.gdx.Input.Keys.*
+import com.badlogic.gdx.Input.Keys.ENTER
+import com.badlogic.gdx.Input.Keys.SPACE
 import com.badlogic.gdx.graphics.Color
 import vecharia.Input
 import vecharia.Vecharia
@@ -22,9 +23,10 @@ import java.util.concurrent.atomic.AtomicBoolean
  * @param canvas the canvas instance
  */
 class Printer(private val canvas: Canvas, state: State) : Tickable {
-
     private val queue: SimpleQueue<Text> = SimpleQueue()
     private var waiting: AtomicBoolean = AtomicBoolean(false)
+
+    val printing: Boolean get() = queue.peek() != null
 
     init {
         Input.registerListener(ENTER, state) {

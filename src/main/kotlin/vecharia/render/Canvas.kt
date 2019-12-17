@@ -122,7 +122,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         }
 
         // Render user input
-        if (printing) {
+        if (printing && !win.game.printer.printing) {
             font.color = Color.WHITE
             font.draw(
                 batch, if (Input.typing) "> ${Input.current}" else Input.current, font.spaceXadvance * xi,
@@ -131,7 +131,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         }
 
         // Renders blinking cursor
-        if (printing && Input.typing) {
+        if (printing && Input.typing && !win.game.printer.printing) {
             if (win.clock.frame / 20L % 2 == 0L) {
                 font.draw(
                     batch, "_", font.spaceXadvance * (Input.length + xi + 2),
