@@ -49,14 +49,9 @@ object Input : Tickable {
             val shift = raw - 1000 > 0
             val key = if (shift) raw - 1000 else raw
 
-            // Call key events
-            events[GameState.state]?.get(key)?.forEach {
-                it.third()
-                if (it.second) this -= it.first
-            }
-
             // Add input to typing buffer
             if (typing) {
+                println(key)
                 if ((A..Z).contains(key))
                     buffer.append((if (shift) key + 36 else key + 68).toChar())
 
@@ -71,11 +66,18 @@ object Input : Tickable {
                     buffer.setLength(buffer.length - 1)
 
                 if (key == ENTER) {
+                    println("ENTER")
                     typing = false
                     game.printer += Text(current, instant = true)
                     cb?.invoke(current)
                     buffer.clear()
                 }
+            }
+
+            // Call key events
+            events[GameState.state]?.get(key)?.forEach {
+                it.third()
+                if (it.second) this -= it.first
             }
         }
     }
