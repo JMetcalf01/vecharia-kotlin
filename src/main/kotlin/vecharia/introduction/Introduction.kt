@@ -3,7 +3,6 @@ package vecharia.introduction
 import vecharia.Input
 import vecharia.Vecharia
 import vecharia.entity.Player
-import vecharia.render.Text
 import vecharia.util.Promise
 
 class Introduction(val game: Vecharia) {
@@ -19,7 +18,6 @@ class Introduction(val game: Vecharia) {
             game.printer.clear()
             game.printer += "You wake from a deep sleep. Rubbing your eyes blearily, you roll over and sit up."
             game.printer += "What's your name again?"
-            game.printer += Text(">", newLine = false, instant = true)
             Input.readInput().then { str ->
                 print("here: $str")
                 builder.name = str

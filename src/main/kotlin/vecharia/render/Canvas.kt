@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import vecharia.Input
-import java.lang.IllegalStateException
 
 /**
  * This class keeps track of the text on the screen.
@@ -126,7 +125,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         if (printing) {
             font.color = Color.WHITE
             font.draw(
-                batch, if (Input.length > 0) "> ${Input.current}" else Input.current, font.spaceXadvance * xi,
+                batch, if (Input.typing) "> ${Input.current}" else Input.current, font.spaceXadvance * xi,
                 win.height - font.lineHeight * yi - 5
             )
         }

@@ -51,7 +51,6 @@ object Input : Tickable {
 
             // Add input to typing buffer
             if (typing) {
-                println(key)
                 if ((A..Z).contains(key))
                     buffer.append((if (shift) key + 36 else key + 68).toChar())
 
@@ -62,13 +61,12 @@ object Input : Tickable {
                 if (key == MINUS) buffer.append('-')
                 if (key == PERIOD) buffer.append('.')
 
-                if (key == BACKSPACE && queue.isNotEmpty())
+                if (key == BACKSPACE && buffer.isNotEmpty())
                     buffer.setLength(buffer.length - 1)
 
                 if (key == ENTER) {
-                    println("ENTER")
                     typing = false
-                    game.printer += Text(current, instant = true)
+                    game.printer += Text("> " + current, instant = true)
                     cb?.invoke(current)
                     buffer.clear()
                 }
