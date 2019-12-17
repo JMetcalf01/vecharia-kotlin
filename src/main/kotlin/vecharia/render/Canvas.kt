@@ -132,7 +132,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
 
         // Renders blinking cursor
         if (printing && Input.typing && !win.game.printer.printing) {
-            if (win.clock.frame / 20L % 2 == 0L) {
+            if (win.clock.frame / 80L % 2 == 0L) {
                 font.draw(
                     batch, "_", font.spaceXadvance * (Input.length + xi + 2),
                     win.height - font.lineHeight * yi - 5
