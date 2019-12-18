@@ -2,6 +2,9 @@ package vecharia.inventory
 
 /**
  * Represents an item which has durability and can be broken or repaired.
+ *
+ * @author Matt Worzala
+ * @since 1.0
  */
 interface Durable {
 

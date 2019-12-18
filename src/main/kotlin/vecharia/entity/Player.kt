@@ -6,7 +6,6 @@ import kotlin.math.pow
 
 /**
  * The player class, which holds the information about the player.
- * // todo add class and race
  *
  * @author Jonathan Metcalf
  * @since 1.0
@@ -98,6 +97,12 @@ class Player private constructor(private val name: String?, maxHealth: Int?, pri
         fun build() = Player(name, maxHealth, quest, possibleQuests)
     }
 
+    /**
+     * An enum representation of possible jobs a player can have.
+     *
+     * @author Jonathan Metcalf
+     * @since 1.3
+     */
     enum class Class {
         KNIGHT, ARCHER, MAGE
     }

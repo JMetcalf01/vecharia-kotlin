@@ -15,7 +15,10 @@ import vecharia.util.GameState
  * @author Jonathan Metcalf
  * @since 1.1
  *
+ * @constructor makes the list of selections, registers the escape keybind, and renders the menu
+ *
  * @param game the Vecharia game instance
+ * @param printer the printer instance
  */
 class PauseMenu(game: Vecharia, private val printer: Printer = Printer(game.window.canvas, GameState.PAUSED)) : Menu(game, "Pause Menu", closeOnSelect = false, centered = true, printer = printer, state = GameState.PAUSED) {
 
@@ -45,18 +48,38 @@ class PauseMenu(game: Vecharia, private val printer: Printer = Printer(game.wind
         this.render()
     }
 
+    /**
+     * Ticks the pause menu when called.
+     *
+     * @author Matt Worzala
+     * @since 1.3
+     *
+     * @param game the Vecharia game instance
+     * @param frame the current frame of the game
+     */
     override fun tick(game: Vecharia, frame: Long) {
         printer.tick(game, frame)
 
         super.tick(game, frame)
     }
 
+    /**
+     * Pauses the game overall.
+     *
+     * @author Matt Worzala and Jonathan Metcalf
+     * @since 1.3
+     */
     private fun pause() {
         game.window.canvas.buffer()
         GameState.state = GameState.PAUSED
     }
 
-
+    /**
+     * Unpauses the game overall.
+     *
+     * @author Matt Worzala and Jonathan Metcalf
+     * @since 1.3
+     */
     private fun unpause() {
         super.current = 0
         super.refresh = true

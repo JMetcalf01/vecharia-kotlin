@@ -21,14 +21,22 @@ import java.util.*
  * @param title the title of the menu
  * @param centered whether the menu is centered on the screen
  */
-open class Menu(val game: Vecharia,
-                private val title: String,
-                var closeOnSelect: Boolean = true,
-                private val caret: Boolean = true,
-                private val centered: Boolean = false,
-                private val printer: Printer = game.printer,
-                private val state: State? = null) : Tickable {
+open class Menu(
+    val game: Vecharia,
+    private val title: String,
+    var closeOnSelect: Boolean = true,
+    private val caret: Boolean = true,
+    private val centered: Boolean = false,
+    private val printer: Printer = game.printer,
+    private val state: State? = null
+) : Tickable {
 
+    /**
+     * Creates a basic promise based menu. The menu simply consists of a set of immutable options and returns a promise representing the index of the selected option.
+     *
+     * @author Matt Worzala
+     * @since 1.3
+     */
     companion object {
         /**
          * Creates a basic promise based menu. The menu simply consists of a set of immutable options and returns a promise representing the index of the selected option.
@@ -42,15 +50,16 @@ open class Menu(val game: Vecharia,
          * @param centered whether the menu is centered on the screen
          * @returns a promise of the selected index
          */
-        fun basic(game: Vecharia, title: String, vararg options: String, centered: Boolean = false): Promise<Int> = Promise {
-            if (options.isEmpty())
-                throw IllegalArgumentException("Must provide at least one option.")
+        fun basic(game: Vecharia, title: String, vararg options: String, centered: Boolean = false): Promise<Int> =
+            Promise {
+                if (options.isEmpty())
+                    throw IllegalArgumentException("Must provide at least one option.")
 
-            val menu = Menu(game, title, centered = centered)
-            for (i in options.indices)
-                menu.selection(options[i]) { it(i) }
-            game.render(menu)
-        }
+                val menu = Menu(game, title, centered = centered)
+                for (i in options.indices)
+                    menu.selection(options[i]) { it(i) }
+                game.render(menu)
+            }
     }
 
     private val selections: MutableList<Selection> = LinkedList()
@@ -71,7 +80,7 @@ open class Menu(val game: Vecharia,
     }
 
     /**
-     * Renders the menu --   this method should not be called manually.
+     * Renders the menu -- this method should not be called manually.
      *
      * @author Matt Worzala
      * @since 1.3
@@ -104,10 +113,10 @@ open class Menu(val game: Vecharia,
 
     /**
      * Ticks the menu.
-     * 
+     *
      * @author Jonathan Metcalf
      * @since 1.3
-     * 
+     *
      * @param game the Vecharia game instance
      * @param frame the current frame
      */

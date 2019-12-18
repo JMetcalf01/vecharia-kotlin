@@ -54,11 +54,6 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
         val startMenu = StartMenu(this)
         log.info("Entering Start Menu")
         render(startMenu)
-
-//        Input.readInput().then {
-//            println(it)
-//
-//        }
     }
 
     /**

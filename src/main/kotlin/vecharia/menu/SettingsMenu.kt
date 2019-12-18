@@ -12,6 +12,8 @@ import vecharia.render.SoundSystem
  * @author Jonathan Metcalf
  * @since 1.1
  *
+ * @constructor makes the list of selections
+ *
  * @param game the Vecharia game instance
  * @param pastMenu the menu the settings menu came from (either start or pause)
  */
@@ -33,5 +35,15 @@ class SettingsMenu(game: Vecharia, pastMenu: Menu) : Menu(game, "Settings", clos
         }
     }
 
+    /**
+     * Returns a string consisting of "[ ]" if the option is not enabled
+     * and a string consisting of "[*]" if the option is enabled.
+     *
+     * @author Matt Worzala
+     * @since 1.3
+     *
+     * @param enabled whether the setting is enabled
+     * @return the string as described above
+     */
     private fun getToggle(enabled: Boolean): String = "[${if (enabled) "*" else " "}] "
 }

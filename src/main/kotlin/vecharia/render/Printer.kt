@@ -15,8 +15,8 @@ import vecharia.util.*
  *
  * @constructor registers key listeners for skip and continue
  *
- * @param game the Vecharia game instance
  * @param canvas the canvas instance
+ * @param state the state the printer prints in
  */
 class Printer(private val canvas: Canvas, state: State) : Tickable {
     private val queue: SimpleQueue<Text> = SimpleQueue()

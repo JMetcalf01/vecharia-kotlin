@@ -2,6 +2,7 @@ package vecharia.menu
 
 import vecharia.Vecharia
 import vecharia.introduction.Introduction
+import vecharia.render.Text
 import vecharia.util.GameState
 
 /**
@@ -14,6 +15,8 @@ import vecharia.util.GameState
  *
  * @author Jonathan Metcalf
  * @since 1.1
+ *
+ * @constructor initializes the selections
  *
  * @param game the Vecharia game instance
  */
@@ -36,10 +39,10 @@ class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", closeOnSelec
         }
 
         selection("Credits") {
-            it.menu.closeOnSelect = true
+            it.menu.closeOnSelect = false
             game.printer.clear()
             game.printer += "Sorry, credits have not been implemented!"
-            game.printer += "The game can be quit using Alt+F4 (Windows, Linux) or Command+Q (macOS)."
+            game.printer += Text("The game can be quit using Alt+F4 (Windows, Linux) or Command+Q (macOS).", wait = true)
         }
 
         selection("Exit") {
@@ -48,6 +51,16 @@ class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", closeOnSelec
     }
 }
 
+/**
+ * A menu for the save selection options
+ *
+ * @author Matt Worzala
+ * @since 1.3
+ *
+ * @constructor initializes the selections
+ *
+ * @param game the Vecharia game instance
+ */
 class SaveSelectionMenu(game: Vecharia) : Menu(game, "Select a save:", centered = true) {
     init {
         selection("Slot 0: Empty") {
@@ -61,6 +74,14 @@ class SaveSelectionMenu(game: Vecharia) : Menu(game, "Select a save:", centered 
         selection("Back") { game.render(StartMenu(game)) }
     }
 
+    /**
+     * Starts a new game (eventually)
+     *
+     * @author Matt Worzala
+     * @since 1.3
+     *
+     * @param selection is currently unused
+     */
     private fun newGame(selection: Selection) {
         GameState.state = GameState.ACTIVE
         game.log.info("new game -- state = ${GameState.state}")
