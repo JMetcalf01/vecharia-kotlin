@@ -5,10 +5,7 @@ import com.badlogic.gdx.Input.Keys.SPACE
 import com.badlogic.gdx.graphics.Color
 import vecharia.Input
 import vecharia.Vecharia
-import vecharia.util.GameState
-import vecharia.util.SimpleQueue
-import vecharia.util.State
-import vecharia.util.Tickable
+import vecharia.util.*
 
 /**
  * Prints text to the canvas.
@@ -130,14 +127,8 @@ class Printer(private val canvas: Canvas, state: State) : Tickable {
         queue.push(text)
     }
 
-
-    // just added these methods to test
-    fun buffer() {
-        canvas.buffer()
-    }
-
-    fun unbuffer() {
-        canvas.unbuffer()
+    fun waiting(message: String, color: Color = Color.WHITE, newLine: Boolean = true): Promise<Unit> = Promise {
+        print(Text(message, color, newLine, wait = true) { it(Unit) })
     }
 
     /**

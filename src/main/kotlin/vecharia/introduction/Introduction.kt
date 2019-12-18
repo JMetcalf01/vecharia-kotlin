@@ -23,7 +23,7 @@ class Introduction(val game: Vecharia) {
             }
         }.then { builder ->
             game.printer.clear()
-            game.printer += Text("Right. It's ${builder.name}.", wait = true) {
+            game.printer.waiting("Right. It's ${builder.name}.").then {
                 game.printer.clear()
 
                 Promise<Int> { resolve ->
@@ -66,6 +66,5 @@ class Introduction(val game: Vecharia) {
                 }
             }
         }
-
     }
 }
