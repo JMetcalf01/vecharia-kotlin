@@ -17,24 +17,24 @@ class Introduction(val game: Vecharia) {
             game.printer.clear()
             game.printer += "You wake from a deep sleep. Rubbing your eyes blearily, you roll over and sit up."
             game.printer += "What's your name again?"
-            Input.readInput().then { str ->
-                builder.name = str
-                resolve(builder)
+            var readName: (String) -> Unit = { }
+            readName = { str ->
+                if (str.length in 2..16) {
+                    builder.name = str
+                    resolve(builder)
+                } else {
+                    game.printer += "Name must be between 2 and 16 characters long."
+                    Input.readInput().then(readName)
+                }
             }
+            Input.readInput().then(readName)
         }.then { builder ->
             game.printer.clear()
             game.printer.waiting("Right. It's ${builder.name}.").then {
                 game.printer.clear()
 
-                Promise<Int> { resolve ->
-                    val menu = Menu(game, "What race are you?", centered = false)
-                    menu.selection("Human") { resolve(0) }
-                    menu.selection("Elf") { resolve(1) }
-                    menu.selection("Dwarf") { resolve(2) }
-                    game.render(menu)
-                }.then {
+                Menu.basic(game, "What race are you?", "Human", "Elf", "Dwarf").then {
                     game.printer.clear()
-                    println(it)
                     when (it) {
                         0 -> {
                             builder.race = Entity.Race.HUMAN

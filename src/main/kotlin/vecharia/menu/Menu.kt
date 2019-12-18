@@ -7,6 +7,7 @@ import vecharia.Vecharia
 import vecharia.render.Printer
 import vecharia.render.Text
 import vecharia.util.GameState
+import vecharia.util.Promise
 import vecharia.util.State
 import vecharia.util.Tickable
 import java.util.*
@@ -27,6 +28,31 @@ open class Menu(val game: Vecharia,
                 private val centered: Boolean = false,
                 private val printer: Printer = game.printer,
                 private val state: State? = null) : Tickable {
+
+    companion object {
+        /**
+         * Creates a basic promise based menu. The menu simply consists of a set of immutable options and returns a promise representing the index of the selected option.
+         *
+         * @author Matt Worzala
+         * @since 1.3
+         *
+         * @param game the vecharia game instance
+         * @param title the title of the menu
+         * @param options the options to be rendered, the order determines the indices
+         * @param centered whether the menu is centered on the screen
+         * @returns a promise of the selected index
+         */
+        fun basic(game: Vecharia, title: String, vararg options: String, centered: Boolean = false): Promise<Int> = Promise {
+            if (options.isEmpty())
+                throw IllegalArgumentException("Must provide at least one option.")
+
+            val menu = Menu(game, title, centered = centered)
+            for (i in options.indices)
+                menu.selection(options[i]) { it(i) }
+            game.render(menu)
+        }
+    }
+
     private val selections: MutableList<Selection> = LinkedList()
     protected var current: Int = 0
     protected var refresh: Boolean = true
