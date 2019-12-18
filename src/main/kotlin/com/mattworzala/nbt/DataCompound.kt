@@ -103,15 +103,17 @@ class DataCompound(private val valueMap: MutableMap<String, Serializable> = Hash
         return if (value != null && value is Array<*>) value as Array<String> else null
     }
 
-    fun getList(name: String): MutableList<*>? {
+    fun <T> getList(name: String): MutableList<T>? {
         val value = valueMap[name]
-        return if (value != null && value is MutableList<*>) value else null
+        return if (value != null && value is MutableList<*>) value as MutableList<T> else null
     }
 
     fun getDataCompound(name: String): DataCompound? {
         val value = valueMap[name]
         return if (value != null && value is DataCompound) value else null
     }
+
+    operator fun set(name: String, data: Serializable) = setValue(name, data)
 
     override fun iterator(): Iterator<Serializable> = valueMap.values.iterator()
 
