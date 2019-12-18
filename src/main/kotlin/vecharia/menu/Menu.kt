@@ -4,8 +4,10 @@ import com.badlogic.gdx.Input.Keys.*
 import com.badlogic.gdx.graphics.Color
 import vecharia.Input
 import vecharia.Vecharia
+import vecharia.render.Printer
 import vecharia.render.Text
 import vecharia.util.GameState
+import vecharia.util.State
 import vecharia.util.Tickable
 import java.util.*
 
@@ -18,10 +20,16 @@ import java.util.*
  * @param title the title of the menu
  * @param centered whether the menu is centered on the screen
  */
-open class Menu(val game: Vecharia, private val title: String, var closeOnSelect: Boolean = true, private val caret: Boolean = true, private val centered: Boolean = false) : Tickable {
+open class Menu(val game: Vecharia,
+                private val title: String,
+                var closeOnSelect: Boolean = true,
+                private val caret: Boolean = true,
+                private val centered: Boolean = false,
+                private val printer: Printer = game.printer,
+                private val state: State? = null) : Tickable {
     private val selections: MutableList<Selection> = LinkedList()
-    private var current: Int = 0
-    private var refresh: Boolean = true
+    protected var current: Int = 0
+    protected var refresh: Boolean = true
 
     /**
      * Add a new selection option to the menu
@@ -45,18 +53,18 @@ open class Menu(val game: Vecharia, private val title: String, var closeOnSelect
      * @param callback a callback for when the menu has been closed by a selection
      */
     fun render(callback: () -> Unit = {}) {
-        val up = Input.registerListener(UP, GameState.state) {
+        val up = Input.registerListener(UP, state ?: GameState.state) {
             if (current > 0) current--
             refresh = true
         }
-        val down = Input.registerListener(DOWN, GameState.state) {
+        val down = Input.registerListener(DOWN, state ?: GameState.state) {
             if (current < selections.size - 1) current++
             refresh = true
         }
         var enter: Int = -1
-        enter = Input.registerListener(ENTER, GameState.state) {
+        enter = Input.registerListener(ENTER, state ?: GameState.state) {
             val selection = selections[current]
-            println(selection)
+            game.log.debug("Option '${selection.title}' has been selected.")
             selection.callback(selection)
             current = 0
             if (closeOnSelect) {
@@ -81,33 +89,33 @@ open class Menu(val game: Vecharia, private val title: String, var closeOnSelect
         if (!refresh) return
         refresh = false
 
-        game.printer.clear()
+        printer.clear()
 
         // Centers vertically
-        if (centered) { //todo fix the length of the titles here (pad them so that they all match the length of the longest one val titleFixed: String = title.padEnd(fixLengths(order))
+        if (centered) {
             for (i in 0 until (game.window.charHeight() / 2) - (selections.size + 1)) {
-                game.printer += Text(" ", newLine = true, instant = true)
+                printer += Text(" ", newLine = true, instant = true)
             }
         }
 
         // Centers title horizontally
         if (centered) {
             for (j in 0..centerString(game, title)) {
-                game.printer += Text(" ", newLine = false, instant = true)
+                printer += Text(" ", newLine = false, instant = true)
             }
         }
-        game.printer += Text(title, instant = true)
+        printer += Text(title, instant = true)
 
         val titles = selections.map { it.title }
         val longest = titles.map { it.length }.sortedDescending()[0]
         var i = 0
         titles.map { it.padEnd(longest, ' ') }.forEach {
             if (centered)
-                game.printer += Text("".padEnd(centerString(game, "  $it")), newLine = false, instant = true)
+                printer += Text("".padEnd(centerString(game, "  $it")), newLine = false, instant = true)
 
             if (i == current)
-                game.printer += Text("${if (caret) "> " else ""}$it", Color.FOREST, instant = true)
-            else game.printer += Text("${if (caret) "  " else ""}$it", instant = true)
+                printer += Text("${if (caret) "> " else ""}$it", Color.FOREST, instant = true)
+            else printer += Text("${if (caret) "  " else ""}$it", instant = true)
 
             i++
         }
@@ -125,32 +133,6 @@ open class Menu(val game: Vecharia, private val title: String, var closeOnSelect
      */
     private fun centerString(game: Vecharia, string: String): Int {
         return game.window.charWidth() / 2 - string.length / 2
-    }
-
-    /**
-     * This method standardizes the length of all the options
-     * It determines the length of the longest String in the array
-     * passed in, then adds spaces to every line that has a length
-     * less than that.
-     *
-     * @author Jonathan Metcalf
-     * @since 1.0
-     *
-     * @param list the options to be standardized in length
-     * @return the length of the longest string
-     */
-    private fun fixLengths(list: MutableList<String>): Int {
-        var maxLength = 0
-        for (i in list.indices) {
-            if (maxLength < list[i].length)
-                maxLength = list[i].length
-        }
-
-        for (i in list.indices)
-            while (list[i].length < maxLength)
-                list[i] += " "
-
-        return maxLength
     }
 }
 

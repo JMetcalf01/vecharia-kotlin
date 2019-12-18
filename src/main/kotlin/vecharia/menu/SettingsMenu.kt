@@ -19,7 +19,6 @@ class SettingsMenu(game: Vecharia, pastMenu: Menu) : Menu(game, "Settings", clos
     init {
         selection("${getToggle(SoundSystem.musicEnabled)}Sounds") {
             SoundSystem.toggleVolume()
-            game.log.info("Music set to ${if (SoundSystem.musicEnabled) "on" else "off"}")
             it.title = "${getToggle(SoundSystem.musicEnabled)}Sounds"
         }
 
@@ -28,14 +27,7 @@ class SettingsMenu(game: Vecharia, pastMenu: Menu) : Menu(game, "Settings", clos
             // Todo implement fullscreen
         }
 
-        // this is temporary until we set up pause menu
-        selection("    temp pause menu access") {
-            it.menu.closeOnSelect = true
-            game.render(PauseMenu(game))
-        }
-
         selection("    Exit Settings") {
-            game.log.info("Exiting settings")
             it.menu.closeOnSelect = true
             game.render(if (pastMenu is StartMenu) StartMenu(game) else PauseMenu(game))
         }

@@ -11,6 +11,7 @@ import vecharia.Input
 import vecharia.Vecharia
 import vecharia.logging.ConsoleLogger
 import vecharia.logging.Logger
+import vecharia.menu.PauseMenu
 import vecharia.util.GameState
 import kotlin.math.roundToInt
 import kotlin.system.exitProcess
@@ -25,6 +26,7 @@ class Window : ApplicationAdapter() {
     lateinit var canvas: Canvas
     lateinit var game: Vecharia
     lateinit var clock: Clock
+    lateinit var pause: PauseMenu
 
     private lateinit var batch: SpriteBatch
     private lateinit var font: BitmapFont
@@ -64,10 +66,12 @@ class Window : ApplicationAdapter() {
 
         game = Vecharia(ConsoleLogger(Logger.Level.DEBUG), this)
         game.start()
+        pause = PauseMenu(game)
 
         clock = Clock(game)
         clock[GameState.ACTIVE] = game
         clock[GameState.UNLOADED] = game
+        clock[GameState.PAUSED] = pause
         logger.info("Clock thread done")
 
         SoundSystem.init(canvas)

@@ -9,7 +9,6 @@ import vecharia.util.GameState
 import vecharia.util.SimpleQueue
 import vecharia.util.State
 import vecharia.util.Tickable
-import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Prints text to the canvas.
@@ -24,15 +23,17 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 class Printer(private val canvas: Canvas, state: State) : Tickable {
     private val queue: SimpleQueue<Text> = SimpleQueue()
-    private var waiting: AtomicBoolean = AtomicBoolean(false)
+    private var waiting: Boolean = false
 
     val printing: Boolean get() = queue.peek() != null
 
     init {
         Input.registerListener(ENTER, state) {
-            waiting.set(false)
-            queue.pop()?.callback?.invoke()
-            canvas.clear()
+            if (waiting) {
+                waiting = false
+                queue.pop()?.callback?.invoke()
+                canvas.clear()
+            }
         }
         Input.registerListener(SPACE, state) {
             if (GameState.state == GameState.ACTIVE)
@@ -53,7 +54,7 @@ class Printer(private val canvas: Canvas, state: State) : Tickable {
      */
     override fun tick(game: Vecharia, frame: Long) {
         // If waiting for user input, don't keep printing
-        if (waiting.get())
+        if (waiting)
             return
 
         val text: Text? = queue.peek()
@@ -88,7 +89,7 @@ class Printer(private val canvas: Canvas, state: State) : Tickable {
                     canvas.println()
                     canvas.print("Hit Enter to Continue")
                     canvas.println()
-                    waiting.set(true)
+                    waiting = true
                 } else {
                     queue.pop()
                     text.callback()

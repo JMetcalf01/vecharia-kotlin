@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import vecharia.Input
+import vecharia.util.GameState
 
 /**
  * This class keeps track of the text on the screen.
@@ -122,7 +123,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         }
 
         // Render user input
-        if (printing && !win.game.printer.printing) {
+        if (printing && !win.game.printer.printing && GameState.state != GameState.PAUSED) {
             font.color = Color.WHITE
             font.draw(
                 batch, if (Input.typing) "> ${Input.current}" else Input.current, font.spaceXadvance * xi,
@@ -131,7 +132,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
         }
 
         // Renders blinking cursor
-        if (printing && Input.typing && !win.game.printer.printing) {
+        if (printing && Input.typing && !win.game.printer.printing && GameState.state != GameState.PAUSED) {
             if (win.clock.frame / 80L % 2 == 0L) {
                 font.draw(
                     batch, "_", font.spaceXadvance * (Input.length + xi + 2),
@@ -165,6 +166,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
     fun unbuffer() {
         if (charBufferTemp.isEmpty())
             throw IllegalStateException()
+        clear()
 
         xi = xiTemp
         yi = yiTemp

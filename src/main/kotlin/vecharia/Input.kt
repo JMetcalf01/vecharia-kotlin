@@ -20,7 +20,7 @@ object Input : Tickable {
     /**
      * A queue of keys being pressed, this contains the GDX id of the key pressed.
      */
-    val queue: ConcurrentLinkedQueue<Int> = ConcurrentLinkedQueue()
+    private val queue: ConcurrentLinkedQueue<Int> = ConcurrentLinkedQueue()
     private val events: MutableMap<State, MutableMap<Int, MutableList<Triple<Int, Boolean, () -> Unit>>>> = mutableMapOf()
 
     private val buffer: StringBuilder = StringBuilder()
@@ -44,14 +44,13 @@ object Input : Tickable {
      * @param frame the current frame
      */
     override fun tick(game: Vecharia, frame: Long) {
-
         while (queue.size > 0) {
             val raw = queue.poll()
             val shift = raw - 1000 > 0
             val key = if (shift) raw - 1000 else raw
 
             // Add input to typing buffer
-            if (typing) {
+            if (typing && GameState.state != GameState.PAUSED) {
                 if ((A..Z).contains(key))
                     buffer.append((if (shift) key + 36 else key + 68).toChar())
 

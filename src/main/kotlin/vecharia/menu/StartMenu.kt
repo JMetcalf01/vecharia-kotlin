@@ -20,7 +20,6 @@ import vecharia.util.GameState
 class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", closeOnSelect = false, centered = true) {
     init {
         selection("New Game") {
-            game.log.info("Prompting for selection")
             it.menu.closeOnSelect = true
             game.render(SaveSelectionMenu(game))
         }
@@ -32,14 +31,15 @@ class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", closeOnSelec
         }
 
         selection("Settings") {
-            game.log.info("Settings opened")
             it.menu.closeOnSelect = true
             game.render(SettingsMenu(game, this))
         }
 
         selection("Credits") {
-            game.log.info("Running credits")
-            // todo implement credits
+            it.menu.closeOnSelect = true
+            game.printer.clear()
+            game.printer += "Sorry, credits have not been implemented!"
+            game.printer += "The game can be quit using Alt+F4 (Windows, Linux) or Command+Q (macOS)."
         }
 
         selection("Exit") {
