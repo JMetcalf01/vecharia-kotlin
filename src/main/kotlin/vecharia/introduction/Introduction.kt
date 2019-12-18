@@ -7,8 +7,23 @@ import vecharia.entity.Player
 import vecharia.menu.Menu
 import vecharia.render.Text
 import vecharia.util.Promise
+import java.util.*
 
 class Introduction(val game: Vecharia) {
+
+    private val rand: Random = Random()
+
+    private val HUMAN_NAMES = arrayOf(
+        "Elric", "Cain", "Rodmund", "Tibault", "Alvyn", "Gilbert", "Lionel", "Brennan", "Raimund", "Axel"
+    )
+
+    private val ELF_NAMES = arrayOf(
+        "Afamrail", "Galaeron", "Ilbryen", "Braern", "Deldrach", "Feno", "Ayduin", "Jhaeros", "Erlathan", "Iorveth"
+    )
+
+    private val DWARF_NAMES = arrayOf(
+        "Gotharldi", "Thargrim", "Brumdus", "Umtharm", "Thorik", "Dalnyl", "Ragkyl", "Hjolrigg", "Grambrek", "Belryl"
+    )
 
     fun introduction() {
         Promise<Player.Builder> { builder ->
@@ -67,4 +82,13 @@ class Introduction(val game: Vecharia) {
             }
         }
     }
+
+    private fun getFriendName(race: Entity.Race): String {
+        return when (race) {
+            Entity.Race.HUMAN -> HUMAN_NAMES[rand.nextInt(HUMAN_NAMES.size)]
+            Entity.Race.ELF -> ELF_NAMES[rand.nextInt(ELF_NAMES.size)]
+            Entity.Race.DWARF -> DWARF_NAMES[rand.nextInt(DWARF_NAMES.size)]
+        }
+    }
+
 }

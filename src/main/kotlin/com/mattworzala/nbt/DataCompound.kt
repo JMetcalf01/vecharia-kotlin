@@ -34,27 +34,27 @@ class DataCompound(private val valueMap: MutableMap<String, Serializable> = Hash
     }
 
     fun getShort(name: String): Short? {
-        val value = valueMap[name];
+        val value = valueMap[name]
         return if (value != null && value is Short) value else null
     }
 
     fun getLong(name: String): Long? {
-        val value = valueMap[name];
+        val value = valueMap[name]
         return if (value != null && value is Long) value else null
     }
 
     fun getInt(name: String): Int? {
-        val value = valueMap[name];
+        val value = valueMap[name]
         return if (value != null && value is Int) value else null
     }
 
     fun getFloat(name: String): Float? {
-        val value = valueMap[name];
+        val value = valueMap[name]
         return if (value != null && value is Float) value else null
     }
 
     fun getDouble(name: String): Double? {
-        val value = valueMap[name];
+        val value = valueMap[name]
         return if (value != null && value is Double) value else null
     }
 
@@ -69,37 +69,37 @@ class DataCompound(private val valueMap: MutableMap<String, Serializable> = Hash
     }
 
     fun getBytes(name: String): Array<Byte>? {
-        val value = valueMap[name];
+        val value = valueMap[name]
         return if (value != null && value is Array<*>) value as Array<Byte> else null
     }
 
     fun getShorts(name: String): Array<Short>? {
-        val value = valueMap[name];
+        val value = valueMap[name]
         return if (value != null && value is Array<*>) value as Array<Short> else null
     }
 
     fun getLongs(name: String): Array<Long>? {
-        val value = valueMap[name];
+        val value = valueMap[name]
         return if (value != null && value is Array<*>) value as Array<Long> else null
     }
 
     fun getInts(name: String): Array<Int>? {
-        val value = valueMap[name];
+        val value = valueMap[name]
         return if (value != null && value is Array<*>) value as Array<Int> else null
     }
 
     fun getFloats(name: String): Array<Float>? {
-        val value = valueMap[name];
+        val value = valueMap[name]
         return if (value != null && value is Array<*>) value as Array<Float> else null
     }
 
     fun getDoubles(name: String): Array<Double>? {
-        val value = valueMap[name];
+        val value = valueMap[name]
         return if (value != null && value is Array<*>) value as Array<Double> else null
     }
 
     fun getStrings(name: String): Array<String>? {
-        val value = valueMap[name];
+        val value = valueMap[name]
         return if (value != null && value is Array<*>) value as Array<String> else null
     }
 

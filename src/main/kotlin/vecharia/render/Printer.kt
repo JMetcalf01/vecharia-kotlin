@@ -127,6 +127,17 @@ class Printer(private val canvas: Canvas, state: State) : Tickable {
         queue.push(text)
     }
 
+    /**
+     * Queues a text with the waiting flag set to true and returns a promise of the wait completion.
+     *
+     * @author Matt Worzala
+     * @since 1.3
+     *
+     * @param message the message of the text
+     * @param color the color of the text
+     * @param newLine whether to print a new line
+     * @return a promise that it will print the text
+     */
     fun waiting(message: String, color: Color = Color.WHITE, newLine: Boolean = true): Promise<Unit> = Promise {
         print(Text(message, color, newLine, wait = true) { it(Unit) })
     }
