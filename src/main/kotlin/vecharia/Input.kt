@@ -28,6 +28,8 @@ object Input : Tickable {
 
     var typing: Boolean = false
         private set
+    private var min: Int = -1
+    private var max: Int = -1
 
     val current get() = buffer.toString()
     val length get() = buffer.length
@@ -51,20 +53,22 @@ object Input : Tickable {
 
             // Add input to typing buffer
             if (typing && GameState.state != GameState.PAUSED) {
-                if ((A..Z).contains(key))
-                    buffer.append((if (shift) key + 36 else key + 68).toChar())
+                if (max == -1 || length < max) {
+                    if ((A..Z).contains(key))
+                        buffer.append((if (shift) key + 36 else key + 68).toChar())
 
-                if ((NUM_0..NUM_9).contains(key))
-                    buffer.append((key + 41).toChar())
+                    if ((NUM_0..NUM_9).contains(key))
+                        buffer.append((key + 41).toChar())
 
-                if (key == SPACE) buffer.append(' ')
-                if (key == MINUS) buffer.append('-')
-                if (key == PERIOD) buffer.append('.')
+                    if (key == SPACE) buffer.append(' ')
+                    if (key == MINUS) buffer.append('-')
+                    if (key == PERIOD) buffer.append('.')
+                }
 
                 if (key == BACKSPACE && buffer.isNotEmpty())
                     buffer.setLength(buffer.length - 1)
 
-                if (key == ENTER) {
+                if (key == ENTER && (min == -1 || length >= min)) {
                     typing = false
                     game.printer += Text("> $current", instant = true)
                     cb?.invoke(current)
@@ -88,11 +92,14 @@ object Input : Tickable {
      * @author Matt Worzala
      * @since 1.3
      *
+     * @param max the max number of characters acceptable in the input
      * @return a promise of the text entered by the user
      */
-    fun readInput(): Promise<String> {
+    fun readInput(minLength: Int = -1, maxLength: Int = -1): Promise<String> {
         if (typing) throw IllegalStateException("Already reading input!")
         typing = true
+        min = minLength
+        max = maxLength
         return Promise { cb = it }
     }
 

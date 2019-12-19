@@ -48,17 +48,11 @@ class Introduction(val game: Vecharia) {
         game.printer.clear()
         game.printer += "You wake from a deep sleep. Rubbing your eyes blearily, you roll over and sit up."
         game.printer += "What's your name again?"
-        var readName: (String) -> Unit = { }
-        readName = { str ->
-            if (str.length in 2..16) {
-                builder.name = str
-                resolve(builder)
-            } else {
-                game.printer += "Name must be between 2 and 16 characters long."
-                Input.readInput().then(readName)
-            }
+
+        Input.readInput(2, 16).then {
+            builder.name = it
+            resolve(builder)
         }
-        Input.readInput().then(readName)
     }
 
     /**
