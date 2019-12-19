@@ -68,10 +68,10 @@ object Input : Tickable {
                 if (key == BACKSPACE && buffer.isNotEmpty())
                     buffer.setLength(buffer.length - 1)
 
-                if (key == ENTER && (min == -1 || length >= min)) {
+                if (key == ENTER && (min == -1 || current.trim().length >= min)) {
                     typing = false
                     game.printer += Text("> $current", instant = true)
-                    cb?.invoke(current)
+                    cb?.invoke(current.trim())
                     buffer.clear()
                 }
             }
