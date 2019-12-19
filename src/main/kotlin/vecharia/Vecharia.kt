@@ -9,6 +9,7 @@ import vecharia.menu.StartMenu
 import vecharia.render.Printer
 import vecharia.render.Window
 import vecharia.util.GameState
+import vecharia.util.Promise
 import vecharia.util.Tickable
 import java.awt.Toolkit
 

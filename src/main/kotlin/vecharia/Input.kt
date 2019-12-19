@@ -60,7 +60,7 @@ object Input : Tickable {
                     if ((NUM_0..NUM_9).contains(key))
                         buffer.append((key + 41).toChar())
 
-                    if (key == SPACE) buffer.append(' ')
+                    if (key == SPACE && !current.endsWith(' ')) buffer.append(' ')
                     if (key == MINUS) buffer.append('-')
                     if (key == PERIOD) buffer.append('.')
                 }
