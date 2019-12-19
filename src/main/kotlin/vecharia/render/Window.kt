@@ -69,8 +69,8 @@ class Window : ApplicationAdapter() {
         pause = PauseMenu(game)
 
         clock = Clock(game)
-        clock[GameState.ACTIVE] = game
         clock[GameState.UNLOADED] = game
+        clock[GameState.ACTIVE] = game
         clock[GameState.PAUSED] = pause
         logger.info("Clock thread done")
 

@@ -67,7 +67,9 @@ class SaveSelectionMenu(game: Vecharia) : Menu(game, "Select a save:", centered 
             it.menu.closeOnSelect = true
             it.title = "Slot 0: NEW_CHARACTER"
             GameState.state = GameState.ACTIVE
-            Introduction(game).introduction()
+            Introduction(game).introduction().then { player ->
+                game.player = player
+            }
         }
         selection("Slot 1: Empty", this::newGame)
         selection("Slot 2: Empty", this::newGame)

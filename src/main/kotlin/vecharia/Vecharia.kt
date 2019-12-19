@@ -2,6 +2,7 @@ package vecharia
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
+import vecharia.entity.Player
 import vecharia.logging.Logger
 import vecharia.menu.Menu
 import vecharia.menu.StartMenu
@@ -39,6 +40,8 @@ fun main() {
 class Vecharia(val log: Logger, val window: Window) : Tickable {
     val printer: Printer = Printer(window.canvas, GameState.ACTIVE)
     private val tickables: MutableSet<Tickable> = mutableSetOf(printer)
+
+    lateinit var player: Player
 
     /**
      * Starts the game thread.
