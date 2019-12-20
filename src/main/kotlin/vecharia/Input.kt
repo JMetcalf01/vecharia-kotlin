@@ -92,7 +92,8 @@ object Input : Tickable {
      * @author Matt Worzala
      * @since 1.3
      *
-     * @param max the max number of characters acceptable in the input
+     * @param minLength the min number of characters acceptable in the input
+     * @param maxLength the max number of characters acceptable in the input
      * @return a promise of the text entered by the user
      */
     fun readInput(minLength: Int = -1, maxLength: Int = -1): Promise<String> {

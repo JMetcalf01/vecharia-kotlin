@@ -1,6 +1,6 @@
 package vecharia.entity
 
-import vecharia.quest.Quest
+import vecharia.inventory.Inventory
 import kotlin.math.ln
 import kotlin.math.pow
 
@@ -12,10 +12,15 @@ import kotlin.math.pow
  *
  * @param name the name of the player
  * @param maxHealth the maxHealth of the player
- * @param quest the quest of the player
- * @param possibleQuests list of possible quests for the player
+ * @param inventory the starting inventory of the player
  */
-class Player private constructor(private val name: String?, maxHealth: Int?, private val quest: Quest?, private val possibleQuests: MutableList<Quest>?) : Entity(name, maxHealth) {
+class Player private constructor(
+    name: String,
+    maxHealth: Int,
+    race: Race,
+    val pclass: Class,
+    inventory: Inventory
+) : Entity(name, maxHealth, race, inventory) {
 
     // Constants
     private val totalLevels: Int = 40
@@ -85,16 +90,9 @@ class Player private constructor(private val name: String?, maxHealth: Int?, pri
         var maxHealth: Int? = null
         var race: Race? = null
         var pclass: Class? = null
-        var quest: Quest? = null
-        var possibleQuests: MutableList<Quest>? = null
+        var startingInventory: Inventory? = null
 
-        fun name(name: String) = apply { this.name = name }
-        fun maxHealth(maxHealth: Int) = apply { this.maxHealth = maxHealth }
-        fun race(race: Race) = apply { this.race = race }
-        fun pclass(pclass: Class) =  apply { this.pclass = pclass }
-        fun quest(quest: Quest) = apply { this.quest = quest }
-        fun possibleQuests(possibleQuests: MutableList<Quest>) = apply { this.possibleQuests = possibleQuests }
-        fun build() = Player(name, maxHealth, quest, possibleQuests)
+        fun build() = Player(name!!, maxHealth!!, race!!, pclass!!, startingInventory!!)
     }
 
     /**
@@ -104,6 +102,6 @@ class Player private constructor(private val name: String?, maxHealth: Int?, pri
      * @since 1.3
      */
     enum class Class {
-        KNIGHT, ARCHER, MAGE
+        MELEE, RANGED, MAGIC
     }
 }
