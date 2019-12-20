@@ -47,11 +47,11 @@ class Introduction(val game: Vecharia) {
     private fun getName(builder: Player.Builder): Promise<Player.Builder> = Promise { resolve ->
         game.printer.clear()
         game.printer += "You wake from a deep sleep. Rubbing your eyes blearily, you roll over and sit up."
-        game.printer += "What's your name again?"
-
-        Input.readInput(2, 16).then {
-            builder.name = it
-            resolve(builder)
+        game.printer += Text("What's your name again?") {
+            Input.readInput(2, 16).then {
+                builder.name = it
+                resolve(builder)
+            }
         }
     }
 

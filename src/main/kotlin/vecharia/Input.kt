@@ -53,7 +53,7 @@ object Input : Tickable {
 
             // Add input to typing buffer
             if (typing && GameState.state != GameState.PAUSED) {
-                if (max == -1 || length < max) {
+                if (max == -1 || current.trim().length < max) {
                     if ((A..Z).contains(key))
                         buffer.append((if (shift) key + 36 else key + 68).toChar())
 
