@@ -46,7 +46,9 @@ class Introduction(val game: Vecharia) {
         getName(Player.Builder()).then { builder ->
             getRace(builder).then { builder1 ->
                 getClass(builder1).then { builder2 ->
-                    confirmClass(builder2)
+                    confirmClass(builder2).then {
+                        resolve(it.build())
+                    }
                 }
             }
         }
@@ -142,18 +144,9 @@ class Introduction(val game: Vecharia) {
      */
     private fun getClass(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
         when (builder.race) {
-            Entity.Race.HUMAN -> {
-                humanClass(builder)
-                resolve(builder)
-            }
-            Entity.Race.ELF -> {
-                elfClass(builder)
-                resolve(builder)
-            }
-            Entity.Race.DWARF -> {
-                dwarfClass(builder)
-                resolve(builder)
-            }
+            Entity.Race.HUMAN -> humanClass(builder).then { resolve(it) }
+            Entity.Race.ELF -> elfClass(builder).then { resolve(it) }
+            Entity.Race.DWARF -> dwarfClass(builder).then { resolve(it) }
         }
     }
 
@@ -333,18 +326,9 @@ class Introduction(val game: Vecharia) {
      */
     private fun confirmClass(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
         when (builder.race) {
-            Entity.Race.HUMAN -> {
-                humanMeeting(builder)
-                resolve(builder)
-            }
-            Entity.Race.ELF -> {
-                elfMeeting(builder)
-                resolve(builder)
-            }
-            Entity.Race.DWARF -> {
-                dwarfMeeting(builder)
-                resolve(builder)
-            }
+            Entity.Race.HUMAN -> humanMeeting(builder).then { resolve(it) }
+            Entity.Race.ELF -> elfMeeting(builder).then { resolve(it) }
+            Entity.Race.DWARF -> dwarfMeeting(builder).then { resolve(it) }
         }
     }
 
@@ -370,18 +354,9 @@ class Introduction(val game: Vecharia) {
                 when (option) {
                     0 -> {
                         when (builder.pclass) {
-                            Player.Class.MELEE -> {
-                                knightHumanText(builder)
-                                resolve(builder)
-                            }
-                            Player.Class.RANGED -> {
-                                archerHumanText(builder)
-                                resolve(builder)
-                            }
-                            Player.Class.MAGIC -> {
-                                wizardHumanText(builder)
-                                resolve(builder)
-                            }
+                            Player.Class.MELEE -> knightHumanText(builder).then { resolve(it) }
+                            Player.Class.RANGED -> archerHumanText(builder).then { resolve(it) }
+                            Player.Class.MAGIC -> wizardHumanText(builder).then { resolve(it) }
                         }
                     }
                     1 -> {
