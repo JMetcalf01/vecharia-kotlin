@@ -47,7 +47,7 @@ class Introduction(val game: Vecharia) {
             getRace(builder).then { builder1 ->
                 getClass(builder1).then { builder2 ->
                     confirmClass(builder2).then {
-                        resolve(it.build())
+//                        resolve(it.build())
                     }
                 }
             }
