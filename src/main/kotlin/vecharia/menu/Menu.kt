@@ -99,7 +99,7 @@ open class Menu(
         var enter: Int = -1
         enter = Input.registerListener(ENTER, state ?: GameState.state) {
             val selection = selections[current]
-            game.log.debug("Option '${selection.title}' has been selected.")
+            game.log.debug("Option '${selection.title.trim()}' has been selected.")
             selection.callback(selection)
             current = 0
             if (closeOnSelect) {
