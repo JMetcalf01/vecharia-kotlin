@@ -2,6 +2,8 @@ package vecharia.render
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -13,8 +15,28 @@ import vecharia.logging.ConsoleLogger
 import vecharia.logging.Logger
 import vecharia.menu.PauseMenu
 import vecharia.util.GameState
+import java.awt.Toolkit
 import kotlin.math.roundToInt
 import kotlin.system.exitProcess
+
+
+private const val FULLSCREEN: Boolean = true
+
+/**
+ * The entry point into the program.
+ *
+ * @author Matt Worzala and Jonathan Metcalf
+ * @since 1.0
+ */
+fun main() {
+    val config = LwjglApplicationConfiguration()
+    config.height = Toolkit.getDefaultToolkit().screenSize.height
+    config.width = Toolkit.getDefaultToolkit().screenSize.width
+    config.fullscreen = FULLSCREEN
+    config.resizable = false
+
+    LwjglApplication(Window(), config)
+}
 
 /**
  * Handles the window of the game as well as user input.
@@ -51,7 +73,7 @@ class Window : ApplicationAdapter() {
         height = Gdx.graphics.height
         logger.info("Constants done")
 
-        val f = FreeTypeFontGenerator(Gdx.files.absolute("assets/font.otf"))
+        val f = FreeTypeFontGenerator(Gdx.files.absolute("assets/consola.ttf"))
         val fontParams = FreeTypeFontGenerator.FreeTypeFontParameter()
         fontParams.size = 16
         font = f.generateFont(fontParams)

@@ -1,7 +1,5 @@
 package vecharia
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import vecharia.entity.Player
 import vecharia.logging.Logger
 import vecharia.menu.Menu
@@ -9,27 +7,7 @@ import vecharia.menu.StartMenu
 import vecharia.render.Printer
 import vecharia.render.Window
 import vecharia.util.GameState
-import vecharia.util.Promise
 import vecharia.util.Tickable
-import java.awt.Toolkit
-
-private const val FULLSCREEN: Boolean = true
-
-/**
- * The entry point into the program.
- *
- * @author Matt Worzala and Jonathan Metcalf
- * @since 1.0
- */
-fun main() {
-    val config = LwjglApplicationConfiguration()
-    config.height = Toolkit.getDefaultToolkit().screenSize.height
-    config.width = Toolkit.getDefaultToolkit().screenSize.width
-    config.fullscreen = FULLSCREEN
-    config.resizable = false
-
-    LwjglApplication(Window(), config)
-}
 
 
 /**

@@ -19,7 +19,7 @@ import vecharia.util.GameState
 class Canvas(private val win: Window, private val font: BitmapFont) {
 
     private var charBuffer: Array<Array<Character>> =
-        Array(win.charHeight()) { Array(win.charWidth()) { Character(0.toChar(), Color.CLEAR) } }
+        Array(win.charHeight()) { Array(win.charWidth()) { Character(' ', Color.CLEAR) } }
 
     private var printing: Boolean = true
 
@@ -29,7 +29,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
 
     // Temporary variables when buffer and unbuffer is called
     private var charBufferTemp: Array<Array<Character>> =
-        Array(win.charHeight()) { Array(win.charWidth()) { Character(0.toChar(), Color.CLEAR) } }
+        Array(win.charHeight()) { Array(win.charWidth()) { Character(' ', Color.CLEAR) } }
     private var yiTemp: Int = 0
     private var xiTemp: Int = 0
 
@@ -67,7 +67,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
             } else {
                 for (i in 1 until charBuffer.size) {
                     for (j in charBuffer[0].indices) {
-                        charBuffer[i - 1][j] = Character(0.toChar(), Color.CLEAR)
+                        charBuffer[i - 1][j] = Character(' ', Color.CLEAR)
                     }
 
                     for (j in charBuffer[0].indices) {
@@ -76,7 +76,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
                 }
 
                 for (i in charBuffer[0].indices) {
-                    charBuffer[charBuffer.size - 1][i] = Character(0.toChar(), Color.CLEAR)
+                    charBuffer[charBuffer.size - 1][i] = Character(' ', Color.CLEAR)
                 }
             }
 
@@ -94,7 +94,7 @@ class Canvas(private val win: Window, private val font: BitmapFont) {
     fun clear() {
         for (i in charBuffer.indices) {
             for (j in charBuffer[0].indices) {
-                charBuffer[i][j] = Character(0.toChar(), Color.CLEAR)
+                charBuffer[i][j] = Character(' ', Color.CLEAR)
             }
         }
 

@@ -4,6 +4,7 @@ import vecharia.Input
 import vecharia.Vecharia
 import vecharia.entity.Entity
 import vecharia.entity.Player
+import vecharia.inventory.Inventory
 import vecharia.menu.Menu
 import vecharia.render.Text
 import vecharia.util.Promise
@@ -64,6 +65,11 @@ class Introduction(val game: Vecharia) {
      * @return a promise of the updated builder
      */
     private fun getName(builder: Player.Builder): Promise<Player.Builder> = Promise { resolve ->
+
+        // Initialize inventory
+        builder.startingInventory = Inventory()
+
+        // Begin printing
         game.printer.clear()
         game.printer += "You wake from a deep sleep. Rubbing your eyes blearily, you roll over and sit up."
         game.printer += Text("What's your name again?") {
@@ -93,6 +99,7 @@ class Introduction(val game: Vecharia) {
                 when (option) {
                     0 -> {
                         builder.race = Entity.Race.HUMAN
+                        builder.maxHealth = 100
                         game.printer += "That's right! You are a young human in the town of Zloridge."
                         game.printer += "Zloridge is under the rule of King Henry IV."
                         game.printer += "The day to become a full-fledged adventurer has come!"
@@ -107,6 +114,7 @@ class Introduction(val game: Vecharia) {
                     }
                     1 -> {
                         builder.race = Entity.Race.ELF
+                        builder.maxHealth = 90
                         game.printer += "You are a young elf in the elven town of Mythmerius."
                         game.printer += "You answer to no king; Mythmerius is a democracy."
                         game.printer += "Today is the day that you choose the quest you wish to attempt."
@@ -119,6 +127,7 @@ class Introduction(val game: Vecharia) {
                     }
                     2 -> {
                         builder.race = Entity.Race.DWARF
+                        builder.maxHealth = 110
                         game.printer += "You are a young dwarf in the dwarven town of Mil Gurum."
                         game.printer += "Your leader is the proud King Meldal."
                         game.printer += "Today you will finally choose your quest!"
