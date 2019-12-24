@@ -10,6 +10,18 @@ import vecharia.render.Text
 import vecharia.util.Promise
 import java.util.*
 
+private val HUMAN_NAMES = arrayOf(
+    "Elric", "Cain", "Rodmund", "Tibault", "Alvyn", "Gilbert", "Lionel", "Brennan", "Raimund", "Axel"
+)
+
+private val ELF_NAMES = arrayOf(
+    "Afamrail", "Galaeron", "Ilbryen", "Braern", "Deldrach", "Feno", "Ayduin", "Jhaeros", "Erlathan", "Iorveth"
+)
+
+private val DWARF_NAMES = arrayOf(
+    "Gotharldi", "Thargrim", "Brumdus", "Umtharm", "Thorik", "Dalnyl", "Ragkyl", "Hjolrigg", "Grambrek", "Belryl"
+)
+
 /**
  * This introduces the player to the world and
  * sets their name, race, class, etc.
@@ -22,18 +34,6 @@ import java.util.*
 class Introduction(val game: Vecharia) {
 
     private val rand: Random = Random()
-
-    private val HUMAN_NAMES = arrayOf(
-        "Elric", "Cain", "Rodmund", "Tibault", "Alvyn", "Gilbert", "Lionel", "Brennan", "Raimund", "Axel"
-    )
-
-    private val ELF_NAMES = arrayOf(
-        "Afamrail", "Galaeron", "Ilbryen", "Braern", "Deldrach", "Feno", "Ayduin", "Jhaeros", "Erlathan", "Iorveth"
-    )
-
-    private val DWARF_NAMES = arrayOf(
-        "Gotharldi", "Thargrim", "Brumdus", "Umtharm", "Thorik", "Dalnyl", "Ragkyl", "Hjolrigg", "Grambrek", "Belryl"
-    )
 
     /**
      * Call this for a player to go through the introduction.
@@ -58,6 +58,7 @@ class Introduction(val game: Vecharia) {
 //        val builder = Player.Builder()
 //        Promise.sequential(
 //            getName(builder),
+//            getRace(builder),
 //            getClass(builder),
 //            confirmClass(builder)
 //        ).then { resolve(it.build()) }
@@ -100,8 +101,6 @@ class Introduction(val game: Vecharia) {
     private fun getRace(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
         game.printer.clear()
         game.printer.waiting("Right. It's ${builder.name}.").then {
-            game.printer.clear()
-
             Menu.basic(game, "What race are you?", "Human", "Elf", "Dwarf").then { option ->
                 when (option) {
                     0 -> {
@@ -115,7 +114,6 @@ class Introduction(val game: Vecharia) {
                             "If you keep forgetting basic stuff like that you're a human, maybe you should be sleeping more..."
                         )
                         // add coins to builder.inventory
-                        game.printer += "If you keep forgetting basic stuff like that you're a human, maybe you should be sleeping more..."
                         game.printer.waiting("You dismiss that thought from your mind and get changed, find something to eat, and leave your hut.")
                             .then {
                                 resolve(builder)
@@ -142,11 +140,10 @@ class Introduction(val game: Vecharia) {
                             "You are a young dwarf in the dwarven town of Mil Gurum.",
                             "Your leader is the proud King Meldal.",
                             "Today you will finally choose your quest!",
-                            "Your pay is not much, but you have managed to save up 1250 gold coins for your quest. [TODO WHEN INVENTORY IS IMPLEMENTED]"
+                            "Your pay is not much, but you have managed to save up 1250 gold coins for your quest. [TODO WHEN INVENTORY IS IMPLEMENTED]",
+                            "How could you forget you're a dwarf?"
                         )
                         // add coins to builder.inventory
-                        game.printer +=
-                            "How could you forget you're a dwarf?"
                         game.printer.waiting("You climb out of bed, struggling to reach the floor. Why are these beds so damn high?")
                             .then {
                                 resolve(builder)
