@@ -25,6 +25,7 @@ open class Menu constructor(
     val game: Vecharia,
     private val title: List<String>,
     var closeOnSelect: Boolean = true,
+    var respectParent: Boolean = true,
     private val caret: Boolean = true,
     private val centered: Boolean = false,
     private val printer: Printer = game.printer,
@@ -91,11 +92,12 @@ open class Menu constructor(
         game: Vecharia,
         title: String,
         closeOnSelect: Boolean = true,
+        respectParent: Boolean = true,
         caret: Boolean = true,
         centered: Boolean = false,
         printer: Printer = game.printer,
         state: State? = null
-    ) : this(game, listOf(title), closeOnSelect, caret, centered, printer, state)
+    ) : this(game, listOf(title), closeOnSelect, respectParent, caret, centered, printer, state)
 
     private val selections: MutableList<Selection> = LinkedList()
     protected var current: Int = 0
@@ -142,7 +144,7 @@ open class Menu constructor(
                 Input -= down
                 Input -= enter
                 callback()
-                if (parent != null)
+                if (parent != null && respectParent)
                     game.render(parent)
             } else refresh = true
         }
