@@ -44,6 +44,8 @@ class Introduction(val game: Vecharia) {
      * @return a promise of the player
      */
     fun introduction() = Promise<Player> { resolve ->
+
+
         getName(Player.Builder()).then { builder ->
             getRace(builder).then { builder1 ->
                 getClass(builder1).then { builder2 ->
@@ -53,6 +55,12 @@ class Introduction(val game: Vecharia) {
                 }
             }
         }
+//        val builder = Player.Builder()
+//        Promise.sequential(
+//            getName(builder),
+//            getClass(builder),
+//            confirmClass(builder)
+//        ).then { resolve(it.build()) }
     }
 
     /**
