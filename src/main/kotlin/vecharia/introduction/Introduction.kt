@@ -108,12 +108,14 @@ class Introduction(val game: Vecharia) {
                     0 -> {
                         builder.race = Entity.Race.HUMAN
                         builder.maxHealth = 100
-                        game.printer += "That's right! You are a young human in the town of Zloridge."
-                        game.printer += "Zloridge is under the rule of King Henry IV."
-                        game.printer += "The day to become a full-fledged adventurer has come!"
-                        game.printer += "Your pay is meager, but you have managed to save up 1000 gold coins for your quest. [TODO WHEN INVENTORY IS IMPLEMENTED]"
+                        game.printer.batch(
+                            "That's right! You are a young human in the town of Zloridge.",
+                            "Zloridge is under the rule of King Henry IV.",
+                            "The day to become a full-fledged adventurer has come!",
+                            "Your pay is meager, but you have managed to save up 1000 gold coins for your quest. [TODO WHEN INVENTORY IS IMPLEMENTED]",
+                            "If you keep forgetting basic stuff like that you're a human, maybe you should be sleeping more..."
+                        )
                         // add coins to builder.inventory
-                        game.printer += "If you keep forgetting basic stuff like that you're a human, maybe you should be sleeping more..."
                         game.printer += Text(
                             "You dismiss that thought from your mind and get changed, find something to eat, and leave your hut.",
                             wait = true
