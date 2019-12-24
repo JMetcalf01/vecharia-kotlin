@@ -21,9 +21,9 @@ import java.util.*
  * @param title the title of the menu
  * @param centered whether the menu is centered on the screen
  */
-open class Menu(
+open class Menu constructor(
     val game: Vecharia,
-    private val title: String,
+    private val title: List<String>,
     var closeOnSelect: Boolean = true,
     private val caret: Boolean = true,
     private val centered: Boolean = false,
@@ -50,7 +50,12 @@ open class Menu(
          * @param centered whether the menu is centered on the screen
          * @returns a promise of the selected index
          */
-        fun basic(game: Vecharia, title: String, vararg options: String, centered: Boolean = false): Promise<Int> =
+        fun basic(
+            game: Vecharia,
+            title: List<String>,
+            vararg options: String,
+            centered: Boolean = false
+        ): Promise<Int> =
             Promise {
                 if (options.isEmpty())
                     throw IllegalArgumentException("Must provide at least one option.")
@@ -60,7 +65,37 @@ open class Menu(
                     menu.selection(options[i]) { it(i) }
                 game.render(menu)
             }
+
+        /**
+         * Creates a basic promise based menu. The menu simply consists of a set of immutable options and returns a promise representing the index of the selected option.
+         *
+         * @author Jonathan Metcalf
+         * @since 1.3
+         *
+         * @param game the vecharia game instance
+         * @param title the title of the menu
+         * @param options the options to be rendered, the order determines the indices
+         * @param centered whether the menu is centered on the screen
+         * @returns a promise of the selected index
+         */
+        fun basic(
+            game: Vecharia,
+            title: String,
+            vararg options: String,
+            centered: Boolean = false
+        ): Promise<Int> =
+            basic(game = game, title = listOf(title), options = *options, centered = centered)
     }
+
+    constructor(
+        game: Vecharia,
+        title: String,
+        closeOnSelect: Boolean = true,
+        caret: Boolean = true,
+        centered: Boolean = false,
+        printer: Printer = game.printer,
+        state: State? = null
+    ) : this(game, listOf(title), closeOnSelect, caret, centered, printer, state)
 
     private val selections: MutableList<Selection> = LinkedList()
     protected var current: Int = 0
@@ -132,13 +167,15 @@ open class Menu(
             }
         }
 
-        // Centers title horizontally
-        if (centered) {
-            for (j in 0..centerString(game, title)) {
-                printer += Text(" ", newLine = false, instant = true)
+        for (str in title) {
+            // Centers title horizontally
+            if (centered) {
+                for (j in 0..centerString(game, str)) {
+                    printer += Text(" ", newLine = false, instant = true)
+                }
             }
+            printer += Text(str, instant = true)
         }
-        printer += Text(title, instant = true)
 
         val titles = selections.map { it.title }
         val longest = titles.map { it.length }.sortedDescending()[0]
@@ -147,9 +184,9 @@ open class Menu(
             if (centered)
                 printer += Text("".padEnd(centerString(game, "  $it")), newLine = false, instant = true)
 
-            if (i == current)
-                printer += Text("${if (caret) "> " else ""}$it", Color.FOREST, instant = true)
-            else printer += Text("${if (caret) "  " else ""}$it", instant = true)
+            printer += if (i == current)
+                Text("${if (caret) "> " else ""}$it", Color.FOREST, instant = true)
+            else Text("${if (caret) "  " else ""}$it", instant = true)
 
             i++
         }

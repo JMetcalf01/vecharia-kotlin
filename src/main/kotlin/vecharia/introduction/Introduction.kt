@@ -171,38 +171,41 @@ class Introduction(val game: Vecharia) {
      */
     private fun humanClass(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
         game.printer.clear()
-        game.printer += "As you walk past the marketplace to the castle, you hear something from over your shoulder."
-        game.printer.waiting("It's your old friend, ${getFriendName(builder.race!!)}.").then {
-            Menu.basic(game, "\"Hey, ${builder.name}! You decided on your job yet?\"", "Knight", "Archer", "Wizard")
-                .then { option ->
-                    when (option) {
-                        0 -> {
-                            builder.pclass = Player.Class.MELEE
-                            game.printer.clear()
-                            game.printer.waiting("\"Knight, huh? I always knew you preferred to be in the thick of the fighting.\"")
-                                .then {
-                                    resolve(builder)
-                                }
-                        }
-                        1 -> {
-                            builder.pclass = Player.Class.RANGED
-                            game.printer.clear()
-                            game.printer.waiting("\"An archer, huh? I always knew you liked to stay out of the fighting. Makes sense.\"")
-                                .then {
-                                    resolve(builder)
-                                }
-                        }
-                        2 -> {
-                            builder.pclass = Player.Class.MAGIC
-                            game.printer.clear()
-                            game.printer.waiting("\"A wizard, huh? I'm not surprised -- you always were good at that kinda stuff.\"")
-                                .then {
-                                    resolve(builder)
-                                }
-                        }
+        Menu.basic(
+            game, listOf(
+                "As you walk past the marketplace to the castle, you hear something from over your shoulder.",
+                "It's your old friend, ${getFriendName(builder.race!!)}.",
+                "\"Hey, ${builder.name}! You decided on your job yet?\""
+            ), "Knight", "Archer", "Wizard"
+        )
+            .then { option ->
+                when (option) {
+                    0 -> {
+                        builder.pclass = Player.Class.MELEE
+                        game.printer.clear()
+                        game.printer.waiting("\"Knight, huh? I always knew you preferred to be in the thick of the fighting.\"")
+                            .then {
+                                resolve(builder)
+                            }
+                    }
+                    1 -> {
+                        builder.pclass = Player.Class.RANGED
+                        game.printer.clear()
+                        game.printer.waiting("\"An archer, huh? I always knew you liked to stay out of the fighting. Makes sense.\"")
+                            .then {
+                                resolve(builder)
+                            }
+                    }
+                    2 -> {
+                        builder.pclass = Player.Class.MAGIC
+                        game.printer.clear()
+                        game.printer.waiting("\"A wizard, huh? I'm not surprised -- you always were good at that kinda stuff.\"")
+                            .then {
+                                resolve(builder)
+                            }
                     }
                 }
-        }
+            }
     }
 
     /**
@@ -215,47 +218,48 @@ class Introduction(val game: Vecharia) {
      */
     private fun elfClass(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
         game.printer.clear()
-        game.printer += "On your way to your mentor, you hear something from over your shoulder."
-        game.printer.waiting("It's your childhood friend, ${getFriendName(builder.race!!)}.").then {
-            Menu.basic(
-                game,
-                "\"Greetings, ${builder.name}. Have you decided on your occupation? Duelist, archer, or mage?\"",
-                "Knight",
-                "Archer",
-                "Mage"
-            )
-                .then { option ->
-                    when (option) {
-                        0 -> {
-                            builder.pclass = Player.Class.MELEE
-                            game.printer.clear()
-                            game.printer += "\"You're definitely quick enough on your feet to be a duelist.\""
-                            game.printer.waiting("\"I like your choice.\"")
-                                .then {
-                                    resolve(builder)
-                                }
-                        }
-                        1 -> {
-                            builder.pclass = Player.Class.RANGED
-                            game.printer.clear()
-                            game.printer += "\"You don't miss a thing with those eyes...\""
-                            game.printer.waiting("\"You'll be a good archer.\"")
-                                .then {
-                                    resolve(builder)
-                                }
-                        }
-                        2 -> {
-                            builder.pclass = Player.Class.MAGIC
-                            game.printer.clear()
-                            game.printer += "\"You always did have an affinity with spells.\""
-                            game.printer.waiting("Good choice.")
-                                .then {
-                                    resolve(builder)
-                                }
-                        }
+        Menu.basic(
+            game,
+            listOf(
+                "On your way to your mentor, you hear something from over your shoulder.",
+                "It's your childhood friend, ${getFriendName(builder.race!!)}.",
+                "\"Greetings, ${builder.name}. Have you decided on your occupation? Duelist, archer, or mage?\""
+            ),
+            "Knight",
+            "Archer",
+            "Mage"
+        )
+            .then { option ->
+                when (option) {
+                    0 -> {
+                        builder.pclass = Player.Class.MELEE
+                        game.printer.clear()
+                        game.printer += "\"You're definitely quick enough on your feet to be a duelist.\""
+                        game.printer.waiting("\"I like your choice.\"")
+                            .then {
+                                resolve(builder)
+                            }
+                    }
+                    1 -> {
+                        builder.pclass = Player.Class.RANGED
+                        game.printer.clear()
+                        game.printer += "\"You don't miss a thing with those eyes...\""
+                        game.printer.waiting("\"You'll be a good archer.\"")
+                            .then {
+                                resolve(builder)
+                            }
+                    }
+                    2 -> {
+                        builder.pclass = Player.Class.MAGIC
+                        game.printer.clear()
+                        game.printer += "\"You always did have an affinity with spells.\""
+                        game.printer.waiting("Good choice.")
+                            .then {
+                                resolve(builder)
+                            }
                     }
                 }
-        }
+            }
     }
 
     /**
@@ -268,44 +272,45 @@ class Introduction(val game: Vecharia) {
      */
     private fun dwarfClass(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
         game.printer.clear()
-        game.printer += "As you pass the blacksmith on your way to meet with the king, you hear a deep voice yell."
-        game.printer.waiting("It's your drinking buddy, ${getFriendName(builder.race!!)}.").then {
-            Menu.basic(
-                game,
-                "\"Sup, ${builder.name}? Gonna be a brawler or a slinger? Or what about those new sorcerers?\"",
-                "Brawler",
-                "Slinger",
-                "Sorcerer"
-            )
-                .then { option ->
-                    when (option) {
-                        0 -> {
-                            builder.pclass = Player.Class.MELEE
-                            game.printer.clear()
-                            game.printer.waiting("\"A fighter, eh? I'll drink to that!\"")
-                                .then {
-                                    resolve(builder)
-                                }
-                        }
-                        1 -> {
-                            builder.pclass = Player.Class.RANGED
-                            game.printer.clear()
-                            game.printer.waiting("\"A slinger, eh? Me likey!\"")
-                                .then {
-                                    resolve(builder)
-                                }
-                        }
-                        2 -> {
-                            builder.pclass = Player.Class.MAGIC
-                            game.printer.clear()
-                            game.printer.waiting("\"A sorcerer? Alright! Spell me up some fuckin' beer!\"")
-                                .then {
-                                    resolve(builder)
-                                }
-                        }
+        Menu.basic(
+            game,
+            listOf(
+                "As you pass the blacksmith on your way to meet with the king, you hear a deep voice yell.",
+                "It's your drinking buddy, ${getFriendName(builder.race!!)}.",
+                "\"Sup, ${builder.name}? Gonna be a brawler or a slinger? Or what about those new sorcerers?\""
+            ),
+            "Brawler",
+            "Slinger",
+            "Sorcerer"
+        )
+            .then { option ->
+                when (option) {
+                    0 -> {
+                        builder.pclass = Player.Class.MELEE
+                        game.printer.clear()
+                        game.printer.waiting("\"A fighter, eh? I'll drink to that!\"")
+                            .then {
+                                resolve(builder)
+                            }
+                    }
+                    1 -> {
+                        builder.pclass = Player.Class.RANGED
+                        game.printer.clear()
+                        game.printer.waiting("\"A slinger, eh? Me likey!\"")
+                            .then {
+                                resolve(builder)
+                            }
+                    }
+                    2 -> {
+                        builder.pclass = Player.Class.MAGIC
+                        game.printer.clear()
+                        game.printer.waiting("\"A sorcerer? Alright! Spell me up some fuckin' beer!\"")
+                            .then {
+                                resolve(builder)
+                            }
                     }
                 }
-        }
+            }
     }
 
     /**
