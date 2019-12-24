@@ -367,25 +367,26 @@ class Introduction(val game: Vecharia) {
      */
     private fun humanMeeting(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
         game.printer.clear()
-        game.printer += "You walk into the courtyard of the castle, and into the throne hall."
-        game.printer.waiting("The benevolent King Henry IV sits on his throne.").then {
-            Menu.basic(
-                game,
-                "\"Greetings, ${builder.name}. You say you wish to become a ${getHumanJob(builder)}. Are you sure of this choice?\"",
-                "Yes",
-                "No"
-            ).then { option ->
-                when (option) {
-                    0 -> {
-                        when (builder.pclass) {
-                            Player.Class.MELEE -> knightHumanText(builder).then { resolve(it) }
-                            Player.Class.RANGED -> archerHumanText(builder).then { resolve(it) }
-                            Player.Class.MAGIC -> wizardHumanText(builder).then { resolve(it) }
-                        }
+        Menu.basic(
+            game,
+            listOf(
+                "You walk into the courtyard of the castle, and into the throne hall.",
+                "The benevolent King Henry IV sits on his throne.",
+                "\"Greetings, ${builder.name}. You say you wish to become a ${getHumanJob(builder)}. Are you sure of this choice?\""
+            ),
+            "Yes",
+            "No"
+        ).then { option ->
+            when (option) {
+                0 -> {
+                    when (builder.pclass) {
+                        Player.Class.MELEE -> knightHumanText(builder).then { resolve(it) }
+                        Player.Class.RANGED -> archerHumanText(builder).then { resolve(it) }
+                        Player.Class.MAGIC -> wizardHumanText(builder).then { resolve(it) }
                     }
-                    1 -> {
-                        recheckClassHuman(builder)
-                    }
+                }
+                1 -> {
+                    recheckClassHuman(builder)
                 }
             }
         }
@@ -529,13 +530,15 @@ class Introduction(val game: Vecharia) {
      */
     private fun elfMeeting(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
         game.printer.clear()
-        game.printer += "You make your way into your mentor's house."
-        game.printer += "Your mentor is upstairs at their desk where they normally are."
-        game.printer += "They gracefully turn to face you."
-        game.printer += "\"Greetings, ${builder.name}.\""
         Menu.basic(
             game,
-            "\"So, you've decided to become a ${getElfJob(builder)}. Are you sure of that choice?\"",
+            listOf(
+                "You make your way into your mentor's house.",
+                "Your mentor is upstairs at their desk where they normally are.",
+                "They gracefully turn to face you.",
+                "\"Greetings, ${builder.name}.\"",
+                "\"So, you've decided to become a ${getElfJob(builder)}. Are you sure of that choice?\""
+            ),
             "Yes",
             "No"
         ).then { option ->
@@ -702,26 +705,27 @@ class Introduction(val game: Vecharia) {
      */
     private fun dwarfMeeting(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
         game.printer.clear()
-        game.printer += "You confidently stroll into the Great Hall."
-        game.printer += "The king is drinking ale at a table and gestures to sit down next to him."
-        game.printer.waiting("\"Oi, ${builder.name}! I'm proud of yah.\"").then {
-            Menu.basic(
-                game,
-                "\"My right-hand man right here tells me that yah wanna become a ${getDwarfJob(builder)}. Yah sure about that?\"",
-                "Yep",
-                "Nah"
-            ).then { option ->
-                when (option) {
-                    0 -> {
-                        when (builder.pclass) {
-                            Player.Class.MELEE -> fighterDwarfText(builder).then { resolve(it) }
-                            Player.Class.RANGED -> slingerDwarfText(builder).then { resolve(it) }
-                            Player.Class.MAGIC -> sorcererDwarfText(builder).then { resolve(it) }
-                        }
+        Menu.basic(
+            game,
+            listOf(
+                "You confidently stroll into the Great Hall.",
+                "The king is drinking ale at a table and gestures to sit down next to him.",
+                "\"Oi, ${builder.name}! I'm proud of yah.\"",
+                "\"My right-hand man right here tells me that yah wanna become a ${getDwarfJob(builder)}. Yah sure about that?\""
+            ),
+            "Yep",
+            "Nah"
+        ).then { option ->
+            when (option) {
+                0 -> {
+                    when (builder.pclass) {
+                        Player.Class.MELEE -> fighterDwarfText(builder).then { resolve(it) }
+                        Player.Class.RANGED -> slingerDwarfText(builder).then { resolve(it) }
+                        Player.Class.MAGIC -> sorcererDwarfText(builder).then { resolve(it) }
                     }
-                    1 -> {
-                        recheckClassDwarf(builder)
-                    }
+                }
+                1 -> {
+                    recheckClassDwarf(builder)
                 }
             }
         }
