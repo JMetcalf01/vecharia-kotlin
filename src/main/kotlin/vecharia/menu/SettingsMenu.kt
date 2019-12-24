@@ -2,6 +2,7 @@ package vecharia.menu
 
 import vecharia.Vecharia
 import vecharia.render.SoundSystem
+import vecharia.settings.Settings
 
 /**
  * Creates the settings menu with selections:
@@ -19,14 +20,15 @@ import vecharia.render.SoundSystem
  */
 class SettingsMenu(game: Vecharia, pastMenu: Menu) : Menu(game, "Settings", closeOnSelect = false, caret = false, centered = true) {
     init {
-        selection("${getToggle(SoundSystem.musicEnabled)}Sounds") {
+        selection("${getToggle(Settings.musicEnabled)}Sounds") {
             SoundSystem.toggleVolume()
-            it.title = "${getToggle(SoundSystem.musicEnabled)}Sounds"
+            it.title = "${getToggle(Settings.musicEnabled)}Sounds"
         }
 
         selection("${getToggle(true)}Fullscreen") {
-            game.log.error("Fullscreen not implemented!")
-            // Todo implement fullscreen
+            Settings.fullscreen = !Settings.fullscreen
+            it.title = "${getToggle(Settings.fullscreen)}Fullscreen"
+            game.log.error("Fullscreen toggle only works for restarting!")
         }
 
         selection("    Exit Settings") {

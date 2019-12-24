@@ -3,6 +3,7 @@ package vecharia.render
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.audio.Music
 import org.lwjgl.openal.AL
+import vecharia.settings.Settings
 import vecharia.util.SimpleQueue
 
 /**
@@ -19,8 +20,6 @@ object SoundSystem : Thread() {
     private var isOn: Boolean = false
     private var wasOff: Boolean = false
     private var playingName: String = ""
-
-    var musicEnabled: Boolean = false
 
     /**
      * Initializes the sound system.
@@ -69,7 +68,6 @@ object SoundSystem : Thread() {
      */
     fun playM() {
         isOn = true
-        musicEnabled = true
     }
 
     /**
@@ -81,7 +79,6 @@ object SoundSystem : Thread() {
     fun stopM() {
         isOn = false
         wasOff = true
-        musicEnabled = false
     }
 
     /**
@@ -92,8 +89,8 @@ object SoundSystem : Thread() {
      * @since 1.1
      */
     fun toggleVolume() {
-        musicEnabled = !musicEnabled
-        if (musicEnabled) {
+        Settings.musicEnabled = !Settings.musicEnabled
+        if (Settings.musicEnabled) {
             add("assets/introscreen.mp3", true)
             playM()
         } else {

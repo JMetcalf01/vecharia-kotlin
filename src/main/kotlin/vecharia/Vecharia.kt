@@ -29,10 +29,6 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
      * @since 1.1
      */
     fun start() {
-//        SoundSystem.add("assets/introscreen.mp3", looping = true, volume = 1f)
-//        SoundSystem.playM()
-//        log.info("Sound system playing")
-
         val startMenu = StartMenu(this)
         log.info("Entering Start Menu")
         render(startMenu)

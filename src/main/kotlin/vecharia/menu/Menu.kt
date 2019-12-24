@@ -101,7 +101,6 @@ open class Menu(
             val selection = selections[current]
             game.log.debug("Option '${selection.title.trim()}' has been selected.")
             selection.callback(selection)
-            current = 0
             if (closeOnSelect) {
                 Input -= up
                 Input -= down

@@ -14,13 +14,11 @@ import vecharia.Vecharia
 import vecharia.logging.ConsoleLogger
 import vecharia.logging.Logger
 import vecharia.menu.PauseMenu
+import vecharia.settings.Settings
 import vecharia.util.GameState
 import java.awt.Toolkit
 import kotlin.math.roundToInt
 import kotlin.system.exitProcess
-
-
-private const val FULLSCREEN: Boolean = true
 
 /**
  * The entry point into the program.
@@ -29,10 +27,12 @@ private const val FULLSCREEN: Boolean = true
  * @since 1.0
  */
 fun main() {
+    Settings.load()
+
     val config = LwjglApplicationConfiguration()
     config.height = Toolkit.getDefaultToolkit().screenSize.height
     config.width = Toolkit.getDefaultToolkit().screenSize.width
-    config.fullscreen = FULLSCREEN
+    config.fullscreen = Settings.fullscreen
     config.resizable = false
 
     LwjglApplication(Window(), config)
@@ -97,6 +97,10 @@ class Window : ApplicationAdapter() {
         logger.info("Clock thread done")
 
         SoundSystem.init(canvas)
+        if(Settings.musicEnabled) {
+            SoundSystem.add("assets/introscreen.mp3", true)
+            SoundSystem.playM()
+        }
         logger.info("Sound done")
 
         logger.info("Initialization finished")

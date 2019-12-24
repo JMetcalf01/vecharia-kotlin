@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation 'com.google.code.gson:gson:2.8.6'
     api "com.badlogicgames.gdx:gdx:1.9.10"
     api "com.badlogicgames.gdx:gdx-backend-lwjgl:1.9.10"
     api "com.badlogicgames.gdx:gdx-platform:1.9.10:natives-desktop"
