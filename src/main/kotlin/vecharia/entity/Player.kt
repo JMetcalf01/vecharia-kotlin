@@ -1,5 +1,6 @@
 package vecharia.entity
 
+import vecharia.inventory.Equippable
 import vecharia.inventory.Inventory
 import kotlin.math.ln
 import kotlin.math.pow
@@ -32,6 +33,8 @@ class Player private constructor(
     // figure this out later
     var mana: Int = 0
     private var xp: Int = 0
+    var hand: Equippable? = null
+    var armor: Equippable? = null
 
     /**
      * Adds a certain amount of xp to the player.

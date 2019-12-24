@@ -5,6 +5,8 @@ import vecharia.Vecharia
 import vecharia.entity.Entity
 import vecharia.entity.Player
 import vecharia.inventory.Inventory
+import vecharia.inventory.weapons.Weapons
+import vecharia.inventory.items.Coin
 import vecharia.menu.Menu
 import vecharia.render.Text
 import vecharia.util.Promise
@@ -110,10 +112,10 @@ class Introduction(val game: Vecharia) {
                             "That's right! You are a young human in the town of Zloridge.",
                             "Zloridge is under the rule of King Henry IV.",
                             "The day to become a full-fledged adventurer has come!",
-                            "Your pay is meager, but you have managed to save up 1000 gold coins for your quest. [TODO WHEN INVENTORY IS IMPLEMENTED]",
+                            "Your pay is meager, but you have managed to save up 1000 gold coins for your quest.",
                             "If you keep forgetting basic stuff like that you're a human, maybe you should be sleeping more..."
                         )
-                        // add coins to builder.inventory
+                        builder.startingInventory!!.add(Coin(1000))
                         game.printer.waiting("You dismiss that thought from your mind and get changed, find something to eat, and leave your hut.")
                             .then {
                                 resolve(builder)
@@ -143,7 +145,7 @@ class Introduction(val game: Vecharia) {
                             "Your pay is not much, but you have managed to save up 1250 gold coins for your quest. [TODO WHEN INVENTORY IS IMPLEMENTED]",
                             "How could you forget you're a dwarf?"
                         )
-                        // add coins to builder.inventory
+                        builder.startingInventory!!.add(Coin(1250))
                         game.printer.waiting("You climb out of bed, struggling to reach the floor. Why are these beds so damn high?")
                             .then {
                                 resolve(builder)
@@ -429,9 +431,9 @@ class Introduction(val game: Vecharia) {
         game.printer.batch(
             "\"You've decided to become a warrior.\"",
             "\"To aid you on your quests, I will grant you a sword.\"",
-            "He hands you a sturdy bronze broadsword. [TODO WHEN INVENTORY IS IMPLEMENTED]"
+            "He hands you a sturdy bronze broadsword."
         )
-        // add the sword to the builder.inventory
+        builder.startingInventory!!.add(Weapons.BRONZE_SWORD)
         game.printer.waiting("\"${builder.name}, you may leave now; best of luck in your quests.\"").then {
             game.printer += "You exit the castle with your new broadsword sheathed on your back."
             resolve(builder)
@@ -452,22 +454,22 @@ class Introduction(val game: Vecharia) {
             "\"Alright.\"",
             "\"To aid you on your quests, I will grant you a simple, yet effective longbow.\""
         )
-        game.printer.waiting("You walk closer to the throne and he bestows upon you the longbow. [TODO WHEN INVENTORY IS IMPLEMENTED]")
+        game.printer.waiting("You walk closer to the throne and he bestows upon you the longbow.")
             .then {
-                // add the bow to the builder.inventory
+                builder.startingInventory!!.add(Weapons.LONGBOW)
                 game.printer.batch(
                     "\"I will also give you a small dagger because I feel like it.\"",
                     "\"I'm the king, after all.\""
                 )
                 game.printer.waiting("The king hands you a dagger.").then {
-                    // add the dagger to the builder.inventory
+                    builder.startingInventory!!.add(Weapons.SMALL_DAGGER)
                     game.printer += "\"Oh yes, you probably would like some arrows as well, I suppose?\""
-                    game.printer.waiting("He hands you a quiver full of arrows. [TODO WHEN INVENTORY IS IMPLEMENTED]")
-                        // add the arrows to the builder.inventory
+                    game.printer.waiting("He hands you a quiver full of steel arrows. [TODO WHEN INVENTORY IS IMPLEMENTED]")
                         .then {
+                            builder.startingInventory!!.add(Weapons.STEEL_ARROW, 20)
                             game.printer.waiting("\"${builder.name}, you may leave now. Good luck on your quest.")
                                 .then {
-                                    game.printer += "You exit the castle with your new broadsword sheathed on your back."
+                                    game.printer += "You exit the castle with your new longbow slung over your shoulder."
                                     resolve(builder)
                                 }
                         }
@@ -489,8 +491,7 @@ class Introduction(val game: Vecharia) {
         game.printer += "\"We could use a new wizard. I'm glad you chose to become one.\""
         game.printer.waiting("\"We'll give you the standard oak staff to begin with, it should get the job done for now. [TODO WHEN INVENTORY IS IMPLEMENTED]")
             .then {
-                // add the oak staff to builder.inventory
-                // todo figure out mana as well
+                builder.startingInventory!!.add(Weapons.OAK_STAFF)
                 game.printer.waiting("\"${builder.name}, you may leave now. Good luck on your quest.")
                     .then {
                         game.printer += "You exit the castle carrying your new oak staff."
@@ -599,13 +600,13 @@ class Introduction(val game: Vecharia) {
             "\"Your rapier skills are already unparalleled among those your age.\"",
             "\"As is customary, you shall take my rapier for your quest.\""
         )
-        game.printer.waiting("They deliver their oldest, yet still perfectly maintained, rapier into your waiting hands. [TODO WHEN INVENTORY IS IMPLEMENTED]")
+        game.printer.waiting("They deliver their oldest, yet still perfectly maintained, rapier into your waiting hands.")
             .then {
-                // add rapier to builder.inventory
+                builder.startingInventory!!.add(Weapons.RAPIER)
                 game.printer += "\"Good luck on whatever quest you choose, young one.\""
-                game.printer.waiting("\"To help you out, I shall give you 750 gold coins. Spend them wisely.\" [TODO WHEN INVENTORY IS IMPLEMENTED]")
+                game.printer.waiting("\"To help you out, I shall give you 750 gold coins. Spend them wisely.\"")
                     .then {
-                        // Add coins to builder.inventory
+                        builder.startingInventory!!.add(Coin(750))
                         game.printer += "You step outside the house with your rapier in a scabbard on your hip."
                         resolve(builder)
                     }
@@ -627,20 +628,20 @@ class Introduction(val game: Vecharia) {
             "\"Your marksmanship is unparalleled among those your age.\"",
             "\"As is customary, you shall take my bow for your quest.\""
         )
-        game.printer.waiting("Your mentor hands you their oldest, yet still perfectly maintained, longbow into your waiting hands. [TODO WHEN INVENTORY IS IMPLEMENTED]")
+        game.printer.waiting("Your mentor hands you their oldest, yet still perfectly maintained, longbow into your waiting hands.")
             .then {
-                // add longbow to builder.inventory
-                game.printer.waiting("They hand you a quiver filled with arrows to go along with it. [TODO WHEN INVENTORY IS IMPLEMENTED]")
+                builder.startingInventory!!.add(Weapons.LONGBOW)
+                game.printer.waiting("They hand you a quiver filled with steel arrows to go along with it. [TODO WHEN INVENTORY IS IMPLEMENTED]")
                     .then {
-                        // add arrows to builder.inventory
+                        builder.startingInventory!!.add(Weapons.STEEL_ARROW, 20)
                         game.printer += "\"Take this dagger as well.\""
-                        game.printer.waiting("Your mentor gives you a small, sharp dagger. [TODO WHEN INVENTORY IS IMPLEMENTED]")
+                        game.printer.waiting("Your mentor gives you a small, sharp dagger.")
                             .then {
-                                // add dagger to builder.inventory
+                                builder.startingInventory!!.add(Weapons.SMALL_DAGGER)
                                 game.printer += "\"Good luck on whatever quest you choose, young one.\""
-                                game.printer.waiting("\"To help you out, I shall give you 750 gold coins. Spend them wisely.\" [TODO WHEN INVENTORY IS IMPLEMENTED]")
+                                game.printer.waiting("\"To help you out, I shall give you 750 gold coins. Spend them wisely.\"")
                                     .then {
-                                        // add coins to builder.inventory
+                                        builder.startingInventory!!.add(Coin(750))
                                         game.printer += "You step outside the house with your longbow slung over your shoulder."
                                         resolve(builder)
                                     }
@@ -665,13 +666,13 @@ class Introduction(val game: Vecharia) {
             "\"Your aptitude for spells is unparalleled among those your age.\"",
             "\"As is customary, you shall take my staff for your quest.\""
         )
-        game.printer.waiting("Your mentor hands you their oldest, yet perfectly maintained oak staff into your hands [TODO WHEN INVENTORY IS IMPLEMENTED]")
+        game.printer.waiting("Your mentor hands you their oldest, yet perfectly maintained oak staff into your hands.")
             .then {
-                // add the staff to builder.inventory
+                builder.startingInventory!!.add(Weapons.OAK_STAFF)
                 game.printer += "\"Best of luck on wherever your fate leads you, young one.\""
-                game.printer.waiting("Before you go, however, I shall give you 750 gold coins to help you out. Spend them well.\" [TODO WHEN INVENTORY IS IMPLEMENTED]")
+                game.printer.waiting("Before you go, however, I shall give you 750 gold coins to help you out. Spend them well.\"")
                     .then {
-                        // add coins to builder.inventory
+                        builder.startingInventory!!.add(Coin(750))
                         game.printer += "You step outside the house with your staff in hand."
                         resolve(builder)
                     }
@@ -774,9 +775,9 @@ class Introduction(val game: Vecharia) {
             "\"You'll be a good 'un.\"",
             "\"Take this axe.\""
         )
-        game.printer.waiting("The king hands you a battleaxe. [TODO WHEN INVENTORY IS IMPLEMENTED]")
+        game.printer.waiting("The king hands you a battleaxe.")
             .then {
-                // add axe to builder.inventory
+                builder.startingInventory!!.add(Weapons.BATTLEAXE)
                 game.printer += "\"I want some peace and quiet now. Do whichever quest you're doing or don't come back at all.\""
 //                game.printer.delay(3000)
                 game.printer.waiting("\"Nah, I'm just kiddin'. Good luck!\"")
@@ -807,14 +808,15 @@ class Introduction(val game: Vecharia) {
         )
         game.printer.waiting("The king hands you a sling and a carton of rounded balls of lead. [TODO WHEN INVENTORY IS IMPLEMENTED]")
             .then {
-                // add sling and lead balls to builder.inventory
+                builder.startingInventory!!.add(Weapons.SLING)
+                builder.startingInventory!!.add(Weapons.LEAD_BALL, 12)
                 game.printer.batch(
                     "You lift it. \"Damn, that's heavy,\" you think to yourself.",
                     "\"Take this dagger as well.\""
                 )
-                game.printer.waiting("The king hands you a small, sharp dagger. [TODO WHEN INVENTORY IS IMPLEMENTED]")
+                game.printer.waiting("The king hands you a small, sharp dagger.")
                     .then {
-                        // add small dagger to builder.inventory
+                        builder.startingInventory!!.add(Weapons.SMALL_DAGGER)
                         game.printer += "\"I want some peace and quiet now. Do that quest or don't come back at all.\""
 //                        game.printer.delay(3000)
                         game.printer.waiting("\"Nah, I'm just kiddin'. Good luck on your quest!\"").then {
@@ -840,9 +842,9 @@ class Introduction(val game: Vecharia) {
             "\"Take this cool stick I found on the ground on my daily walk yesterday.\"",
             "\"They always say that it's not the quality of the stick, it's how you use it!\""
         )
-        game.printer.waiting("The king hands you the cool stick. Thanks a lot... [TODO WHEN INVENTORY IS IMPLEMENTED]")
+        game.printer.waiting("The king hands you the cool stick. Thanks a lot...")
             .then {
-                // add the cool stick to builder.inventory
+                builder.startingInventory!!.add(Weapons.COOL_STICK)
                 game.printer += "\"I want some peace and quiet now. Do that quest or don't come back at all.\""
 //            game.printer.delay(3000)
                 game.printer.waiting("\"Nah, I'm just kiddin'. Good luck on your quest!\"")

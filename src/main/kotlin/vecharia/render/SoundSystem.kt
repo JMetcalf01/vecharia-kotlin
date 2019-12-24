@@ -76,7 +76,7 @@ object SoundSystem : Thread() {
      * @author Jonathan Metcalf
      * @since 1.0
      */
-    fun stopM() {
+    private fun stopM() {
         isOn = false
         wasOff = true
     }

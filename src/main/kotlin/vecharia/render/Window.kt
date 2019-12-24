@@ -48,7 +48,7 @@ class Window : ApplicationAdapter() {
     lateinit var canvas: Canvas
     lateinit var game: Vecharia
     lateinit var clock: Clock
-    lateinit var pause: PauseMenu
+    private lateinit var pause: PauseMenu
 
     private lateinit var batch: SpriteBatch
     private lateinit var font: BitmapFont

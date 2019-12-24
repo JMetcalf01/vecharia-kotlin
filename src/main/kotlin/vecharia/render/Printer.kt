@@ -123,7 +123,7 @@ class Printer(private val canvas: Canvas, state: State) : Tickable {
      * @see SimpleQueue
      * @param text the text to be printed
      */
-    fun print(text: Text) {
+    private fun print(text: Text) {
         queue.push(text)
     }
 

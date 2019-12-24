@@ -14,7 +14,7 @@ import vecharia.inventory.Inventory
  * @param name the name of the Entity
  * @param maxHealth the max health of the Entity
  */
-abstract class Entity(val name: String, val maxHealth: Int, val race: Race, val inventory: Inventory?) {
+abstract class Entity(val name: String, private val maxHealth: Int, val race: Race, val inventory: Inventory?) {
     var effects: MutableList<Effect> = mutableListOf()
 
     enum class Race {

@@ -1,7 +1,5 @@
 package vecharia.util
 
-import java.lang.IllegalStateException
-
 /**
  * Represents a value which will be returned eventually.
  * Thanks JavaScript

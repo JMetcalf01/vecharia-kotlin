@@ -1,5 +1,7 @@
 package vecharia.inventory
 
+import vecharia.entity.Player
+
 /**
  * Represents an item which can be equipped to an Entity.
  *
@@ -18,9 +20,10 @@ interface Equippable {
      * @since 1.0
      *
      * @param slot the slot to equip to
+     * @param player the player to check
      * @return whether the item was equipped to the slot
      */
-    fun equip(slot: EquipmentSlot): Boolean
+    fun equip(slot: EquipmentSlot, player: Player): Boolean
 
     /**
      * Get the slot which this item may be equipped to.

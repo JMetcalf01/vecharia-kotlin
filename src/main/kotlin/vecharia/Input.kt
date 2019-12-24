@@ -131,7 +131,7 @@ object Input : Tickable {
      *
      * @param id the id of the listener to remove
      */
-    fun removeListener(id: Int) = events.values.forEach { keys -> keys.values.forEach { actions -> actions.removeIf { it.first == id } } }
+    private fun removeListener(id: Int) = events.values.forEach { keys -> keys.values.forEach { actions -> actions.removeIf { it.first == id } } }
 
     /**
      * An operator alternative to remove an event listener.
