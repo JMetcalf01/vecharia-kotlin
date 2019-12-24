@@ -1,5 +1,7 @@
 package vecharia.util
 
+import java.lang.IllegalStateException
+
 /**
  * Represents a value which will be returned eventually.
  * Thanks JavaScript
@@ -13,6 +15,37 @@ package vecharia.util
  * @constructor invokes the resolution function
  */
 class Promise<T>(run: Boolean = true, private val func: ((T) -> Unit) -> Unit) {
+    companion object {
+        /**
+         * Runs a set of promises, with a guarantee that they will be executed in order, and returns the result of the final promise.
+         *
+         * @author Matt Worzala
+         * @since 1.3
+         *
+         * @param promises a set of promises to execute in order
+         * @return a promise, resolved when the final promise has resolved
+         */
+        fun <T> sequential(vararg promises: Promise<T>): Promise<T> = Promise { resolve ->
+            val remaining = promises.asList().toMutableList()
+            var cb: (T) -> Unit = {}
+            cb = {
+                println("Running next: ${remaining.isNotEmpty()}")
+                if (remaining.isEmpty())
+                    resolve(it)
+                else {
+                    val current = remaining[0]
+                    remaining.removeAt(0)
+                    current.then(cb)
+                }
+            }
+            val current = remaining[0]
+            remaining.removeAt(0)
+            current.then(cb)
+        }
+
+//        fun all(vararg promises: Promise<*>)= TODO()
+    }
+
     private var value: T? = null
     private var next: Promise<*>? = null
     private var end: ((T) -> Unit)? = null
