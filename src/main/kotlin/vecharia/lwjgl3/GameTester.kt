@@ -11,7 +11,7 @@ import java.io.File
 fun main() {
     val engine: GameEngine = GameEngine.create(true)
 
-    val candara = FontType(engine.window, Texture.load("/home/matt/dev/kotlin/vecharia/assets/candara.png").id, File("/home/matt/dev/kotlin/vecharia/assets/candara.fnt"))
+    val candara = FontType(engine.window, Texture.load("assets/candara.png").id, File("assets/candara.fnt"))
     val text = GUIText("Text 2: Electric Boogaloo", 4f, candara, Position(y = 0.5f), 1.0f, true)
 
     var color = 0
