@@ -31,11 +31,15 @@ object Settings {
      * @author Jonathan Metcalf
      * @since 1.4
      */
-    fun save() {
-        val settings = SettingsData(fullscreen, musicEnabled)
-        val gsonBuilder = GsonBuilder().setPrettyPrinting().create()
-        val jsonSettings: String = gsonBuilder.toJson(settings)
-        File("settings/settings.json").writeText(jsonSettings)
+    private fun save() {
+        File("settings/settings.json").writeText(
+            GsonBuilder().setPrettyPrinting().create().toJson(
+                SettingsData(
+                    fullscreen,
+                    musicEnabled
+                )
+            )
+        )
     }
 
     /**
@@ -46,10 +50,32 @@ object Settings {
      * @since 1.4
      */
     fun load() {
-        val jsonSettings: String = File("settings/settings.json").readText()
-        val settingsData = Gson().fromJson(jsonSettings, SettingsData::class.java)
-        fullscreen = settingsData.fullscreen
-        musicEnabled = settingsData.musicEnabled
+        try {
+            val settingsData = Gson().fromJson(File("settings/settings.json").readText(), SettingsData::class.java)
+            fullscreen = settingsData.fullscreen
+            musicEnabled = settingsData.musicEnabled
+        } catch (err: Exception) {
+            freshCopy()
+            load()
+        }
+    }
+
+    /**
+     * Prints a fresh copy of the settings to settings.json
+     * This is done if it's not found (i.e. user deleted it)
+     *
+     * @author Jonathan Metcalf
+     * @since 1.4
+     */
+    private fun freshCopy() {
+        File("settings/settings.json").writeText(
+            GsonBuilder().setPrettyPrinting().create().toJson(
+                SettingsData(
+                    fullscreen = true,
+                    musicEnabled = true
+                )
+            )
+        )
     }
 }
 

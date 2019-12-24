@@ -25,7 +25,7 @@ class SettingsMenu(game: Vecharia, pastMenu: Menu) : Menu(game, "Settings", clos
             it.title = "${getToggle(Settings.musicEnabled)}Sounds"
         }
 
-        selection("${getToggle(true)}Fullscreen") {
+        selection("${getToggle(Settings.fullscreen)}Fullscreen") {
             Settings.fullscreen = !Settings.fullscreen
             it.title = "${getToggle(Settings.fullscreen)}Fullscreen"
             game.log.error("Fullscreen toggle only works for restarting!")
