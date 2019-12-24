@@ -24,7 +24,7 @@ class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", closeOnSelec
     init {
         selection("New Game") {
             it.menu.closeOnSelect = true
-            game.render(SaveSelectionMenu(game))
+            game.render(SaveSelectionMenu(game), this)
         }
 
         selection("Load Game") {
@@ -35,7 +35,7 @@ class StartMenu(game: Vecharia) : Menu(game,"Welcome to Vecharia!", closeOnSelec
 
         selection("Settings") {
             it.menu.closeOnSelect = true
-            game.render(SettingsMenu(game, this))
+            game.render(SettingsMenu(game), this)
         }
 
         selection("Credits") {
@@ -73,7 +73,7 @@ class SaveSelectionMenu(game: Vecharia) : Menu(game, "Select a save:", centered 
         }
         selection("Slot 1: Empty", this::newGame)
         selection("Slot 2: Empty", this::newGame)
-        selection("Back") { game.render(StartMenu(game)) }
+        selection("Back") {  }
     }
 
     /**

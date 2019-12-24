@@ -122,7 +122,8 @@ open class Menu constructor(
      *
      * @param callback a callback for when the menu has been closed by a selection
      */
-    fun render(callback: () -> Unit = {}) {
+    fun render(parent: Menu? = null, callback: () -> Unit = {}) {
+        refresh = true
         val up = Input.registerListener(UP, state ?: GameState.state) {
             if (current > 0) current--
             refresh = true
@@ -141,6 +142,8 @@ open class Menu constructor(
                 Input -= down
                 Input -= enter
                 callback()
+                if (parent != null)
+                    game.render(parent)
             } else refresh = true
         }
     }

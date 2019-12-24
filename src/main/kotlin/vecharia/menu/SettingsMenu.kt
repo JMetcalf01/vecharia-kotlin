@@ -16,9 +16,8 @@ import vecharia.settings.Settings
  * @constructor makes the list of selections
  *
  * @param game the Vecharia game instance
- * @param pastMenu the menu the settings menu came from (either start or pause)
  */
-class SettingsMenu(game: Vecharia, pastMenu: Menu) : Menu(game, "Settings", closeOnSelect = false, caret = false, centered = true) {
+class SettingsMenu(game: Vecharia) : Menu(game, "Settings", closeOnSelect = false, caret = false, centered = true) {
     init {
         selection("${getToggle(Settings.musicEnabled)}Sounds") {
             SoundSystem.toggleVolume()
@@ -31,10 +30,7 @@ class SettingsMenu(game: Vecharia, pastMenu: Menu) : Menu(game, "Settings", clos
             game.log.error("Fullscreen toggle only works for restarting!")
         }
 
-        selection("    Exit Settings") {
-            it.menu.closeOnSelect = true
-            game.render(if (pastMenu is StartMenu) StartMenu(game) else PauseMenu(game))
-        }
+        selection("    Back") { it.menu.closeOnSelect = true }
     }
 
     /**

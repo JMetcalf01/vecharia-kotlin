@@ -43,11 +43,11 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
      *
      * @param menu the menu to render
      */
-    fun render(menu: Menu) {
+    fun render(menu: Menu, parent: Menu? = null) {
         synchronized(tickables) {
             tickables.add(menu)
         }
-        menu.render {
+        menu.render(parent) {
             synchronized(tickables) {
                 tickables.remove(menu)
             }
