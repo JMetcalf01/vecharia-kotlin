@@ -35,8 +35,8 @@ object Settings {
         File("settings/settings.json").writeText(
             GsonBuilder().setPrettyPrinting().create().toJson(
                 SettingsData(
-                    fullscreen,
-                    musicEnabled
+                    musicEnabled,
+                    fullscreen
                 )
             )
         )
@@ -52,8 +52,8 @@ object Settings {
     fun load() {
         try {
             val settingsData = Gson().fromJson(File("settings/settings.json").readText(), SettingsData::class.java)
-            fullscreen = settingsData.fullscreen
             musicEnabled = settingsData.musicEnabled
+            fullscreen = settingsData.fullscreen
         } catch (err: Exception) {
             freshCopy()
             load()
@@ -71,8 +71,8 @@ object Settings {
         File("settings/settings.json").writeText(
             GsonBuilder().setPrettyPrinting().create().toJson(
                 SettingsData(
-                    fullscreen = true,
-                    musicEnabled = true
+                    musicEnabled = true,
+                    fullscreen = true
                 )
             )
         )
@@ -88,4 +88,4 @@ object Settings {
  * @param fullscreen whether the screen is fullscreen
  * @param musicEnabled whether the music is enabled
  */
-data class SettingsData(val fullscreen: Boolean, val musicEnabled: Boolean)
+data class SettingsData(val musicEnabled: Boolean, val fullscreen: Boolean)

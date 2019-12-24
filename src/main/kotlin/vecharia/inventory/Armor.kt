@@ -1,11 +1,7 @@
-package vecharia.inventory.armor
+package vecharia.inventory
 
 import vecharia.effect.Effect
 import vecharia.entity.Player
-import vecharia.inventory.Durable
-import vecharia.inventory.EquipmentSlot
-import vecharia.inventory.Equippable
-import vecharia.inventory.Item
 
 class Armor(
     name: String,
@@ -87,8 +83,12 @@ class Armor(
         return EquipmentSlot.ARMOR
     }
 
+    /**
+     * TODO
+     *
+     */
     private fun breakItem() {
-
+        TODO("not implemented")
     }
 
     /**
@@ -112,6 +112,14 @@ class Armor(
         fun effects(effects: List<Effect>) = apply { this.effects = effects as MutableList<Effect> }
         fun disableSelling() = apply { sellable = false }
 
-        fun build() = Armor(name!!, cost!!, baseDefense!!, durability!!, effects, sellable)
+        fun build() =
+            Armor(name!!, cost!!, baseDefense!!, durability!!, effects, sellable)
+    }
+
+    companion object Armors {
+        val LEATHER_ARMOR = Builder().name("Leather Armor").cost(200).defense(10).durability(50).build()
+        val CHAINMAIL_ARMOR = Builder().name("Chainmail Armor").cost(500).defense(20).durability(75).build()
+        val PLATE_ARMOR = Builder().name("Plate Armor").cost(1000).defense(40).durability(150).build()
+        val MITHRIL_ARMOR = Builder().name("Mithril Armor").cost(15_000).defense(90).durability(500).build()
     }
 }

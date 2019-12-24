@@ -80,5 +80,4 @@ class Vecharia(val log: Logger, val window: Window) : Tickable {
     fun exit() {
         window.exit = true
     }
-
 }

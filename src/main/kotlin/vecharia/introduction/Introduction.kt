@@ -5,8 +5,9 @@ import vecharia.Vecharia
 import vecharia.entity.Entity
 import vecharia.entity.Player
 import vecharia.inventory.Inventory
-import vecharia.inventory.weapons.Weapons
+import vecharia.inventory.weapons.Weapon.Weapons
 import vecharia.inventory.items.Coin
+import vecharia.inventory.weapons.Weapon
 import vecharia.menu.Menu
 import vecharia.render.Text
 import vecharia.util.Promise
