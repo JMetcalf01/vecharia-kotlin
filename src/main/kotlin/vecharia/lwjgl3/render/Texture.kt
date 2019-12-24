@@ -10,7 +10,7 @@ import vecharia.lwjgl3.Disposable
 import vecharia.lwjgl3.Garbage
 import java.nio.ByteBuffer
 
-class Texture private constructor(private val id: Int, val width: Int, val height: Int) : Disposable {
+class Texture private constructor(val id: Int, val width: Int, val height: Int) : Disposable {
     init { Garbage.dispose(this) }
 
     fun bind(unit: Int = 0) {

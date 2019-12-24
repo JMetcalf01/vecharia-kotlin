@@ -27,7 +27,7 @@ class GameFile internal constructor(val path: String) {
         Files.newBufferedReader(location()).use {
             var line: String? = null
             while ({ line = it.readLine(); line }() != null)
-                file.append(line)
+                file.append(line).append('\n')
         }
         return file.toString().trim()
     }
@@ -36,5 +36,5 @@ class GameFile internal constructor(val path: String) {
 
     fun texture(): Texture = Texture.load(absolute())
 
-    override fun toString(): String = path.substring(path.lastIndexOf('/')) //todo test me!
+    override fun toString(): String = path.substring(path.lastIndexOf('/') + 1)
 }

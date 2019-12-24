@@ -178,7 +178,7 @@ object SoundSystem : Thread() {
      * @since 1.1
      */
     fun end() {
-        AL.destroy()
+//        AL.destroy() todo
     }
 
     /**

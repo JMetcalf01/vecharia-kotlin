@@ -43,7 +43,7 @@ class Window(title: String, width: Int, height: Int, vsync: Boolean) : Tickable 
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE)
 
         handle = glfwCreateWindow(width, height, title, NULL, NULL)
-        check(handle == NULL) { "Failed to create GLFW window." }
+        check(handle != NULL) { "Failed to create GLFW window." }
 
         glfwSetFramebufferSizeCallback(handle) { _, newWidth, newHeight ->
             this.width = newWidth
