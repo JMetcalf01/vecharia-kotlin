@@ -115,39 +115,42 @@ class Introduction(val game: Vecharia) {
                             "If you keep forgetting basic stuff like that you're a human, maybe you should be sleeping more..."
                         )
                         // add coins to builder.inventory
-                        game.printer += Text(
-                            "You dismiss that thought from your mind and get changed, find something to eat, and leave your hut.",
-                            wait = true
-                        )
-                        resolve(builder)
+                        game.printer += "If you keep forgetting basic stuff like that you're a human, maybe you should be sleeping more..."
+                        game.printer.waiting("You dismiss that thought from your mind and get changed, find something to eat, and leave your hut.")
+                            .then {
+                                resolve(builder)
+                            }
                     }
                     1 -> {
                         builder.race = Entity.Race.ELF
                         builder.maxHealth = 90
-                        game.printer += "You are a young elf in the elven town of Mythmerius."
-                        game.printer += "You answer to no king; Mythmerius is a democracy."
-                        game.printer += "Today is the day that you choose the quest you wish to attempt."
-                        game.printer += "If you keep forgetting basic stuff like the fact that you're an elf, maybe you should be sleeping more..."
-                        game.printer += Text(
-                            "You dismiss that thought from your mind and get changed, find something to eat, and leave your house.",
-                            wait = true
+                        game.printer.batch(
+                            "You are a young elf in the elven town of Mythmerius.",
+                            "You answer to no king; Mythmerius is a democracy.",
+                            "Today is the day that you choose the quest you wish to attempt.",
+                            "If you keep forgetting basic stuff like the fact that you're an elf, maybe you should be sleeping more..."
                         )
-                        resolve(builder)
+                        game.printer.waiting("You dismiss that thought from your mind and get changed, find something to eat, and leave your house.")
+                            .then {
+                                resolve(builder)
+                            }
                     }
                     2 -> {
                         builder.race = Entity.Race.DWARF
                         builder.maxHealth = 110
-                        game.printer += "You are a young dwarf in the dwarven town of Mil Gurum."
-                        game.printer += "Your leader is the proud King Meldal."
-                        game.printer += "Today you will finally choose your quest!"
-                        game.printer += "Your pay is not much, but you have managed to save up 1250 gold coins for your quest. [TODO WHEN INVENTORY IS IMPLEMENTED]"
-                        // add coins to builder.inventory
-                        game.printer += "How could you forget you're a dwarf?"
-                        game.printer += Text(
-                            "You climb out of bed, struggling to reach the floor. Why are these beds so damn high?",
-                            wait = true
+                        game.printer.batch(
+                            "You are a young dwarf in the dwarven town of Mil Gurum.",
+                            "Your leader is the proud King Meldal.",
+                            "Today you will finally choose your quest!",
+                            "Your pay is not much, but you have managed to save up 1250 gold coins for your quest. [TODO WHEN INVENTORY IS IMPLEMENTED]"
                         )
-                        resolve(builder)
+                        // add coins to builder.inventory
+                        game.printer +=
+                            "How could you forget you're a dwarf?"
+                        game.printer.waiting("You climb out of bed, struggling to reach the floor. Why are these beds so damn high?")
+                            .then {
+                                resolve(builder)
+                            }
                     }
                 }
             }
@@ -179,7 +182,6 @@ class Introduction(val game: Vecharia) {
      * @param builder the builder object
      */
     private fun humanClass(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
-        game.printer.clear()
         Menu.basic(
             game, listOf(
                 "As you walk past the marketplace to the castle, you hear something from over your shoulder.",
@@ -226,7 +228,6 @@ class Introduction(val game: Vecharia) {
      * @param builder the builder object
      */
     private fun elfClass(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
-        game.printer.clear()
         Menu.basic(
             game,
             listOf(
@@ -280,7 +281,6 @@ class Introduction(val game: Vecharia) {
      * @param builder the builder object
      */
     private fun dwarfClass(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
-        game.printer.clear()
         Menu.basic(
             game,
             listOf(
@@ -367,7 +367,6 @@ class Introduction(val game: Vecharia) {
      * @return a promise of the player builder
      */
     private fun humanMeeting(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
-        game.printer.clear()
         Menu.basic(
             game,
             listOf(
@@ -430,10 +429,11 @@ class Introduction(val game: Vecharia) {
      * @return a promise of the player builder
      */
     private fun knightHumanText(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
-        game.printer.clear()
-        game.printer += "\"You've decided to become a warrior.\""
-        game.printer += "\"To aid you on your quests, I will grant you a sword.\""
-        game.printer += "He hands you a sturdy bronze broadsword. [TODO WHEN INVENTORY IS IMPLEMENTED]"
+        game.printer.batch(
+            "\"You've decided to become a warrior.\"",
+            "\"To aid you on your quests, I will grant you a sword.\"",
+            "He hands you a sturdy bronze broadsword. [TODO WHEN INVENTORY IS IMPLEMENTED]"
+        )
         // add the sword to the builder.inventory
         game.printer.waiting("\"${builder.name}, you may leave now; best of luck in your quests.\"").then {
             game.printer += "You exit the castle with your new broadsword sheathed on your back."
@@ -451,14 +451,17 @@ class Introduction(val game: Vecharia) {
      * @return a promise of the player builder
      */
     private fun archerHumanText(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
-        game.printer.clear()
-        game.printer += "\"Alright.\""
-        game.printer += "\"To aid you on your quests, I will grant you a simple, yet effective longbow.\""
+        game.printer.batch(
+            "\"Alright.\"",
+            "\"To aid you on your quests, I will grant you a simple, yet effective longbow.\""
+        )
         game.printer.waiting("You walk closer to the throne and he bestows upon you the longbow. [TODO WHEN INVENTORY IS IMPLEMENTED]")
             .then {
                 // add the bow to the builder.inventory
-                game.printer += "\"I will also give you a small dagger because I feel like it.\""
-                game.printer += "\"I'm the king, after all.\""
+                game.printer.batch(
+                    "\"I will also give you a small dagger because I feel like it.\"",
+                    "\"I'm the king, after all.\""
+                )
                 game.printer.waiting("The king hands you a dagger.").then {
                     // add the dagger to the builder.inventory
                     game.printer += "\"Oh yes, you probably would like some arrows as well, I suppose?\""
@@ -530,7 +533,6 @@ class Introduction(val game: Vecharia) {
      * @return a promise of the player builder
      */
     private fun elfMeeting(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
-        game.printer.clear()
         Menu.basic(
             game,
             listOf(
@@ -595,10 +597,11 @@ class Introduction(val game: Vecharia) {
      * @return a promise of the player builder
      */
     private fun duelistElfText(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
-        game.printer.clear()
-        game.printer += "\"I agree you as a duelist would be best.\""
-        game.printer += "\"Your rapier skills are already unparalleled among those your age.\""
-        game.printer += "\"As is customary, you shall take my rapier for your quest.\""
+        game.printer.batch(
+            "\"I agree you as a duelist would be best.\"",
+            "\"Your rapier skills are already unparalleled among those your age.\"",
+            "\"As is customary, you shall take my rapier for your quest.\""
+        )
         game.printer.waiting("They deliver their oldest, yet still perfectly maintained, rapier into your waiting hands. [TODO WHEN INVENTORY IS IMPLEMENTED]")
             .then {
                 // add rapier to builder.inventory
@@ -622,10 +625,11 @@ class Introduction(val game: Vecharia) {
      * @return a promise of the player builder
      */
     private fun archerElfText(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
-        game.printer.clear()
-        game.printer += "\"I agree; archery would be best for you.\""
-        game.printer += "\"Your marksmanship is unparalleled among those your age.\""
-        game.printer += "\"As is customary, you shall take my bow for your quest.\""
+        game.printer.batch(
+            "\"I agree; archery would be best for you.\"",
+            "\"Your marksmanship is unparalleled among those your age.\"",
+            "\"As is customary, you shall take my bow for your quest.\""
+        )
         game.printer.waiting("Your mentor hands you their oldest, yet still perfectly maintained, longbow into your waiting hands. [TODO WHEN INVENTORY IS IMPLEMENTED]")
             .then {
                 // add longbow to builder.inventory
@@ -659,10 +663,11 @@ class Introduction(val game: Vecharia) {
      * @return a promise of the player builder
      */
     private fun mageElfText(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
-        game.printer.clear()
-        game.printer += "\"I agree that you would be best as a mage.\""
-        game.printer += "\"Your aptitude for spells is unparalleled among those your age.\""
-        game.printer += "\"As is customary, you shall take my staff for your quest.\""
+        game.printer.batch(
+            "\"I agree that you would be best as a mage.\"",
+            "\"Your aptitude for spells is unparalleled among those your age.\"",
+            "\"As is customary, you shall take my staff for your quest.\""
+        )
         game.printer.waiting("Your mentor hands you their oldest, yet perfectly maintained oak staff into your hands [TODO WHEN INVENTORY IS IMPLEMENTED]")
             .then {
                 // add the staff to builder.inventory
@@ -705,7 +710,6 @@ class Introduction(val game: Vecharia) {
      * @return a promise of the player builder
      */
     private fun dwarfMeeting(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
-        game.printer.clear()
         Menu.basic(
             game,
             listOf(
@@ -769,9 +773,10 @@ class Introduction(val game: Vecharia) {
      * @return a promise of the player builder
      */
     private fun fighterDwarfText(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
-        game.printer.clear()
-        game.printer += "\"You'll be a good 'un.\""
-        game.printer += "\"Take this axe.\""
+        game.printer.batch(
+            "\"You'll be a good 'un.\"",
+            "\"Take this axe.\""
+        )
         game.printer.waiting("The king hands you a battleaxe. [TODO WHEN INVENTORY IS IMPLEMENTED]")
             .then {
                 // add axe to builder.inventory
@@ -798,13 +803,18 @@ class Introduction(val game: Vecharia) {
         game.printer.clear()
         game.printer += "\"A slinger? I didn't peg yah as a coward!\""
 //        game.printer.delay(3000)
-        game.printer += "\"I'm just joshin' with yah! A slinger would be a good job for yah.\""
-        game.printer += "\"I'll give you a nice sling, don'tcha worry.\""
+        game.printer.batch(
+            "\"I'm just joshin' with yah! A slinger would be a good job for yah.\"",
+            "\"I'll give you a nice sling, don'tcha worry.\"",
+            clear = false
+        )
         game.printer.waiting("The king hands you a sling and a carton of rounded balls of lead. [TODO WHEN INVENTORY IS IMPLEMENTED]")
             .then {
                 // add sling and lead balls to builder.inventory
-                game.printer += "You lift it. \"Damn, that's heavy,\" you think to yourself."
-                game.printer += "\"Take this dagger as well.\""
+                game.printer.batch(
+                    "You lift it. \"Damn, that's heavy,\" you think to yourself.",
+                    "\"Take this dagger as well.\""
+                )
                 game.printer.waiting("The king hands you a small, sharp dagger. [TODO WHEN INVENTORY IS IMPLEMENTED]")
                     .then {
                         // add small dagger to builder.inventory
@@ -828,10 +838,11 @@ class Introduction(val game: Vecharia) {
      * @return a promise of the player builder
      */
     private fun sorcererDwarfText(builder: Player.Builder) = Promise<Player.Builder> { resolve ->
-        game.printer.clear()
-        game.printer += "\"A sorcerer, eh? You better be useful to me!\""
-        game.printer += "\"Take this cool stick I found on the ground on my daily walk yesterday.\""
-        game.printer += "\"They always say that it's not the quality of the stick, it's how you use it!\""
+        game.printer.batch(
+            "\"A sorcerer, eh? You better be useful to me!\"",
+            "\"Take this cool stick I found on the ground on my daily walk yesterday.\"",
+            "\"They always say that it's not the quality of the stick, it's how you use it!\""
+        )
         game.printer.waiting("The king hands you the cool stick. Thanks a lot... [TODO WHEN INVENTORY IS IMPLEMENTED]")
             .then {
                 // add the cool stick to builder.inventory

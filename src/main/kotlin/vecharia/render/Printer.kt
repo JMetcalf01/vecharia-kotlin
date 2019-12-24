@@ -142,6 +142,15 @@ class Printer(private val canvas: Canvas, state: State) : Tickable {
         print(Text(message, color, newLine, wait = true) { it(Unit) })
     }
 
+    /**
+     * Queues an arbitrary amount of strings.
+     *
+     * @author Matt Worzala
+     * @since 1.3
+     *
+     * @param messages the list of messages to print
+     * @param clear whether the clear beforehand
+     */
     fun batch(vararg messages: String, clear: Boolean = true) {
         if (clear) clear()
         messages.forEach { this += it }
