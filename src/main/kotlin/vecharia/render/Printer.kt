@@ -142,7 +142,10 @@ class Printer(private val canvas: Canvas, state: State) : Tickable {
         print(Text(message, color, newLine, wait = true) { it(Unit) })
     }
 
-    fun batch(vararg messages: String) = messages.forEach { this += it }
+    fun batch(vararg messages: String, clear: Boolean = true) {
+        if (clear) clear()
+        messages.forEach { this += it }
+    }
 
     /**
      * Adds an empty line to the end of the queue,

@@ -103,7 +103,6 @@ class Introduction(val game: Vecharia) {
             game.printer.clear()
 
             Menu.basic(game, "What race are you?", "Human", "Elf", "Dwarf").then { option ->
-                game.printer.clear()
                 when (option) {
                     0 -> {
                         builder.race = Entity.Race.HUMAN
