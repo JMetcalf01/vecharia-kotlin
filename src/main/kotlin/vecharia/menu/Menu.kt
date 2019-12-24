@@ -19,6 +19,9 @@ import java.util.*
  * @since 1.3
  *
  * @param title the title of the menu
+ * @param closeOnSelect whether to close the menu when a selection is made
+ * @param respectParent whether to return to the supplied parent upon menu closure
+ * @param caret whether to include the > for the current selection
  * @param centered whether the menu is centered on the screen
  */
 open class Menu constructor(
