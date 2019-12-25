@@ -67,7 +67,7 @@ class Armor(
      */
     override fun equip(slot: EquipmentSlot, player: Player): Boolean {
         if (this.getSlot() != slot) return false
-        player.hand = this
+        player.armor = this
         return true
     }
 

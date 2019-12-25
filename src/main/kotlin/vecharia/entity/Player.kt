@@ -33,6 +33,8 @@ class Player private constructor(
     // figure this out later
     var mana: Int = 0
     private var xp: Int = 0
+
+    // Equipment
     var hand: Equippable? = null
     var armor: Equippable? = null
 
