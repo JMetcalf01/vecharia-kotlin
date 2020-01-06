@@ -15,6 +15,8 @@ object Time {
 
     var deltaTime: Float = 0f
         private set
+    val deltaTimeMs: Float
+        get() = deltaTime * 1000f
     var vsync: Boolean = false
 
     fun update() {

@@ -1,118 +1,155 @@
 package vecharia.lwjgl3
 
+import glm_.vec2.Vec2i
+import imgui.DEBUG
+import imgui.ImGui
+import imgui.classes.Context
+import imgui.impl.gl.ImplGL3
+import imgui.impl.glfw.ImplGlfw
 import org.lwjgl.glfw.GLFW.*
-import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil.NULL
+import uno.glfw.GlfwWindow
+import uno.glfw.VSync
+import uno.glfw.glfw
 
 
-class Window(title: String, width: Int, height: Int, vsync: Boolean) : Tickable {
+class Window(title: String, width: Int, height: Int, vsync: Boolean) : Tickable, Disposable {
     private val windowCallbacks: MutableList<(Int, Int) -> Unit> = mutableListOf()
 
-    private val handle: Long
+    private val window: GlfwWindow
 
+    // ImGUI
+    private val imguiContext: Context
+    private val imguiGlfw: ImplGlfw
+    private val imguiGl3: ImplGL3
+
+    // Window parameters
     var width: Int = width
         private set
     var height: Int = height
         private set
     val ratio: Float
         get() = width.toFloat() / height.toFloat()
-
-    private var tWidth: Int = width
-    private var tHeight: Int = height
-
     var title: String = title
-        set(value) { field = updateTitle(value) }
-
-    private var update: Boolean = false
+        set(value) {
+            window.title = value
+            field = value
+        }
     var fullscreen: Boolean = false
         set(value) { field = setFullscreen(value) }
 
+    // Target window size (when exiting fullscreen)
+    private var tWidth: Int = width
+    private var tHeight: Int = height
+
+    // Update viewport (when screen size changes)
+    private var update: Boolean = false
+
     init {
-        GLFWErrorCallback.createPrint(System.err) //todo use logger here.
-        check(glfwInit()) { "Failed to initialize GLFW." }
+        glfw {
+            // Change to some error handling system in the future.
+            errorCallback = { error, description -> println("GLFW has encountered an error: $error\n$description") }
 
-        glfwDefaultWindowHints()
-        glfwWindowHint(GLFW_VISIBLE, GL_FALSE)
-        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE)
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3)
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2)
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE)
+            init()
+            windowHint {
+                debug = DEBUG
+                visible = false
+                resizable = true
 
-        handle = glfwCreateWindow(width, height, title, NULL, NULL)
-        check(handle != NULL) { "Failed to create GLFW window." }
-
-        glfwSetFramebufferSizeCallback(handle) { _, newWidth, newHeight ->
-            this.width = newWidth
-            this.height = newHeight
-            glViewport(0, 0, newWidth, newHeight)
-            windowCallbacks.forEach { it(newWidth, newHeight) }
+                context.version = "3.2"
+                profile = uno.glfw.windowHint.Profile.core
+                forwardComp = true
+            }
         }
 
-        glfwSetKeyCallback(handle) { _, key, _, action, _ ->
-            if (key == GLFW_KEY_F && action == GLFW_RELEASE) fullscreen = !fullscreen
-        }
+        // GLFW
+        window = GlfwWindow(width, height, title)
+        window.makeContextCurrent()
 
-        val mode = glfwGetVideoMode(glfwGetPrimaryMonitor())
-        glfwSetWindowPos(handle, ((mode?.width() ?: width) - width) / 2, ((mode?.height() ?: height) - height) / 2)
-
-        glfwMakeContextCurrent(handle)
+        // OpenGL
         GL.createCapabilities()
 
-        if (vsync) glfwSwapInterval(1); // 1 = 60 fps, 2 = 30 fps, etc
+        //ImGUI
+        imguiContext = Context()
+        ImGui.styleColorsDark()
+        imguiGlfw = ImplGlfw(window, true)
+        imguiGl3 = ImplGL3()
 
-        glfwShowWindow(handle)
+        // Window resize event and viewport update
+        window.framebufferSizeCallback = { size ->
+            this.width = size.x
+            this.height = size.y
+            glViewport(0, 0, size.x, size.y)
+            windowCallbacks.forEach { it(size.x, size.y) }
+        }
 
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
+        // Key callback, ignoring imgui input when acceptable
+        window.keyCallback = { key, _, action, _ ->
+            // Ignore input when ImGui is capturing mouse.
+            if (!ImGui.io.wantCaptureMouse) {
+                if (key == GLFW_KEY_F && action == GLFW_RELEASE) fullscreen = !fullscreen
+            }
+        }
+
+        // Center window in screen
+        val mode = glfw.videoMode(glfw.primaryMonitor)
+        window.pos = Vec2i(((mode?.width() ?: width) - width) / 2, ((mode?.height() ?: height) - height) / 2)
+
+        // vsync
+        glfw.swapInterval = if (vsync) VSync.ON else VSync.OFF
+
+        window.show()
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
+
+        Garbage.dispose(this)
     }
 
     override fun tick() {
         if (update) MemoryStack.stackPush().use { stack ->
-            val pWidth = stack.mallocInt(1)
-            val pHeight = stack.mallocInt(1)
-            glfwGetFramebufferSize(handle, pWidth, pHeight)
-            glViewport(0, 0, pWidth[0], pHeight[0])
+            val size = window.framebufferSize
+            glViewport(0, 0, size.x, size.y)
         }
 
-        glfwSwapBuffers(handle)
-        glfwPollEvents()
+        window.swapBuffers()
+        glfw.pollEvents()
     }
 
     fun onResize(callback: (Int, Int) -> Unit) = windowCallbacks.add(callback)
 
-    fun close() = glfwSetWindowShouldClose(handle, true)
+    fun close() = run { window.shouldClose = true }
 
-    fun shouldClose() = glfwWindowShouldClose(handle)
+    fun shouldClose() = window.shouldClose
 
     private fun setFullscreen(value: Boolean): Boolean {
-        val mode = glfwGetVideoMode(glfwGetPrimaryMonitor()) ?: return fullscreen
+        val mode = glfw.videoMode(glfw.primaryMonitor) ?: return fullscreen
 
         if (!fullscreen) {
-            MemoryStack.stackPush().use { stack ->
-                val pWidth = stack.mallocInt(1)
-                val pHeight = stack.mallocInt(1)
-                glfwGetWindowSize(handle, pWidth, pHeight)
-                glfwSetWindowMonitor(
-                    handle, glfwGetPrimaryMonitor(), 0, 0,
-                    mode.width(), mode.height(), mode.refreshRate()
-                )
-            }
-        } else glfwSetWindowMonitor(
-            handle, NULL,
-            (mode.width() - tWidth) / 2,
-            (mode.height() - tHeight) / 2,
-            tWidth, tHeight, mode.refreshRate()
-        )
+            window.monitor = GlfwWindow.Monitor(glfw.primaryMonitor, 0, 0,
+                mode.width(), mode.height(), mode.refreshRate())
+        } else
+            window.monitor = GlfwWindow.Monitor(NULL, (mode.width() - tWidth) / 2,
+                (mode.height() - tHeight) / 2, tWidth, tHeight, mode.refreshRate())
 
         update = true
         return value
     }
 
-    private fun updateTitle(title: String): String {
-        glfwSetWindowTitle(handle, title)
-        return title
+    fun imGuiRender() = imguiGl3.renderDrawData(ImGui.drawData!!)
+
+    fun imGuiNewFrame() {
+        imguiGl3.newFrame()
+        imguiGlfw.newFrame()
+    }
+
+    override fun dispose() {
+        imguiGl3.shutdown()
+        imguiGlfw.shutdown()
+        imguiContext.destroy()
+
+        window.destroy()
+        glfw.terminate() //todo this might need to be done in garbage, specifically last
     }
 }
