@@ -1,7 +1,9 @@
 package vecharia.filesystem
 
+import org.lwjgl.BufferUtils
 import vecharia.lwjgl3.render.Texture
 import java.io.FileNotFoundException
+import java.nio.ByteBuffer
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -35,6 +37,21 @@ class GameFile internal constructor(val path: String) {
     fun lines(): List<String> = text().split("\n")
 
     fun texture(): Texture = Texture.load(absolute())
+
+    fun buffer(): ByteBuffer? {
+        var buffer: ByteBuffer? = null
+
+        val path = location()
+        if (Files.isReadable(path)) {
+            Files.newByteChannel(path).use {
+                buffer = BufferUtils.createByteBuffer(it.size().toInt() + 1)
+                while (it.read(buffer) != -1) { }
+            }
+        }
+
+        buffer?.flip()
+        return buffer
+    }
 
     override fun toString(): String = path.substring(path.lastIndexOf('/') + 1)
 }

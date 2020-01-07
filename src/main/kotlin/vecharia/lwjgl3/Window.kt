@@ -21,10 +21,12 @@ class Window(title: String, width: Int, height: Int, vsync: Boolean) : Tickable,
 
     private val window: GlfwWindow
 
+    //PP.IF production
     // ImGUI
     private val imguiContext: Context
     private val imguiGlfw: ImplGlfw
     private val imguiGl3: ImplGL3
+    //PP.ENDIF
 
     // Window parameters
     var width: Int = width
@@ -39,7 +41,9 @@ class Window(title: String, width: Int, height: Int, vsync: Boolean) : Tickable,
             field = value
         }
     var fullscreen: Boolean = false
-        set(value) { field = setFullscreen(value) }
+        set(value) {
+            field = setFullscreen(value)
+        }
 
     // Target window size (when exiting fullscreen)
     private var tWidth: Int = width
@@ -59,9 +63,9 @@ class Window(title: String, width: Int, height: Int, vsync: Boolean) : Tickable,
                 visible = false
                 resizable = true
 
-                context.version = "3.2"
-                profile = uno.glfw.windowHint.Profile.core
-                forwardComp = true
+//                context.version = "3.0"
+//                profile = uno.glfw.windowHint.Profile.core
+//                forwardComp = true //todo convert font to 3.0 standards
             }
         }
 
@@ -72,11 +76,13 @@ class Window(title: String, width: Int, height: Int, vsync: Boolean) : Tickable,
         // OpenGL
         GL.createCapabilities()
 
+        //PP.IF production
         //ImGUI
         imguiContext = Context()
         ImGui.styleColorsDark()
         imguiGlfw = ImplGlfw(window, true)
         imguiGl3 = ImplGL3()
+        //PP.ENDIF
 
         // Window resize event and viewport update
         window.framebufferSizeCallback = { size ->
@@ -127,29 +133,42 @@ class Window(title: String, width: Int, height: Int, vsync: Boolean) : Tickable,
         val mode = glfw.videoMode(glfw.primaryMonitor) ?: return fullscreen
 
         if (!fullscreen) {
-            window.monitor = GlfwWindow.Monitor(glfw.primaryMonitor, 0, 0,
-                mode.width(), mode.height(), mode.refreshRate())
+            window.monitor = GlfwWindow.Monitor(
+                glfw.primaryMonitor, 0, 0,
+                mode.width(), mode.height(), mode.refreshRate()
+            )
         } else
-            window.monitor = GlfwWindow.Monitor(NULL, (mode.width() - tWidth) / 2,
-                (mode.height() - tHeight) / 2, tWidth, tHeight, mode.refreshRate())
+            window.monitor = GlfwWindow.Monitor(
+                NULL, (mode.width() - tWidth) / 2,
+                (mode.height() - tHeight) / 2, tWidth, tHeight, mode.refreshRate()
+            )
 
         update = true
         return value
     }
 
-    fun imGuiRender() = imguiGl3.renderDrawData(ImGui.drawData!!)
+    //PP.IF production
+    fun imGuiRender() {
+        val data = ImGui.drawData
+        if (data != null)
+            imguiGl3.renderDrawData(data)
+    }
 
     fun imGuiNewFrame() {
         imguiGl3.newFrame()
         imguiGlfw.newFrame()
     }
+    //PP.ENDIF
 
     override fun dispose() {
+        //PP.IF production
         imguiGl3.shutdown()
         imguiGlfw.shutdown()
         imguiContext.destroy()
+        //PP.ENDIF
 
         window.destroy()
         glfw.terminate() //todo this might need to be done in garbage, specifically last
     }
+
 }

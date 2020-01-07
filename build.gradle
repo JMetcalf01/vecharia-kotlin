@@ -11,6 +11,7 @@ sourceCompatibility = 11
 targetCompatibility = 11
 
 ext {
+    production = false // used for code exclusion, see preprocessor task below
     kx = "com.github.kotlin-graphics"
     uno_version = 'f528113bf45e43406953d6881915467d85a20881'
     gln_version = '880960aeaf813f72242f03458cf44e606d4c05f0'
@@ -77,4 +78,35 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "11"
+}
+
+// Gradle Source Preprocessor
+// https://gist.github.com/mworzala/43c24ff574e15d94c1186167af5cc622
+task preprocessor(type: Copy) {
+    boolean inTag = false
+    from 'src/main/kotlin'
+    into "$buildDir/processed-src"
+    filter { line ->
+        String updated = line
+
+        try {
+            if (line.trim().startsWith("//PP.IF") && project.ext[line.replace("//PP.IF", "").trim()] as boolean)
+                inTag = true
+        } catch (MissingPropertyException ignored) { }
+
+        if (inTag) updated = null
+
+        if (line.trim().startsWith("//PP.ENDIF"))
+            inTag = false
+
+        return updated
+    }
+}
+
+preprocessor.dependsOn(clean)
+
+['compileKotlin'].each {
+    tasks[it].doFirst {sourceSets.main.kotlin.srcDirs = ["$buildDir/processed-src"]}
+    tasks[it].dependsOn(preprocessor)
+    tasks[it].doLast {sourceSets.main.kotlin.srcDirs = ["src/main/kotlin"]}
 }
