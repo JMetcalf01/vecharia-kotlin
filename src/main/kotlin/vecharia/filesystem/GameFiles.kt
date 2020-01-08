@@ -53,5 +53,7 @@ class GameFile internal constructor(val path: String) {
         return buffer
     }
 
+    fun exists(): Boolean = Files.exists(location())
+
     override fun toString(): String = path.substring(path.lastIndexOf('/') + 1)
 }

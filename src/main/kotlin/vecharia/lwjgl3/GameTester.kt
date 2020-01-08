@@ -1,20 +1,22 @@
 package vecharia.lwjgl3
 
 import imgui.WindowFlag
-import org.lwjgl.BufferUtils
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL30
 import org.lwjgl.stb.STBTTAlignedQuad
-import org.lwjgl.stb.STBTTPackContext
-import org.lwjgl.stb.STBTTPackedchar
 import org.lwjgl.stb.STBTruetype.*
 import org.lwjgl.system.MemoryUtil
-import org.lwjgl.system.MemoryUtil.NULL
 import uno.buffer.memFree
 import vecharia.filesystem.GameFiles
-import java.lang.RuntimeException
+import vecharia.lwjgl3.text.Font
+import vecharia.lwjgl3.text.FontSize
+import vecharia.lwjgl3.text.Fonts
 import java.nio.FloatBuffer
+import kotlin.math.ceil
+import kotlin.math.log
+import kotlin.math.log10
+import kotlin.math.pow
 
 fun main() {
     GameTester()
@@ -25,26 +27,27 @@ class GameTester {
     private val xb: FloatBuffer = MemoryUtil.memAllocFloat(1)
     private val yb: FloatBuffer = MemoryUtil.memAllocFloat(1)
 
-    private var fontTexture: Int = -1
-
-    private lateinit var chardata: STBTTPackedchar.Buffer
-
     private val supportsGammaCorrection: Boolean
     private var gammaCorrection = false
     private var translation = 0f
-    private var size = intArrayOf(2)
+    private var size = intArrayOf(0)
     private val color: FloatArray = floatArrayOf(1f, 0f, 0f)
 
     private var showDemo = false
     private var showTest = false
 
+    private val font: Font
+
     init {
         val engine: GameEngine = GameEngine.create(true)
+
+        Fonts.init()
+        font = Fonts.OLD_DEFAULT
 
         val caps = GL.getCapabilities()
         supportsGammaCorrection = caps.OpenGL30 || caps.GL_ARB_framebuffer_sRGB || caps.GL_EXT_framebuffer_sRGB
 
-        initFont()
+//        initFont()
 
         while (engine.isRunning()) {
             engine.update()
@@ -84,7 +87,7 @@ class GameTester {
                 sliderFloat("Translation", ::translation, 0f, 500f)
                 colorEdit3("Text Color", color)
 
-                combo("Font Size", size, listOf("12pt", "24pt", "48pt", "192pt"), 10)
+                combo("Font Size", size, this@GameTester.font.sizes.map { it.name.toLowerCase().capitalize() }, 10)
 
                 end()
             }
@@ -96,7 +99,6 @@ class GameTester {
             engine.tick()
         }
 
-        chardata.free()
         memFree(yb, xb)
         q.free()
     }
@@ -124,27 +126,28 @@ class GameTester {
         glColor3f(color[0], color[1], color[2])
 
         // todo the font argument in print is the size to use according to the sizes array.
-        print(80f, 80f, 1, "Truetype font is very cool because it is based")
-        print(80f, 104f, 1, "on vectors, meaning there is no image supplied when loading it.")
-        print(80f, 128f, 1, "the benefit is that we can generate an image (texture atlas) for")
-        print(80f, 154f, 1, "any size font we desire without worrying about pixelation due to scaling.")
+        print(80f, 80f, FontSize.DEFAULT, "Truetype font is very cool because it is based")
+        print(80f, 104f, FontSize.DEFAULT, "on vectors, meaning there is no image supplied when loading it.")
+        print(80f, 128f, FontSize.DEFAULT, "the benefit is that we can generate an image (texture atlas) for")
+        print(80f, 154f, FontSize.DEFAULT, "any size font we desire without worrying about pixelation due to scaling.")
 
-        print(80f, 200f, 1, "This can be seen by testing out some of the larger font sizes (192pt)")
-        print(80f, 224f, 1, "and noting that the symbols stay very crisp throughout scaling.")
-        print(80f, 248f, 1, "(the missing letters are expected, don't worry)")
+        print(80f, 200f, FontSize.DEFAULT, "This can be seen by testing out some of the larger font sizes")
+        print(80f, 224f, FontSize.DEFAULT, "and noting that the symbols stay very crisp throughout scaling.")
+        print(80f, 248f, FontSize.DEFAULT, "(the missing letters are expected, don't worry)")
 
         glMatrixMode(GL_MODELVIEW)
         glTranslatef(200f, 350f, 0f)
 
         x += translation
 
-        val lineHeight = SCALE[size[0]]
+        val fontSize = FontSize.values()[size[0]]
+        val lineHeight = fontSize.size
 
-        print(x, 100f + lineHeight * 0, size[0], "This is a test")
-        print(x, 100f + lineHeight * 1, size[0], "Now is the time for all good men to come to the aid of their country.")
-        print(x, 100f + lineHeight * 2, size[0], "The quick brown fox jumps over the lazy dog.")
-        print(x, 100f + lineHeight * 3, size[0], "0123456789")
-        print(x, 100f + lineHeight * 4, size[0], "~!@#$%^&*(){}[];':,.<>/?")
+        print(x, 100f + lineHeight * 0, fontSize, "This is a test")
+        print(x, 100f + lineHeight * 1, fontSize, "Now is the time for all good men to come to the aid of their country.")
+        print(x, 100f + lineHeight * 2, fontSize, "The quick brown fox jumps over the lazy dog.")
+        print(x, 100f + lineHeight * 3, fontSize, "0123456789")
+        print(x, 100f + lineHeight * 4, fontSize, "~!@#$%^&*(){}[];':,.<>/?")
 
         glDisable(GL30.GL_FRAMEBUFFER_SRGB)
     }
@@ -160,49 +163,21 @@ class GameTester {
         glVertex2f(x0, y1)
     }
 
-    private fun print(x: Float, y: Float, font: Int, text: String) {
+    private fun print(x: Float, y: Float, size: FontSize, text: String) {
         xb.put(0, x)
         yb.put(0, y)
 
-        chardata.position(font * 128)
+        font.data.position(font.sizes.indexOf(size) * 128)
 
         glEnable(GL_TEXTURE_2D)
-        glBindTexture(GL_TEXTURE_2D, fontTexture)
+        glBindTexture(GL_TEXTURE_2D, font.texture)
 
         glBegin(GL_QUADS)
         for (i in text.indices) {
-            stbtt_GetPackedQuad(chardata, BITMAP_W, BITMAP_H, text[i].toInt(), xb, yb, q, false)
+            stbtt_GetPackedQuad(font.data, BITMAP_W, BITMAP_H, text[i].toInt(), xb, yb, q, false)
             drawBoxTC(q.x0(), q.y0(), q.x1(), q.y1(), q.s0(), q.t0(), q.s1(), q.t1())
         }
         glEnd()
-    }
-
-    private fun initFont() {
-        fontTexture = glGenTextures()
-        chardata = STBTTPackedchar.malloc(6 * 128)
-
-        STBTTPackContext.malloc().use {
-            val font = FONT.buffer() ?: throw RuntimeException("Failed to read font file!")
-            val bitmap = BufferUtils.createByteBuffer(BITMAP_W * BITMAP_H)
-
-            // Pack each font size
-            stbtt_PackBegin(it, bitmap, BITMAP_W, BITMAP_H, 0, 1, NULL)
-            for (i in SCALE.indices) {
-                val p = (i) * 128 + 32
-                chardata.limit(p + 95)
-                chardata.position(p)
-                stbtt_PackSetOversampling(it, 2, 2)
-                stbtt_PackFontRange(it, font, 0, SCALE[i], 32, chardata)
-            }
-            chardata.clear()
-            stbtt_PackEnd(it)
-
-            // Bind the texture
-            glBindTexture(GL_TEXTURE_2D, fontTexture)
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, BITMAP_W, BITMAP_H, 0, GL_ALPHA, GL_UNSIGNED_BYTE, bitmap)
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-        }
     }
 
     companion object {
