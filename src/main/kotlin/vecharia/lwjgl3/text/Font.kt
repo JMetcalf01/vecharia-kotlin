@@ -24,7 +24,6 @@ class Font private constructor(val texture: Int, val data: STBTTPackedchar.Buffe
 
     companion object {
         fun load(name: String, vararg sizes: FontSize): Font {
-            println("$name init")
             val fontFile = GameFiles.get("assets/$name.ttf")
             if (!fontFile.exists())
                 throw RuntimeException("Failed to locate font file at '${fontFile.absolute()}'!") //todo proper error handling

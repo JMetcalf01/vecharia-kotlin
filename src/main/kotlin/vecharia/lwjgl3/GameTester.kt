@@ -136,18 +136,18 @@ class GameTester {
         print(80f, 248f, FontSize.DEFAULT, "(the missing letters are expected, don't worry)")
 
         glMatrixMode(GL_MODELVIEW)
-        glTranslatef(200f, 350f, 0f)
+        glTranslatef(200f, 500f, 0f) //todo widget positioning, then everything else is relative positioning to that as 0,0
 
         x += translation
 
         val fontSize = FontSize.values()[size[0]]
         val lineHeight = fontSize.size
 
-        print(x, 100f + lineHeight * 0, fontSize, "This is a test")
-        print(x, 100f + lineHeight * 1, fontSize, "Now is the time for all good men to come to the aid of their country.")
-        print(x, 100f + lineHeight * 2, fontSize, "The quick brown fox jumps over the lazy dog.")
-        print(x, 100f + lineHeight * 3, fontSize, "0123456789")
-        print(x, 100f + lineHeight * 4, fontSize, "~!@#$%^&*(){}[];':,.<>/?")
+        print(x, lineHeight * 0, fontSize, "This is a test")
+        print(x, lineHeight * 1, fontSize, "Now is the time for all good men to come to the aid of their country.")
+        print(x, lineHeight * 2, fontSize, "The quick brown fox jumps over the lazy dog.")
+        print(x, lineHeight * 3, fontSize, "0123456789")
+        print(x, lineHeight * 4, fontSize, "~!@#$%^&*(){}[];':,.<>/?")
 
         glDisable(GL30.GL_FRAMEBUFFER_SRGB)
     }

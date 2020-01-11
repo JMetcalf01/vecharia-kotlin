@@ -1,7 +1,7 @@
 package vecharia.filesystem
 
 import org.lwjgl.BufferUtils
-import vecharia.lwjgl3.render.Texture
+import vecharia.lwjgl3.opengl3.render.Texture
 import java.io.FileNotFoundException
 import java.nio.ByteBuffer
 import java.nio.file.Files

@@ -1,4 +1,4 @@
-package vecharia.lwjgl3.render
+package vecharia.lwjgl3.opengl3.render
 
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL13.*

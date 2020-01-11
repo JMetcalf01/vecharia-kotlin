@@ -1,4 +1,4 @@
-package vecharia.lwjgl3.shader
+package vecharia.lwjgl3.opengl3.shader
 
 import org.lwjgl.opengl.GL20
 import vecharia.lwjgl3.util.Color
