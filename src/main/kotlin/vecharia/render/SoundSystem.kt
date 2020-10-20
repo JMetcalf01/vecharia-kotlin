@@ -147,7 +147,9 @@ object SoundSystem : Thread() {
     private fun sleep() {
         try {
             sleep(10)
-        } catch (ignored: Exception) { }
+        } catch (ignored: Exception) {
+
+        }
     }
 
     /**
