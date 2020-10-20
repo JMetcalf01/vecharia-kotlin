@@ -23,6 +23,8 @@ import kotlin.system.exitProcess
 /**
  * The entry point into the program.
  *
+ * This loads the settings from the JSON file and initializes/starts the LWJGL config.
+ *
  * @author Matt Worzala and Jonathan Metcalf
  * @since 1.0
  */
@@ -66,6 +68,7 @@ class Window : ApplicationAdapter() {
      * @since 1.0
      */
     override fun create() {
+        // Initializes Logger
         val logger: Logger = ConsoleLogger(Logger.Level.DEBUG)
         logger.info("Initializing System")
 
@@ -73,6 +76,7 @@ class Window : ApplicationAdapter() {
         height = Gdx.graphics.height
         logger.info("Constants done")
 
+        // Initializes font
         val f = FreeTypeFontGenerator(Gdx.files.absolute("assets/consola.ttf"))
         val fontParams = FreeTypeFontGenerator.FreeTypeFontParameter()
         fontParams.size = 16
@@ -82,25 +86,25 @@ class Window : ApplicationAdapter() {
         font.color = Color.WHITE
         logger.info("Font done")
 
+        // Initializes libGDX stuff
         batch = SpriteBatch()
         canvas = Canvas(this, font)
         logger.info("libGDX initialized")
 
+        // Initializes the game itself
         game = Vecharia(ConsoleLogger(Logger.Level.DEBUG), this)
         game.start()
         pause = PauseMenu(game)
 
+        // Initializes the clock thread
         clock = Clock(game)
         clock[GameState.UNLOADED] = game
         clock[GameState.ACTIVE] = game
         clock[GameState.PAUSED] = pause
         logger.info("Clock thread done")
 
-        SoundSystem.init(canvas)
-        if(Settings.musicEnabled) {
-            SoundSystem.add("assets/introscreen.mp3", true)
-            SoundSystem.playM()
-        }
+        // Initializes the sound system
+        SoundSystem.start()
         logger.info("Sound done")
 
         logger.info("Initialization finished")
@@ -114,6 +118,7 @@ class Window : ApplicationAdapter() {
      * @since 1.0
      */
     override fun render() {
+        // If exit() is called, then safely clean up and exit
         if (exit) {
             game.log.info("Exiting")
             game.window.dispose()

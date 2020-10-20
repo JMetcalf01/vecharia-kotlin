@@ -14,24 +14,17 @@ import vecharia.util.SimpleQueue
  */
 object SoundSystem : Thread() {
 
-    private lateinit var canvas: Canvas
-    private val playing: SimpleQueue<Song> =
-        SimpleQueue()
+    private val playing: SimpleQueue<Song> = SimpleQueue()
     private var isOn: Boolean = false
     private var wasOff: Boolean = false
     private var playingName: String = ""
 
-    /**
-     * Initializes the sound system.
-     *
-     * @author Matt Worzala
-     * @since 1.0
-     *
-     * @param c the Canvas object
-     */
-    fun init(c: Canvas) {
-        canvas = c
-        start()
+    override fun start() {
+        super.start()
+        if(Settings.musicEnabled) {
+            add("assets/introscreen.mp3", true)
+            playM()
+        }
     }
 
     /**
@@ -66,7 +59,7 @@ object SoundSystem : Thread() {
      * @author Jonathan Metcalf
      * @since 1.0
      */
-    fun playM() {
+    private fun playM() {
         isOn = true
     }
 
@@ -93,9 +86,8 @@ object SoundSystem : Thread() {
         if (Settings.musicEnabled) {
             add("assets/introscreen.mp3", true)
             playM()
-        } else {
-            stopM()
-        }
+        } else stopM()
+
     }
 
 
@@ -113,9 +105,7 @@ object SoundSystem : Thread() {
             if (isOn) {
                 wasOff = false
                 playNext()
-            } else {
-                sleep()
-            }
+            } else sleep()
         }
     }
 
@@ -141,18 +131,11 @@ object SoundSystem : Thread() {
         music.play()
 
         while (music.isPlaying) {
-            if (wasOff) {
-                break
-            }
-
+            if (wasOff) break
             sleep()
         }
-
         playingName = ""
-
-        if (wasOff) {
-            music.stop()
-        }
+        if (wasOff) music.stop()
     }
 
     /**
@@ -164,8 +147,7 @@ object SoundSystem : Thread() {
     private fun sleep() {
         try {
             sleep(10)
-        } catch (ignored: Exception) {
-        }
+        } catch (ignored: Exception) { }
     }
 
     /**
